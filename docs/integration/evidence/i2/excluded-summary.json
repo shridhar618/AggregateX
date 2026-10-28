@@ -1,0 +1,23 @@
+{
+  "source_commit": "49f63ee4e242efe0c5aa4aef0a524652e75cfd5a",
+  "selected_files": 57,
+  "excluded_files": 609,
+  "excluded_families": {
+    ".env.example": 1,
+    ".gitignore": 1,
+    "DEMO_GUIDE.md": 1,
+    "MIGRATION_CODE_SHA256.json": 1,
+    "MIGRATION_REPORT.md": 1,
+    "PHASE_STATUS.md": 1,
+    "README.md": 1,
+    "data/": 56,
+    "design-qa.md": 1,
+    "design-source/": 12,
+    "evidence/": 432,
+    "migration-private/": 12,
+    "outputs/": 14,
+    "tests/": 41,
+    "work/": 34
+  },
+  "exact_paths_private_only": true
+}

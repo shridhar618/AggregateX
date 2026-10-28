@@ -1,0 +1,2258 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Revelio Image Dashboard",
+    "version": "0.1.0"
+  },
+  "paths": {
+    "/": {
+      "get": {
+        "summary": "Index",
+        "operationId": "index__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/generate": {
+      "post": {
+        "summary": "Generate",
+        "operationId": "generate_api_generate_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GenerateRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/jobs/{job_id}": {
+      "get": {
+        "summary": "Job Status",
+        "operationId": "job_status_api_jobs__job_id__get",
+        "parameters": [
+          {
+            "name": "job_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Job Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/images/{job_id}": {
+      "get": {
+        "summary": "Image",
+        "operationId": "image_images__job_id__get",
+        "parameters": [
+          {
+            "name": "job_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Job Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/health": {
+      "get": {
+        "summary": "Health",
+        "operationId": "health_api_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/cases": {
+      "get": {
+        "summary": "Cases",
+        "operationId": "cases_api_cases_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create Case",
+        "operationId": "create_case_api_cases_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NewCase"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/cases/{case_id}": {
+      "get": {
+        "summary": "Read Case",
+        "operationId": "read_case_api_cases__case_id__get",
+        "parameters": [
+          {
+            "name": "case_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Case Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Save Case",
+        "operationId": "save_case_api_cases__case_id__put",
+        "parameters": [
+          {
+            "name": "case_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Case Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SaveCase"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/cases/{case_id}/freeze": {
+      "post": {
+        "summary": "Freeze Case",
+        "operationId": "freeze_case_api_cases__case_id__freeze_post",
+        "parameters": [
+          {
+            "name": "case_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Case Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Freeze"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/cases/{case_id}/clarifications": {
+      "post": {
+        "summary": "Append Clarification",
+        "operationId": "append_clarification_api_cases__case_id__clarifications_post",
+        "parameters": [
+          {
+            "name": "case_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Case Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Clarification"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/lab-schema": {
+      "get": {
+        "summary": "Lab Schema",
+        "operationId": "lab_schema_api_lab_schema_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/cases/{case_id}/prompt-preview": {
+      "post": {
+        "summary": "Preview Case Prompt",
+        "operationId": "preview_case_prompt_api_cases__case_id__prompt_preview_post",
+        "parameters": [
+          {
+            "name": "case_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Case Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Draft"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/cases/{case_id}/selection": {
+      "post": {
+        "summary": "Select Case Version",
+        "operationId": "select_case_version_api_cases__case_id__selection_post",
+        "parameters": [
+          {
+            "name": "case_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Case Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Selection"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/cases/{case_id}/refinement-preview": {
+      "post": {
+        "summary": "Preview Refinement",
+        "operationId": "preview_refinement_api_cases__case_id__refinement_preview_post",
+        "parameters": [
+          {
+            "name": "case_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Case Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Refinement"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/cases/{case_id}/refine": {
+      "post": {
+        "summary": "Refine",
+        "operationId": "refine_api_cases__case_id__refine_post",
+        "parameters": [
+          {
+            "name": "case_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Case Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Refinement"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/cases/{case_id}/versions/{version_id}/sketch": {
+      "get": {
+        "summary": "Read Sketch",
+        "operationId": "read_sketch_api_cases__case_id__versions__version_id__sketch_get",
+        "parameters": [
+          {
+            "name": "case_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Case Id"
+            }
+          },
+          {
+            "name": "version_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Version Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/cases/{case_id}/local-edits": {
+      "post": {
+        "summary": "Save Sketch",
+        "operationId": "save_sketch_api_cases__case_id__local_edits_post",
+        "parameters": [
+          {
+            "name": "case_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Case Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SaveEdit"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/cases/{case_id}/imports": {
+      "post": {
+        "summary": "Import Source",
+        "operationId": "import_source_api_cases__case_id__imports_post",
+        "parameters": [
+          {
+            "name": "case_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Case Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ImportImage"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/cases/{case_id}/versions/{version_id}/enhance": {
+      "get": {
+        "summary": "Read Enhancement",
+        "operationId": "read_enhancement_api_cases__case_id__versions__version_id__enhance_get",
+        "parameters": [
+          {
+            "name": "case_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Case Id"
+            }
+          },
+          {
+            "name": "version_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Version Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/cases/{case_id}/versions/{version_id}/pixels": {
+      "get": {
+        "summary": "Read Canonical Pixels",
+        "operationId": "read_canonical_pixels_api_cases__case_id__versions__version_id__pixels_get",
+        "parameters": [
+          {
+            "name": "case_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Case Id"
+            }
+          },
+          {
+            "name": "version_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Version Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/cases/{case_id}/enhancements": {
+      "post": {
+        "summary": "Save Enhancement",
+        "operationId": "save_enhancement_api_cases__case_id__enhancements_post",
+        "parameters": [
+          {
+            "name": "case_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Case Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SaveEnhancement"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/enhance-schema": {
+      "get": {
+        "summary": "Enhancement Schema",
+        "operationId": "enhancement_schema_api_enhance_schema_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/cases/{case_id}/multiview-preview": {
+      "post": {
+        "summary": "Preview Multiview",
+        "operationId": "preview_multiview_api_cases__case_id__multiview_preview_post",
+        "parameters": [
+          {
+            "name": "case_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Case Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/multiview_store__Request"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/cases/{case_id}/multiview": {
+      "get": {
+        "summary": "Multiview History",
+        "operationId": "multiview_history_api_cases__case_id__multiview_get",
+        "parameters": [
+          {
+            "name": "case_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Case Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Generate Multiview",
+        "operationId": "generate_multiview_api_cases__case_id__multiview_post",
+        "parameters": [
+          {
+            "name": "case_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Case Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/multiview_store__Request"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/cases/{case_id}/views/{version_id}/layouts": {
+      "post": {
+        "summary": "Review Multiview Layout",
+        "operationId": "review_multiview_layout_api_cases__case_id__views__version_id__layouts_post",
+        "parameters": [
+          {
+            "name": "case_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Case Id"
+            }
+          },
+          {
+            "name": "version_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Version Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Layout"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/cases/{case_id}/views/{version_id}/layouts/{layout_id}/{angle}.png": {
+      "get": {
+        "summary": "Multiview Panel",
+        "operationId": "multiview_panel_api_cases__case_id__views__version_id__layouts__layout_id___angle__png_get",
+        "parameters": [
+          {
+            "name": "case_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Case Id"
+            }
+          },
+          {
+            "name": "version_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Version Id"
+            }
+          },
+          {
+            "name": "layout_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Layout Id"
+            }
+          },
+          {
+            "name": "angle",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Angle"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/cases/{case_id}/reports": {
+      "post": {
+        "summary": "Create Report",
+        "operationId": "create_report_api_cases__case_id__reports_post",
+        "parameters": [
+          {
+            "name": "case_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Case Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/report_store__Request"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "Report History",
+        "operationId": "report_history_api_cases__case_id__reports_get",
+        "parameters": [
+          {
+            "name": "case_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Case Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/cases/{case_id}/versions/{version_id}/export.png": {
+      "get": {
+        "summary": "Export Version Png",
+        "operationId": "export_version_png_api_cases__case_id__versions__version_id__export_png_get",
+        "parameters": [
+          {
+            "name": "case_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Case Id"
+            }
+          },
+          {
+            "name": "version_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Version Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/cases/{case_id}/reports/{report_id}/preview": {
+      "get": {
+        "summary": "Report Preview",
+        "operationId": "report_preview_api_cases__case_id__reports__report_id__preview_get",
+        "parameters": [
+          {
+            "name": "case_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Case Id"
+            }
+          },
+          {
+            "name": "report_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Report Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/cases/{case_id}/reports/{report_id}/{extension}": {
+      "get": {
+        "summary": "Download Report",
+        "operationId": "download_report_api_cases__case_id__reports__report_id___extension__get",
+        "parameters": [
+          {
+            "name": "case_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Case Id"
+            }
+          },
+          {
+            "name": "report_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Report Id"
+            }
+          },
+          {
+            "name": "extension",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Extension"
+            }
+          },
+          {
+            "name": "inline",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false,
+              "title": "Inline"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/cases/{case_id}/versions/{version_id}/export.json": {
+      "get": {
+        "summary": "Export Case Metadata",
+        "operationId": "export_case_metadata_api_cases__case_id__versions__version_id__export_json_get",
+        "parameters": [
+          {
+            "name": "case_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Case Id"
+            }
+          },
+          {
+            "name": "version_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Version Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Adjustments": {
+        "properties": {
+          "brightness": {
+            "type": "number",
+            "maximum": 100.0,
+            "minimum": -100.0,
+            "title": "Brightness",
+            "default": 0
+          },
+          "contrast": {
+            "type": "number",
+            "maximum": 95.0,
+            "minimum": -95.0,
+            "title": "Contrast",
+            "default": 0
+          },
+          "exposure": {
+            "type": "number",
+            "maximum": 3.0,
+            "minimum": -3.0,
+            "title": "Exposure",
+            "default": 0
+          },
+          "gamma": {
+            "type": "number",
+            "maximum": 3.0,
+            "minimum": 0.2,
+            "title": "Gamma",
+            "default": 1
+          },
+          "highlights": {
+            "type": "number",
+            "maximum": 100.0,
+            "minimum": -100.0,
+            "title": "Highlights",
+            "default": 0
+          },
+          "shadows": {
+            "type": "number",
+            "maximum": 100.0,
+            "minimum": -100.0,
+            "title": "Shadows",
+            "default": 0
+          },
+          "saturation": {
+            "type": "number",
+            "maximum": 200.0,
+            "minimum": 0.0,
+            "title": "Saturation",
+            "default": 100
+          },
+          "temperature": {
+            "type": "number",
+            "maximum": 100.0,
+            "minimum": -100.0,
+            "title": "Temperature",
+            "default": 0
+          },
+          "sharpen": {
+            "type": "number",
+            "maximum": 200.0,
+            "minimum": 0.0,
+            "title": "Sharpen",
+            "default": 0
+          },
+          "smoothing": {
+            "type": "number",
+            "maximum": 100.0,
+            "minimum": 0.0,
+            "title": "Smoothing",
+            "default": 0
+          },
+          "blur": {
+            "type": "integer",
+            "maximum": 5.0,
+            "minimum": 0.0,
+            "title": "Blur",
+            "default": 0
+          },
+          "grayscale": {
+            "type": "boolean",
+            "title": "Grayscale",
+            "default": false
+          },
+          "invert": {
+            "type": "boolean",
+            "title": "Invert",
+            "default": false
+          },
+          "resize": {
+            "type": "integer",
+            "maximum": 150.0,
+            "minimum": 25.0,
+            "title": "Resize",
+            "default": 100
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "Adjustments"
+      },
+      "Attribute": {
+        "properties": {
+          "value": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 100
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Value"
+          },
+          "confidence": {
+            "type": "string",
+            "enum": [
+              "unknown",
+              "tentative",
+              "certain"
+            ],
+            "title": "Confidence",
+            "default": "unknown"
+          },
+          "source": {
+            "type": "string",
+            "enum": [
+              "operator",
+              "witness"
+            ],
+            "title": "Source",
+            "default": "operator"
+          },
+          "quote": {
+            "type": "string",
+            "maxLength": 1800,
+            "title": "Quote",
+            "default": ""
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "Attribute"
+      },
+      "Clarification": {
+        "properties": {
+          "text": {
+            "type": "string",
+            "maxLength": 1800,
+            "minLength": 1,
+            "title": "Text"
+          },
+          "source": {
+            "type": "string",
+            "enum": [
+              "operator",
+              "witness"
+            ],
+            "title": "Source",
+            "default": "operator"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "text"
+        ],
+        "title": "Clarification"
+      },
+      "Draft": {
+        "properties": {
+          "attributes": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/Attribute"
+            },
+            "type": "object",
+            "title": "Attributes"
+          },
+          "lab": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/Attribute"
+            },
+            "type": "object",
+            "title": "Lab"
+          },
+          "style": {
+            "type": "string",
+            "enum": [
+              "forensic",
+              "portrait"
+            ],
+            "title": "Style",
+            "default": "forensic"
+          },
+          "view": {
+            "type": "string",
+            "enum": [
+              "Portrait",
+              "16:9",
+              "Upper Body"
+            ],
+            "title": "View",
+            "default": "Portrait"
+          },
+          "note": {
+            "type": "string",
+            "maxLength": 1800,
+            "title": "Note",
+            "default": ""
+          },
+          "note_source": {
+            "type": "string",
+            "enum": [
+              "operator",
+              "witness"
+            ],
+            "title": "Note Source",
+            "default": "operator"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "Draft"
+      },
+      "Freeze": {
+        "properties": {
+          "revision": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Revision"
+          },
+          "text": {
+            "type": "string",
+            "maxLength": 1800,
+            "minLength": 10,
+            "title": "Text"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "revision",
+          "text"
+        ],
+        "title": "Freeze"
+      },
+      "GenerateRequest": {
+        "properties": {
+          "description": {
+            "type": "string",
+            "maxLength": 2500,
+            "minLength": 10,
+            "title": "Description"
+          },
+          "style": {
+            "type": "string",
+            "enum": [
+              "forensic",
+              "portrait",
+              "illustration"
+            ],
+            "title": "Style",
+            "default": "forensic"
+          },
+          "case_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Case Id"
+          },
+          "case_revision": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Case Revision"
+          },
+          "workspace": {
+            "type": "string",
+            "enum": [
+              "text",
+              "lab"
+            ],
+            "title": "Workspace",
+            "default": "text"
+          }
+        },
+        "type": "object",
+        "required": [
+          "description"
+        ],
+        "title": "GenerateRequest"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "ImportImage": {
+        "properties": {
+          "request_key": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{32}$",
+            "title": "Request Key"
+          },
+          "image": {
+            "type": "string",
+            "maxLength": 16777280,
+            "minLength": 32,
+            "title": "Image"
+          },
+          "filename": {
+            "type": "string",
+            "maxLength": 180,
+            "minLength": 1,
+            "title": "Filename"
+          },
+          "consent": {
+            "type": "boolean",
+            "const": true,
+            "title": "Consent"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "request_key",
+          "image",
+          "filename",
+          "consent"
+        ],
+        "title": "ImportImage"
+      },
+      "Layout": {
+        "properties": {
+          "checked": {
+            "type": "boolean",
+            "const": true,
+            "title": "Checked"
+          },
+          "panels": {
+            "items": {
+              "$ref": "#/components/schemas/Panel"
+            },
+            "type": "array",
+            "maxItems": 4,
+            "minItems": 4,
+            "title": "Panels"
+          },
+          "note": {
+            "type": "string",
+            "maxLength": 500,
+            "title": "Note",
+            "default": ""
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "checked",
+          "panels"
+        ],
+        "title": "Layout"
+      },
+      "NewCase": {
+        "properties": {
+          "title": {
+            "type": "string",
+            "maxLength": 120,
+            "minLength": 1,
+            "title": "Title"
+          },
+          "synthetic": {
+            "type": "boolean",
+            "title": "Synthetic",
+            "default": false
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "title"
+        ],
+        "title": "NewCase"
+      },
+      "Operation": {
+        "properties": {
+          "tool": {
+            "type": "string",
+            "enum": [
+              "pencil",
+              "brush",
+              "eraser",
+              "line",
+              "rectangle",
+              "ellipse",
+              "arrow",
+              "text",
+              "crop",
+              "rotate",
+              "flip",
+              "clear"
+            ],
+            "title": "Tool"
+          },
+          "points": {
+            "items": {
+              "prefixItems": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "number"
+                }
+              ],
+              "type": "array",
+              "maxItems": 3,
+              "minItems": 3
+            },
+            "type": "array",
+            "maxItems": 20000,
+            "title": "Points"
+          },
+          "color": {
+            "type": "string",
+            "pattern": "^#[0-9a-fA-F]{6}$",
+            "title": "Color",
+            "default": "#111111"
+          },
+          "width": {
+            "type": "number",
+            "maximum": 120.0,
+            "minimum": 1.0,
+            "title": "Width",
+            "default": 4
+          },
+          "opacity": {
+            "type": "number",
+            "maximum": 1.0,
+            "minimum": 0.05,
+            "title": "Opacity",
+            "default": 1
+          },
+          "text": {
+            "type": "string",
+            "maxLength": 240,
+            "title": "Text",
+            "default": ""
+          },
+          "rect": {
+            "anyOf": [
+              {
+                "prefixItems": [
+                  {
+                    "type": "integer"
+                  },
+                  {
+                    "type": "integer"
+                  },
+                  {
+                    "type": "integer"
+                  },
+                  {
+                    "type": "integer"
+                  }
+                ],
+                "type": "array",
+                "maxItems": 4,
+                "minItems": 4
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Rect"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "tool"
+        ],
+        "title": "Operation"
+      },
+      "Panel": {
+        "properties": {
+          "angle": {
+            "type": "string",
+            "enum": [
+              "front",
+              "left",
+              "right",
+              "three_quarter"
+            ],
+            "title": "Angle"
+          },
+          "rect": {
+            "prefixItems": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "integer"
+              },
+              {
+                "type": "integer"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "type": "array",
+            "maxItems": 4,
+            "minItems": 4,
+            "title": "Rect"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "angle",
+          "rect"
+        ],
+        "title": "Panel"
+      },
+      "Project": {
+        "properties": {
+          "schema_version": {
+            "type": "integer",
+            "const": 1,
+            "title": "Schema Version",
+            "default": 1
+          },
+          "source_version_id": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{32}$",
+            "title": "Source Version Id"
+          },
+          "operations": {
+            "items": {
+              "$ref": "#/components/schemas/Operation"
+            },
+            "type": "array",
+            "maxItems": 2000,
+            "title": "Operations"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "source_version_id"
+        ],
+        "title": "Project"
+      },
+      "Refinement": {
+        "properties": {
+          "parent_id": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{32}$",
+            "title": "Parent Id"
+          },
+          "instruction": {
+            "type": "string",
+            "maxLength": 1800,
+            "minLength": 1,
+            "title": "Instruction"
+          },
+          "draft": {
+            "$ref": "#/components/schemas/Draft"
+          },
+          "revision": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Revision"
+          },
+          "request_key": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{32}$",
+            "title": "Request Key"
+          },
+          "reviewed_prompt": {
+            "type": "string",
+            "maxLength": 2500,
+            "title": "Reviewed Prompt",
+            "default": ""
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "parent_id",
+          "instruction",
+          "draft",
+          "revision",
+          "request_key"
+        ],
+        "title": "Refinement"
+      },
+      "SaveCase": {
+        "properties": {
+          "revision": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Revision"
+          },
+          "original": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 1800
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Original"
+          },
+          "draft": {
+            "$ref": "#/components/schemas/Draft"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "revision",
+          "draft"
+        ],
+        "title": "SaveCase"
+      },
+      "SaveEdit": {
+        "properties": {
+          "parent_id": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{32}$",
+            "title": "Parent Id"
+          },
+          "request_key": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{32}$",
+            "title": "Request Key"
+          },
+          "png": {
+            "type": "string",
+            "maxLength": 16777248,
+            "minLength": 32,
+            "title": "Png"
+          },
+          "project": {
+            "$ref": "#/components/schemas/Project"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "parent_id",
+          "request_key",
+          "png",
+          "project"
+        ],
+        "title": "SaveEdit"
+      },
+      "SaveEnhancement": {
+        "properties": {
+          "parent_id": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{32}$",
+            "title": "Parent Id"
+          },
+          "source_id": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{32}$",
+            "title": "Source Id"
+          },
+          "request_key": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{32}$",
+            "title": "Request Key"
+          },
+          "png": {
+            "type": "string",
+            "maxLength": 16777280,
+            "minLength": 32,
+            "title": "Png"
+          },
+          "adjustments": {
+            "$ref": "#/components/schemas/Adjustments"
+          },
+          "engine": {
+            "type": "string",
+            "const": "rgba-worker-v1",
+            "title": "Engine",
+            "default": "rgba-worker-v1"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "parent_id",
+          "source_id",
+          "request_key",
+          "png",
+          "adjustments"
+        ],
+        "title": "SaveEnhancement"
+      },
+      "Selection": {
+        "properties": {
+          "version_id": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{32}$",
+            "title": "Version Id"
+          },
+          "preferred": {
+            "type": "boolean",
+            "title": "Preferred",
+            "default": false
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "version_id"
+        ],
+        "title": "Selection"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "ctx": {
+            "type": "object",
+            "title": "Context"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      },
+      "multiview_store__Request": {
+        "properties": {
+          "parent_id": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{32}$",
+            "title": "Parent Id"
+          },
+          "revision": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Revision"
+          },
+          "draft": {
+            "$ref": "#/components/schemas/Draft"
+          },
+          "request_key": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{32}$",
+            "title": "Request Key"
+          },
+          "reviewed_prompt": {
+            "type": "string",
+            "maxLength": 2500,
+            "title": "Reviewed Prompt",
+            "default": ""
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "parent_id",
+          "revision",
+          "draft",
+          "request_key"
+        ],
+        "title": "Request"
+      },
+      "report_store__Request": {
+        "properties": {
+          "version_id": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{32}$",
+            "title": "Version Id"
+          },
+          "request_key": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{32}$",
+            "title": "Request Key"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "version_id",
+          "request_key"
+        ],
+        "title": "Request"
+      }
+    }
+  }
+}

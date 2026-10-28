@@ -1,0 +1,784 @@
+[
+  {
+    "source_ref": "49f63ee4e242efe0c5aa4aef0a524652e75cfd5a",
+    "source_path": "app.py",
+    "destination": "witness-backend/app.py",
+    "source_sha256": "c21acb442dc1894d1c255b9ec6c9236a5f17f42dab5d5566478003ad146321e8",
+    "references_match": {
+      "original": true,
+      "newBackend": true
+    },
+    "imported_sha256": "610ae1b8daf988bda28612b96b607a571a830e77be902493ee3f6bd06f27435f",
+    "byte_identical": false,
+    "relocation_diff": [
+      "--- b/app.py",
+      "+++ witness-backend/app.py",
+      "@@ -26,8 +26,8 @@",
+      " ",
+      " ROOT = Path(__file__).resolve().parent",
+      " STATIC = ROOT / \"static\"",
+      "-OUTPUTS = ROOT / \"outputs\"",
+      "-WORK = ROOT / \"work\"",
+      "+OUTPUTS = Path(os.environ.get(\"WITNESSTRACE_OUTPUTS_DIR\", str(ROOT / \"outputs\"))).expanduser().resolve()",
+      "+WORK = Path(os.environ.get(\"WITNESSTRACE_WORK_DIR\", str(ROOT / \"work\"))).expanduser().resolve()",
+      " for directory in (OUTPUTS, WORK):",
+      "     directory.mkdir(parents=True, exist_ok=True)",
+      " "
+    ],
+    "all_functions_and_classes_AST_unchanged": true
+  },
+  {
+    "source_ref": "49f63ee4e242efe0c5aa4aef0a524652e75cfd5a",
+    "source_path": "case_store.py",
+    "destination": "witness-backend/case_store.py",
+    "source_sha256": "e6ace3894c5564cb8a099937eed626ddea8155539c965407ef56a9a5ea2919f8",
+    "references_match": {
+      "original": true,
+      "newBackend": true
+    },
+    "imported_sha256": "e6ace3894c5564cb8a099937eed626ddea8155539c965407ef56a9a5ea2919f8",
+    "byte_identical": true
+  },
+  {
+    "source_ref": "49f63ee4e242efe0c5aa4aef0a524652e75cfd5a",
+    "source_path": "lab_schema.py",
+    "destination": "witness-backend/lab_schema.py",
+    "source_sha256": "26967bafa3cdf6f1843e483779ace77327980b9e4b286c37e42b9637d14286c9",
+    "references_match": {
+      "original": true,
+      "newBackend": true
+    },
+    "imported_sha256": "26967bafa3cdf6f1843e483779ace77327980b9e4b286c37e42b9637d14286c9",
+    "byte_identical": true
+  },
+  {
+    "source_ref": "49f63ee4e242efe0c5aa4aef0a524652e75cfd5a",
+    "source_path": "sketch_store.py",
+    "destination": "witness-backend/sketch_store.py",
+    "source_sha256": "818d2d7e21151f8ed568df8e7477d3e13066659e81ab6ddb4e96ab60dd398da5",
+    "references_match": {
+      "original": true,
+      "newBackend": true
+    },
+    "imported_sha256": "818d2d7e21151f8ed568df8e7477d3e13066659e81ab6ddb4e96ab60dd398da5",
+    "byte_identical": true
+  },
+  {
+    "source_ref": "49f63ee4e242efe0c5aa4aef0a524652e75cfd5a",
+    "source_path": "enhance_store.py",
+    "destination": "witness-backend/enhance_store.py",
+    "source_sha256": "51d28767c171503dd9daaf59b5fe062f887d9981d49188ec40f860600499d834",
+    "references_match": {
+      "original": true,
+      "newBackend": true
+    },
+    "imported_sha256": "51d28767c171503dd9daaf59b5fe062f887d9981d49188ec40f860600499d834",
+    "byte_identical": true
+  },
+  {
+    "source_ref": "49f63ee4e242efe0c5aa4aef0a524652e75cfd5a",
+    "source_path": "multiview_store.py",
+    "destination": "witness-backend/multiview_store.py",
+    "source_sha256": "f779ba1b8c68eb074be3d3f092f1655336716d70c165d26a6c34c774c77b69ca",
+    "references_match": {
+      "original": true,
+      "newBackend": true
+    },
+    "imported_sha256": "f779ba1b8c68eb074be3d3f092f1655336716d70c165d26a6c34c774c77b69ca",
+    "byte_identical": true
+  },
+  {
+    "source_ref": "49f63ee4e242efe0c5aa4aef0a524652e75cfd5a",
+    "source_path": "report_store.py",
+    "destination": "witness-backend/report_store.py",
+    "source_sha256": "8776505b0b2698702c9bc3753207d919ff26b852cb61676b08df41657f095e81",
+    "references_match": {
+      "original": true,
+      "newBackend": true
+    },
+    "imported_sha256": "8776505b0b2698702c9bc3753207d919ff26b852cb61676b08df41657f095e81",
+    "byte_identical": true
+  },
+  {
+    "source_ref": "49f63ee4e242efe0c5aa4aef0a524652e75cfd5a",
+    "source_path": "requirements.txt",
+    "destination": "witness-backend/requirements.txt",
+    "source_sha256": "28a8d5e3127fbb119442389701c068f202fc704a9c529f39d3130d9f4de2dcbb",
+    "references_match": {
+      "original": true,
+      "newBackend": true
+    },
+    "imported_sha256": "28a8d5e3127fbb119442389701c068f202fc704a9c529f39d3130d9f4de2dcbb",
+    "byte_identical": true
+  },
+  {
+    "source_ref": "49f63ee4e242efe0c5aa4aef0a524652e75cfd5a",
+    "source_path": "requirements-runtime-lock.txt",
+    "destination": "witness-backend/requirements-runtime-lock.txt",
+    "source_sha256": "932c36623a0b60e3b376a9b550564df48f65ea94034902b8319cf3feff2e77b6",
+    "references_match": {
+      "original": false,
+      "newBackend": true
+    },
+    "imported_sha256": "932c36623a0b60e3b376a9b550564df48f65ea94034902b8319cf3feff2e77b6",
+    "byte_identical": true
+  },
+  {
+    "source_ref": "49f63ee4e242efe0c5aa4aef0a524652e75cfd5a",
+    "source_path": "requirements-test.txt",
+    "destination": "witness-backend/requirements-test.txt",
+    "source_sha256": "c24a52b14f679bdb091f4d9635bae9f6b65002d1654c8abccf1c70f6d5907d67",
+    "references_match": {
+      "original": false,
+      "newBackend": true
+    },
+    "imported_sha256": "c24a52b14f679bdb091f4d9635bae9f6b65002d1654c8abccf1c70f6d5907d67",
+    "byte_identical": true
+  },
+  {
+    "source_ref": "49f63ee4e242efe0c5aa4aef0a524652e75cfd5a",
+    "source_path": "start.sh",
+    "destination": "witness-backend/start.sh",
+    "source_sha256": "4d378b2bf58e203fc1e6fea0966d9c0232b57d9a20cb55a5c04f4e448fae4159",
+    "references_match": {
+      "original": true,
+      "newBackend": true
+    },
+    "imported_sha256": "093400309aa244bbc10e5ec130ef5b5f69d500bea72dfdf3c75c29e1897f5f38",
+    "byte_identical": false,
+    "relocation_diff": [
+      "--- b/start.sh",
+      "+++ witness-backend/start.sh",
+      "@@ -1,12 +1,27 @@",
+      " #!/usr/bin/env bash",
+      "+# Independent reference backend only. React continues to use its existing API.",
+      " set -euo pipefail",
+      " cd \"$(dirname \"${BASH_SOURCE[0]}\")\"",
+      "+umask 077",
+      "+runtime_base=\"${XDG_DATA_HOME:-$HOME/.local/share}/witnesstrace-integration\"",
+      "+export WITNESSTRACE_DATA_DIR=\"${WITNESSTRACE_DATA_DIR:-$runtime_base/data}\"",
+      "+export WITNESSTRACE_OUTPUTS_DIR=\"${WITNESSTRACE_OUTPUTS_DIR:-$runtime_base/outputs}\"",
+      "+export WITNESSTRACE_WORK_DIR=\"${WITNESSTRACE_WORK_DIR:-$runtime_base/work}\"",
+      "+reference_port=\"${WITNESSTRACE_PORT:-8022}\"",
+      "+if [[ ! \"$reference_port\" =~ ^[0-9]+$ ]] || (( ${#reference_port} > 5 )); then",
+      "+  echo 'Choose an available unprivileged port other than 8000 or 8001.' >&2",
+      "+  exit 2",
+      "+fi",
+      "+reference_port=$((10#$reference_port))",
+      "+if (( reference_port < 1024 || reference_port > 65535 || reference_port == 8000 || reference_port == 8001 )); then",
+      "+  echo 'Choose an available unprivileged port other than 8000 or 8001.' >&2",
+      "+  exit 2",
+      "+fi",
+      "+if [[ ! -x .venv/bin/python ]]; then",
+      "+  echo 'Create .venv and install requirements-runtime-lock.txt first; see README.md.' >&2",
+      "+  exit 1",
+      "+fi",
+      " if ! command -v codex >/dev/null 2>&1; then",
+      "-  echo 'Warning: codex CLI not found. Install it and run \"codex login\" before generating.' >&2",
+      "+  echo 'Warning: Codex CLI is unavailable. Saved/local editing works; AI generation requires local sign-in.' >&2",
+      " fi",
+      "-if [[ ! -d .venv ]]; then",
+      "-  python3 -m venv .venv",
+      "-fi",
+      "-source .venv/bin/activate",
+      "-python -m pip install -r requirements.txt",
+      "-exec python -m uvicorn app:app --host 127.0.0.1 --port 8001",
+      "+exec .venv/bin/python -m uvicorn app:app --host 127.0.0.1 --port \"$reference_port\""
+    ]
+  },
+  {
+    "source_ref": "49f63ee4e242efe0c5aa4aef0a524652e75cfd5a",
+    "source_path": "static/character-lab.js",
+    "destination": "witness-backend/static/character-lab.js",
+    "source_sha256": "9ec54ceefa91356b8c0bc9994c369a097c9531cfe817acaba2b89dee78f9bab6",
+    "references_match": {
+      "original": true,
+      "newBackend": true
+    },
+    "imported_sha256": "9ec54ceefa91356b8c0bc9994c369a097c9531cfe817acaba2b89dee78f9bab6",
+    "byte_identical": true
+  },
+  {
+    "source_ref": "49f63ee4e242efe0c5aa4aef0a524652e75cfd5a",
+    "source_path": "static/enhance-worker.js",
+    "destination": "witness-backend/static/enhance-worker.js",
+    "source_sha256": "2d35aa6844e35891b2097e80d17b29ee88b2098c3937c6c50ab8695df5c478f9",
+    "references_match": {
+      "original": true,
+      "newBackend": true
+    },
+    "imported_sha256": "2d35aa6844e35891b2097e80d17b29ee88b2098c3937c6c50ab8695df5c478f9",
+    "byte_identical": true
+  },
+  {
+    "source_ref": "49f63ee4e242efe0c5aa4aef0a524652e75cfd5a",
+    "source_path": "static/enhance.js",
+    "destination": "witness-backend/static/enhance.js",
+    "source_sha256": "80172c41cce8bf87d660fa87d23371678f82af058b86fa07dda5b3df8bde72de",
+    "references_match": {
+      "original": true,
+      "newBackend": true
+    },
+    "imported_sha256": "80172c41cce8bf87d660fa87d23371678f82af058b86fa07dda5b3df8bde72de",
+    "byte_identical": true
+  },
+  {
+    "source_ref": "49f63ee4e242efe0c5aa4aef0a524652e75cfd5a",
+    "source_path": "static/icons/LICENSE",
+    "destination": "witness-backend/static/icons/LICENSE",
+    "source_sha256": "0fb3e11bd57e896c5a512afd64864d28a37de45d19835016c87ca1ad19ead969",
+    "references_match": {
+      "original": true,
+      "newBackend": true
+    },
+    "imported_sha256": "0fb3e11bd57e896c5a512afd64864d28a37de45d19835016c87ca1ad19ead969",
+    "byte_identical": true
+  },
+  {
+    "source_ref": "49f63ee4e242efe0c5aa4aef0a524652e75cfd5a",
+    "source_path": "static/icons/arrow-up-right.svg",
+    "destination": "witness-backend/static/icons/arrow-up-right.svg",
+    "source_sha256": "9dc30361a3c58216f02ffa3e20523651a36e34e0619d80eb785005e5bb8af8fb",
+    "references_match": {
+      "original": true,
+      "newBackend": true
+    },
+    "imported_sha256": "9dc30361a3c58216f02ffa3e20523651a36e34e0619d80eb785005e5bb8af8fb",
+    "byte_identical": true
+  },
+  {
+    "source_ref": "49f63ee4e242efe0c5aa4aef0a524652e75cfd5a",
+    "source_path": "static/icons/arrows-move.svg",
+    "destination": "witness-backend/static/icons/arrows-move.svg",
+    "source_sha256": "e5ed022e5dd6ac21e179c43c0c9ca511282aa654dec201389b85e8d95dcab9c1",
+    "references_match": {
+      "original": true,
+      "newBackend": true
+    },
+    "imported_sha256": "e5ed022e5dd6ac21e179c43c0c9ca511282aa654dec201389b85e8d95dcab9c1",
+    "byte_identical": true
+  },
+  {
+    "source_ref": "49f63ee4e242efe0c5aa4aef0a524652e75cfd5a",
+    "source_path": "static/icons/brush.svg",
+    "destination": "witness-backend/static/icons/brush.svg",
+    "source_sha256": "afb9a3e539e14f5e71dbab78918deecd58130e4fb66c088d2b495e9ea278644f",
+    "references_match": {
+      "original": true,
+      "newBackend": true
+    },
+    "imported_sha256": "afb9a3e539e14f5e71dbab78918deecd58130e4fb66c088d2b495e9ea278644f",
+    "byte_identical": true
+  },
+  {
+    "source_ref": "49f63ee4e242efe0c5aa4aef0a524652e75cfd5a",
+    "source_path": "static/icons/circle.svg",
+    "destination": "witness-backend/static/icons/circle.svg",
+    "source_sha256": "72b3b32a85af98d2a8ba8805706d568287252eed83fc8766aca216e56add140b",
+    "references_match": {
+      "original": true,
+      "newBackend": true
+    },
+    "imported_sha256": "72b3b32a85af98d2a8ba8805706d568287252eed83fc8766aca216e56add140b",
+    "byte_identical": true
+  },
+  {
+    "source_ref": "49f63ee4e242efe0c5aa4aef0a524652e75cfd5a",
+    "source_path": "static/icons/crop.svg",
+    "destination": "witness-backend/static/icons/crop.svg",
+    "source_sha256": "51f7d27b7de25a355aa7038a7fedc9214ec6215530b5e68aa491e1a8c939a136",
+    "references_match": {
+      "original": true,
+      "newBackend": true
+    },
+    "imported_sha256": "51f7d27b7de25a355aa7038a7fedc9214ec6215530b5e68aa491e1a8c939a136",
+    "byte_identical": true
+  },
+  {
+    "source_ref": "49f63ee4e242efe0c5aa4aef0a524652e75cfd5a",
+    "source_path": "static/icons/download.svg",
+    "destination": "witness-backend/static/icons/download.svg",
+    "source_sha256": "ef82782835351c43f0e41025888b00459268a767113d33524d4f8fbfe8008c16",
+    "references_match": {
+      "original": true,
+      "newBackend": true
+    },
+    "imported_sha256": "ef82782835351c43f0e41025888b00459268a767113d33524d4f8fbfe8008c16",
+    "byte_identical": true
+  },
+  {
+    "source_ref": "49f63ee4e242efe0c5aa4aef0a524652e75cfd5a",
+    "source_path": "static/icons/emoji-neutral.svg",
+    "destination": "witness-backend/static/icons/emoji-neutral.svg",
+    "source_sha256": "d69514ebdf456314084d112aaf8a2ab995d5f3bd6e733b88afd4f0f20578ed90",
+    "references_match": {
+      "original": true,
+      "newBackend": true
+    },
+    "imported_sha256": "d69514ebdf456314084d112aaf8a2ab995d5f3bd6e733b88afd4f0f20578ed90",
+    "byte_identical": true
+  },
+  {
+    "source_ref": "49f63ee4e242efe0c5aa4aef0a524652e75cfd5a",
+    "source_path": "static/icons/eraser.svg",
+    "destination": "witness-backend/static/icons/eraser.svg",
+    "source_sha256": "45f67fac536b70282b90ed941b0ba7bf5b71ee6bcc1d54bca5d5ffb5df307145",
+    "references_match": {
+      "original": true,
+      "newBackend": true
+    },
+    "imported_sha256": "45f67fac536b70282b90ed941b0ba7bf5b71ee6bcc1d54bca5d5ffb5df307145",
+    "byte_identical": true
+  },
+  {
+    "source_ref": "49f63ee4e242efe0c5aa4aef0a524652e75cfd5a",
+    "source_path": "static/icons/eye.svg",
+    "destination": "witness-backend/static/icons/eye.svg",
+    "source_sha256": "2f3f390d1bb389b753f9183cfac653e3358f9b4a11313ae0dfe968a917f82be2",
+    "references_match": {
+      "original": true,
+      "newBackend": true
+    },
+    "imported_sha256": "2f3f390d1bb389b753f9183cfac653e3358f9b4a11313ae0dfe968a917f82be2",
+    "byte_identical": true
+  },
+  {
+    "source_ref": "49f63ee4e242efe0c5aa4aef0a524652e75cfd5a",
+    "source_path": "static/icons/file-earmark-text.svg",
+    "destination": "witness-backend/static/icons/file-earmark-text.svg",
+    "source_sha256": "1c6745b3c4782b0af852b48c8ad180c9f9c635926d5c458dc333689b8c3c4831",
+    "references_match": {
+      "original": true,
+      "newBackend": true
+    },
+    "imported_sha256": "1c6745b3c4782b0af852b48c8ad180c9f9c635926d5c458dc333689b8c3c4831",
+    "byte_identical": true
+  },
+  {
+    "source_ref": "49f63ee4e242efe0c5aa4aef0a524652e75cfd5a",
+    "source_path": "static/icons/folder2-open.svg",
+    "destination": "witness-backend/static/icons/folder2-open.svg",
+    "source_sha256": "0cc38b0197cb7f3c1e8dc08027528cafef4100b5eb2bc508ae69653ff2837556",
+    "references_match": {
+      "original": true,
+      "newBackend": true
+    },
+    "imported_sha256": "0cc38b0197cb7f3c1e8dc08027528cafef4100b5eb2bc508ae69653ff2837556",
+    "byte_identical": true
+  },
+  {
+    "source_ref": "49f63ee4e242efe0c5aa4aef0a524652e75cfd5a",
+    "source_path": "static/icons/fonts.svg",
+    "destination": "witness-backend/static/icons/fonts.svg",
+    "source_sha256": "ca84f21d43709ac137a1510de337381e363a1c5e6fc566c0fb21bc43a7865819",
+    "references_match": {
+      "original": true,
+      "newBackend": true
+    },
+    "imported_sha256": "ca84f21d43709ac137a1510de337381e363a1c5e6fc566c0fb21bc43a7865819",
+    "byte_identical": true
+  },
+  {
+    "source_ref": "49f63ee4e242efe0c5aa4aef0a524652e75cfd5a",
+    "source_path": "static/icons/image.svg",
+    "destination": "witness-backend/static/icons/image.svg",
+    "source_sha256": "640710a3092ef6abda1f86061283b5b2f290fe7ff4f1ed2b005316fe134571c7",
+    "references_match": {
+      "original": true,
+      "newBackend": true
+    },
+    "imported_sha256": "640710a3092ef6abda1f86061283b5b2f290fe7ff4f1ed2b005316fe134571c7",
+    "byte_identical": true
+  },
+  {
+    "source_ref": "49f63ee4e242efe0c5aa4aef0a524652e75cfd5a",
+    "source_path": "static/icons/palette.svg",
+    "destination": "witness-backend/static/icons/palette.svg",
+    "source_sha256": "8a9fa8b6118741a3322c71bfac9ff9d1bbde838dc1ebe4d029bd7345e686d59c",
+    "references_match": {
+      "original": true,
+      "newBackend": true
+    },
+    "imported_sha256": "8a9fa8b6118741a3322c71bfac9ff9d1bbde838dc1ebe4d029bd7345e686d59c",
+    "byte_identical": true
+  },
+  {
+    "source_ref": "49f63ee4e242efe0c5aa4aef0a524652e75cfd5a",
+    "source_path": "static/icons/patch-exclamation.svg",
+    "destination": "witness-backend/static/icons/patch-exclamation.svg",
+    "source_sha256": "d64d70e9d7234a6096209a5c902d9c7c5b2ca40d315c34301784d874b69aa463",
+    "references_match": {
+      "original": true,
+      "newBackend": true
+    },
+    "imported_sha256": "d64d70e9d7234a6096209a5c902d9c7c5b2ca40d315c34301784d874b69aa463",
+    "byte_identical": true
+  },
+  {
+    "source_ref": "49f63ee4e242efe0c5aa4aef0a524652e75cfd5a",
+    "source_path": "static/icons/pencil-square.svg",
+    "destination": "witness-backend/static/icons/pencil-square.svg",
+    "source_sha256": "75ff482695a7214c5022f90d1651aade804b922af4f3553a4192fc828d59dd92",
+    "references_match": {
+      "original": true,
+      "newBackend": true
+    },
+    "imported_sha256": "75ff482695a7214c5022f90d1651aade804b922af4f3553a4192fc828d59dd92",
+    "byte_identical": true
+  },
+  {
+    "source_ref": "49f63ee4e242efe0c5aa4aef0a524652e75cfd5a",
+    "source_path": "static/icons/pencil.svg",
+    "destination": "witness-backend/static/icons/pencil.svg",
+    "source_sha256": "890d0ad4a6d4a41ef2e7365596aac6910b3d19f772a4da85ff89129303a7979c",
+    "references_match": {
+      "original": true,
+      "newBackend": true
+    },
+    "imported_sha256": "890d0ad4a6d4a41ef2e7365596aac6910b3d19f772a4da85ff89129303a7979c",
+    "byte_identical": true
+  },
+  {
+    "source_ref": "49f63ee4e242efe0c5aa4aef0a524652e75cfd5a",
+    "source_path": "static/icons/person-arms-up.svg",
+    "destination": "witness-backend/static/icons/person-arms-up.svg",
+    "source_sha256": "a856b565821169649057be0f01e3f53c983e40d7df35e71107f0ba977cf910e0",
+    "references_match": {
+      "original": true,
+      "newBackend": true
+    },
+    "imported_sha256": "a856b565821169649057be0f01e3f53c983e40d7df35e71107f0ba977cf910e0",
+    "byte_identical": true
+  },
+  {
+    "source_ref": "49f63ee4e242efe0c5aa4aef0a524652e75cfd5a",
+    "source_path": "static/icons/person.svg",
+    "destination": "witness-backend/static/icons/person.svg",
+    "source_sha256": "e071db1bfc90bd30bc621d14e9b1c9b5d195b932d7027d65e1e30fbd9ffbf6c9",
+    "references_match": {
+      "original": true,
+      "newBackend": true
+    },
+    "imported_sha256": "e071db1bfc90bd30bc621d14e9b1c9b5d195b932d7027d65e1e30fbd9ffbf6c9",
+    "byte_identical": true
+  },
+  {
+    "source_ref": "49f63ee4e242efe0c5aa4aef0a524652e75cfd5a",
+    "source_path": "static/icons/scissors.svg",
+    "destination": "witness-backend/static/icons/scissors.svg",
+    "source_sha256": "7719593c3d970d61063fc25e91dd637e94f2bd2a11a65d60c41f5dd23c7e482a",
+    "references_match": {
+      "original": true,
+      "newBackend": true
+    },
+    "imported_sha256": "7719593c3d970d61063fc25e91dd637e94f2bd2a11a65d60c41f5dd23c7e482a",
+    "byte_identical": true
+  },
+  {
+    "source_ref": "49f63ee4e242efe0c5aa4aef0a524652e75cfd5a",
+    "source_path": "static/icons/slash-lg.svg",
+    "destination": "witness-backend/static/icons/slash-lg.svg",
+    "source_sha256": "9c8c5bb993a9b321d7661d9c8958468edf0a92bb0fb8646e8821905239581aa1",
+    "references_match": {
+      "original": true,
+      "newBackend": true
+    },
+    "imported_sha256": "9c8c5bb993a9b321d7661d9c8958468edf0a92bb0fb8646e8821905239581aa1",
+    "byte_identical": true
+  },
+  {
+    "source_ref": "49f63ee4e242efe0c5aa4aef0a524652e75cfd5a",
+    "source_path": "static/icons/sliders.svg",
+    "destination": "witness-backend/static/icons/sliders.svg",
+    "source_sha256": "38986f0874b63e3a34e5f489a39b23579f31cbd0c43b79d17e95b50312ac21fc",
+    "references_match": {
+      "original": true,
+      "newBackend": true
+    },
+    "imported_sha256": "38986f0874b63e3a34e5f489a39b23579f31cbd0c43b79d17e95b50312ac21fc",
+    "byte_identical": true
+  },
+  {
+    "source_ref": "49f63ee4e242efe0c5aa4aef0a524652e75cfd5a",
+    "source_path": "static/icons/square.svg",
+    "destination": "witness-backend/static/icons/square.svg",
+    "source_sha256": "50f7e9c5940d7a71263a597233b92f396ceea7b8765ab7480625c49506d10c9b",
+    "references_match": {
+      "original": true,
+      "newBackend": true
+    },
+    "imported_sha256": "50f7e9c5940d7a71263a597233b92f396ceea7b8765ab7480625c49506d10c9b",
+    "byte_identical": true
+  },
+  {
+    "source_ref": "49f63ee4e242efe0c5aa4aef0a524652e75cfd5a",
+    "source_path": "static/index.html",
+    "destination": "witness-backend/static/index.html",
+    "source_sha256": "35d66991ae7169ec96849f823d8e5629874f84a028ecf4a7f83624e16e567fed",
+    "references_match": {
+      "original": true,
+      "newBackend": true
+    },
+    "imported_sha256": "35d66991ae7169ec96849f823d8e5629874f84a028ecf4a7f83624e16e567fed",
+    "byte_identical": true
+  },
+  {
+    "source_ref": "49f63ee4e242efe0c5aa4aef0a524652e75cfd5a",
+    "source_path": "static/multiview-reports.js",
+    "destination": "witness-backend/static/multiview-reports.js",
+    "source_sha256": "241f6f02c88fd8e3779a227d6a3dc93fa73424f8b3164ce0bdb4c1cd232e840e",
+    "references_match": {
+      "original": true,
+      "newBackend": true
+    },
+    "imported_sha256": "241f6f02c88fd8e3779a227d6a3dc93fa73424f8b3164ce0bdb4c1cd232e840e",
+    "byte_identical": true
+  },
+  {
+    "source_ref": "49f63ee4e242efe0c5aa4aef0a524652e75cfd5a",
+    "source_path": "static/refinement.js",
+    "destination": "witness-backend/static/refinement.js",
+    "source_sha256": "cc1d1c89eb3774d90bee6f9720ad3e7449754bf8238e8980cdde9633ee62b91a",
+    "references_match": {
+      "original": true,
+      "newBackend": true
+    },
+    "imported_sha256": "cc1d1c89eb3774d90bee6f9720ad3e7449754bf8238e8980cdde9633ee62b91a",
+    "byte_identical": true
+  },
+  {
+    "source_ref": "49f63ee4e242efe0c5aa4aef0a524652e75cfd5a",
+    "source_path": "static/revelio-logo.png",
+    "destination": "witness-backend/static/revelio-logo.png",
+    "source_sha256": "dbb8b7b47ac768ba4d9653eff22d5b9be07af0111db7f76a108f219b76ebdb98",
+    "references_match": {
+      "original": true,
+      "newBackend": true
+    },
+    "imported_sha256": "dbb8b7b47ac768ba4d9653eff22d5b9be07af0111db7f76a108f219b76ebdb98",
+    "byte_identical": true
+  },
+  {
+    "source_ref": "49f63ee4e242efe0c5aa4aef0a524652e75cfd5a",
+    "source_path": "static/sketchpad.js",
+    "destination": "witness-backend/static/sketchpad.js",
+    "source_sha256": "327bda0019c4c956749f56a3cb140ed87c0c52bac66d2e6617f610d64957e346",
+    "references_match": {
+      "original": true,
+      "newBackend": true
+    },
+    "imported_sha256": "327bda0019c4c956749f56a3cb140ed87c0c52bac66d2e6617f610d64957e346",
+    "byte_identical": true
+  },
+  {
+    "source_ref": "49f63ee4e242efe0c5aa4aef0a524652e75cfd5a",
+    "source_path": "static/workbench-polish.css",
+    "destination": "witness-backend/static/workbench-polish.css",
+    "source_sha256": "b3068239dcad593e87ecbec24d0de561147a678dbb4ac1e6e005bf4c49260205",
+    "references_match": {
+      "original": true,
+      "newBackend": true
+    },
+    "imported_sha256": "b3068239dcad593e87ecbec24d0de561147a678dbb4ac1e6e005bf4c49260205",
+    "byte_identical": true
+  },
+  {
+    "source_ref": "49f63ee4e242efe0c5aa4aef0a524652e75cfd5a",
+    "source_path": "static/workbench.css",
+    "destination": "witness-backend/static/workbench.css",
+    "source_sha256": "49194c0a90f6eefa1cd54099ff1eb534dbca4b51819f12d43ec436f71cccee43",
+    "references_match": {
+      "original": true,
+      "newBackend": true
+    },
+    "imported_sha256": "49194c0a90f6eefa1cd54099ff1eb534dbca4b51819f12d43ec436f71cccee43",
+    "byte_identical": true
+  },
+  {
+    "source_ref": "49f63ee4e242efe0c5aa4aef0a524652e75cfd5a",
+    "source_path": "static/workbench.js",
+    "destination": "witness-backend/static/workbench.js",
+    "source_sha256": "0953f9abc1b7bd6675dedd9320ae623ed0d09477e26438c732d635e15846fce5",
+    "references_match": {
+      "original": true,
+      "newBackend": true
+    },
+    "imported_sha256": "0953f9abc1b7bd6675dedd9320ae623ed0d09477e26438c732d635e15846fce5",
+    "byte_identical": true
+  },
+  {
+    "source_ref": "49f63ee4e242efe0c5aa4aef0a524652e75cfd5a",
+    "source_path": "tests/conftest.py",
+    "destination": "witness-backend/tests/conftest.py",
+    "source_sha256": "59d829e1c08a27470866fa5f5fa92f18eb75de47de20fa0a6b6a4a356bbd949a",
+    "references_match": {
+      "original": true,
+      "newBackend": true
+    },
+    "imported_sha256": "9a71038cef7682fe85e92d04f6487a2d354ab2f7cb2453c83302b978ccc5d97e",
+    "byte_identical": false,
+    "relocation_diff": [
+      "--- b/tests/conftest.py\n",
+      "+++ witness-backend/tests/conftest.py\n",
+      "@@ -8,9 +8,11 @@\n",
+      " # Isolate even import-time app initialization, before any per-test fixture runs.",
+      " _bootstrap=tempfile.TemporaryDirectory(prefix='witnesstrace-tests-')",
+      " os.environ['WITNESSTRACE_DATA_DIR']=_bootstrap.name",
+      "+os.environ['WITNESSTRACE_OUTPUTS_DIR']=str(Path(_bootstrap.name)/'outputs')",
+      "+os.environ['WITNESSTRACE_WORK_DIR']=str(Path(_bootstrap.name)/'work')",
+      " import case_store",
+      " case_store.DATA=Path(_bootstrap.name)",
+      "-case_store.DB=case_store.DATA/'witness.sqlite3' ",
+      "+case_store.DB=case_store.DATA/'witness.sqlite3'",
+      " ",
+      " @pytest.fixture(autouse=True)",
+      " def isolated_case_database(tmp_path,monkeypatch):"
+    ]
+  },
+  {
+    "source_ref": "49f63ee4e242efe0c5aa4aef0a524652e75cfd5a",
+    "source_path": "tests/test_app.py",
+    "destination": "witness-backend/tests/test_app.py",
+    "source_sha256": "02ecdef233ddd76d8d8d43197543cfccd46ddf0964d580738c5ce68caf2a904c",
+    "references_match": {
+      "original": true,
+      "newBackend": true
+    },
+    "imported_sha256": "02ecdef233ddd76d8d8d43197543cfccd46ddf0964d580738c5ce68caf2a904c",
+    "byte_identical": true
+  },
+  {
+    "source_ref": "49f63ee4e242efe0c5aa4aef0a524652e75cfd5a",
+    "source_path": "tests/test_cases.py",
+    "destination": "witness-backend/tests/test_cases.py",
+    "source_sha256": "45f3f655b4a77e6ec3445f4af76e49eefa5ee7129aec6007586da71015ccbd68",
+    "references_match": {
+      "original": true,
+      "newBackend": true
+    },
+    "imported_sha256": "ed4bebe059fb235e68d6e354cec6c2a9598fa7f3916a2cd466b0c97264f917b2",
+    "byte_identical": false,
+    "relocation_diff": [
+      "--- b/tests/test_cases.py",
+      "+++ witness-backend/tests/test_cases.py",
+      "@@ -147,7 +147,7 @@",
+      " ",
+      " def test_original_generation_functions_unchanged():",
+      "     root=Path(app.__file__).parent",
+      "-    original=ast.parse((root/'evidence/phase02/before/app.py').read_text())",
+      "+    original=ast.parse((root/'tests/fixtures/phase02_app.py').read_text())",
+      "     current=ast.parse((root/'app.py').read_text())",
+      "     for name in ['prompt_for','run_job','snapshot_generated','validate_generated_image']:",
+      "         def function(tree):return ast.dump(next(n for n in tree.body if isinstance(n,ast.FunctionDef) and n.name==name))"
+    ]
+  },
+  {
+    "source_ref": "49f63ee4e242efe0c5aa4aef0a524652e75cfd5a",
+    "source_path": "tests/test_character_lab.py",
+    "destination": "witness-backend/tests/test_character_lab.py",
+    "source_sha256": "c50688429d948472e5a4570000ae3b00cff5c69fe7502fc1ec982ac5b79e8323",
+    "references_match": {
+      "original": true,
+      "newBackend": true
+    },
+    "imported_sha256": "40fe02f1bdae74587a1bf20fa45a3974c6351c449e575ffb7b92c304bce79812",
+    "byte_identical": false,
+    "relocation_diff": [
+      "--- b/tests/test_character_lab.py",
+      "+++ witness-backend/tests/test_character_lab.py",
+      "@@ -116,7 +116,7 @@",
+      " def test_original_adapter_unchanged_since_phase02():",
+      "     root=Path(app.__file__).parent",
+      "     def functions(path):return {n.name:ast.dump(n) for n in ast.parse(path.read_text()).body if isinstance(n,ast.FunctionDef)}",
+      "-    before=functions(root/'evidence/phase03/before/app.py');after=functions(root/'app.py')",
+      "+    before=functions(root/'tests/fixtures/phase03_app.py');after=functions(root/'app.py')",
+      "     for name in ['prompt_for','run_job','snapshot_generated','validate_generated_image','durable_run_job']:",
+      "         assert before[name]==after[name],name",
+      " "
+    ]
+  },
+  {
+    "source_ref": "49f63ee4e242efe0c5aa4aef0a524652e75cfd5a",
+    "source_path": "tests/test_enhance.py",
+    "destination": "witness-backend/tests/test_enhance.py",
+    "source_sha256": "522eb363d7ef1901e1484b8a9e9d38e84306c8e05100043c0db7106b19b81256",
+    "references_match": {
+      "original": true,
+      "newBackend": true
+    },
+    "imported_sha256": "522eb363d7ef1901e1484b8a9e9d38e84306c8e05100043c0db7106b19b81256",
+    "byte_identical": true
+  },
+  {
+    "source_ref": "49f63ee4e242efe0c5aa4aef0a524652e75cfd5a",
+    "source_path": "tests/test_multiview_reports.py",
+    "destination": "witness-backend/tests/test_multiview_reports.py",
+    "source_sha256": "8cccafe38c57d510b6bfdad300e13591b6034a16a44cca369ee48ff99aae4d88",
+    "references_match": {
+      "original": true,
+      "newBackend": true
+    },
+    "imported_sha256": "8cccafe38c57d510b6bfdad300e13591b6034a16a44cca369ee48ff99aae4d88",
+    "byte_identical": true
+  },
+  {
+    "source_ref": "49f63ee4e242efe0c5aa4aef0a524652e75cfd5a",
+    "source_path": "tests/test_phase08_workflow.py",
+    "destination": "witness-backend/tests/test_phase08_workflow.py",
+    "source_sha256": "e13b183d4b39a66d0b542e2518e3dcb10cfbba8e35ff76f411e5d73c4739ef93",
+    "references_match": {
+      "original": true,
+      "newBackend": true
+    },
+    "imported_sha256": "e13b183d4b39a66d0b542e2518e3dcb10cfbba8e35ff76f411e5d73c4739ef93",
+    "byte_identical": true
+  },
+  {
+    "source_ref": "49f63ee4e242efe0c5aa4aef0a524652e75cfd5a",
+    "source_path": "tests/test_refinement.py",
+    "destination": "witness-backend/tests/test_refinement.py",
+    "source_sha256": "3349e828a23f08c6a3347df9bb3dd32b17b9922b95b722b8ad78718b71b37566",
+    "references_match": {
+      "original": true,
+      "newBackend": true
+    },
+    "imported_sha256": "3349e828a23f08c6a3347df9bb3dd32b17b9922b95b722b8ad78718b71b37566",
+    "byte_identical": true
+  },
+  {
+    "source_ref": "49f63ee4e242efe0c5aa4aef0a524652e75cfd5a",
+    "source_path": "tests/test_sketchpad.py",
+    "destination": "witness-backend/tests/test_sketchpad.py",
+    "source_sha256": "aff29c68efcc3d164943953d357fd0eb03dbbfbb96b2ff27e6424bc55e31dcdd",
+    "references_match": {
+      "original": true,
+      "newBackend": true
+    },
+    "imported_sha256": "aff29c68efcc3d164943953d357fd0eb03dbbfbb96b2ff27e6424bc55e31dcdd",
+    "byte_identical": true
+  },
+  {
+    "source_ref": "49f63ee4e242efe0c5aa4aef0a524652e75cfd5a",
+    "source_path": "evidence/phase02/before/app.py",
+    "destination": "witness-backend/tests/fixtures/phase02_app.py",
+    "source_sha256": "32100a72bb37ce8263b531bd0d0e73b3557090bee98afea7512b8333e26b1e3e",
+    "references_match": {
+      "original": true,
+      "newBackend": true
+    },
+    "imported_sha256": "32100a72bb37ce8263b531bd0d0e73b3557090bee98afea7512b8333e26b1e3e",
+    "byte_identical": true
+  },
+  {
+    "source_ref": "49f63ee4e242efe0c5aa4aef0a524652e75cfd5a",
+    "source_path": "evidence/phase03/before/app.py",
+    "destination": "witness-backend/tests/fixtures/phase03_app.py",
+    "source_sha256": "c4bf16bc6b5883570d7d1878d5736aea0b914a6641d91ee59db28064a7971c40",
+    "references_match": {
+      "original": true,
+      "newBackend": true
+    },
+    "imported_sha256": "c4bf16bc6b5883570d7d1878d5736aea0b914a6641d91ee59db28064a7971c40",
+    "byte_identical": true
+  }
+]
