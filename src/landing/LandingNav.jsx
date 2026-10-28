@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
-import { BrandLogo } from '../components/brand/Logo'
+import { BrandLogo, LogoMark } from '../components/brand/Logo'
 import Icon from '../components/ui/Icon'
+import ThemeToggle from '../components/ui/ThemeToggle'
 import { useEngine } from './engine'
 import { scrollToId, useIntroReady } from './motion'
 
@@ -58,7 +59,10 @@ function MobileMenu({ open, onClose }) {
   return (
     <div ref={panel} className={`lp-menu ${open ? 'is-open' : ''}`} role="dialog" aria-modal="true" aria-label="Site menu" aria-hidden={!open} inert={!open}>
       <div className="lp-shell lp-menu__top">
-        <span className="lp-brand"><BrandLogo height={40} /></span>
+        <span className="lp-brand">
+          <LogoMark size={40} />
+          <BrandLogo height={40} />
+        </span>
         <button ref={closeBtn} type="button" className="lp-menu__close" onClick={onClose}>
           <Icon name="close" /> Close
         </button>
@@ -120,6 +124,7 @@ export default function LandingNav() {
       <header className={`lp-nav ${scrolled ? 'is-scrolled' : ''} ${ready ? 'is-ready' : ''}`}>
         <div className="lp-shell lp-nav__inner">
           <a href="/" className="lp-brand" onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }) }} aria-label="Revelio — back to top">
+            <LogoMark size={40} />
             <BrandLogo height={40} />
           </a>
           <nav className="lp-nav__links" aria-label="Sections">
@@ -136,6 +141,7 @@ export default function LandingNav() {
           </nav>
           <div className="lp-nav__right">
             <EngineStatus />
+            <ThemeToggle className="lp-theme-toggle" />
             <a href="/app" className="lp-btn lp-btn--primary lp-btn--sm">
               Open Workspace <Icon name="arrowRight" />
             </a>

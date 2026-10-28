@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { api } from '../../api/client'
 import { optionLabel } from '../../lib/format'
 import { useApp } from '../../state/AppContext'
+import DictateButton from '../ui/DictateButton'
 import Icon from '../ui/Icon'
 
 const EXAMPLES = [
@@ -67,7 +68,10 @@ const RefinePanel = ({ profile, onApply }) => {
     <div className="refine">
       <form className="refine__form" onSubmit={(e) => { e.preventDefault(); parse() }}>
         <label className="field">
-          <span className="label">Refinement request</span>
+          <span className="label refine__label">
+            Refinement request
+            <DictateButton value={text} onChange={setText} maxLength={500} />
+          </span>
           <input className="input" value={text} onChange={(e) => setText(e.target.value)} maxLength={500}
             placeholder="e.g. make the eyebrows thicker and the jaw narrower" />
         </label>
