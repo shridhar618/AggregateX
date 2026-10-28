@@ -9,12 +9,12 @@ const R2 = '/landing/demo-r2.webp'
 // Traits of the fictional demo profile (extracted from the description, then refined).
 const DEMO_TRAITS = [
   ['Face shape', 'Oval', 'extracted'],
-  ['Hair', 'Short · dark', 'extracted'],
-  ['Eyebrows', 'Bushy', 'manual'],
-  ['Nose', 'Narrow', 'extracted'],
-  ['Facial hair', 'Goatee', 'manual'],
-  ['Eyewear', 'Rectangular', 'manual'],
-  ['Mark', 'Small scar · L cheek', 'extracted'],
+  ['Hair', 'Curly · dark', 'extracted'],
+  ['Eyebrows', 'Thick', 'extracted'],
+  ['Eyes', 'Dark · deep-set', 'extracted'],
+  ['Nose', 'Straight', 'extracted'],
+  ['Hair length', 'Collar-length', 'manual'],
+  ['Facial hair', 'Full beard', 'manual'],
 ]
 
 /**
@@ -143,7 +143,7 @@ function LiquidComposite({ base, reveal, onModeChange }) {
 
   return (
     <div ref={wrap} className={`lp-liquid ${interactive ? 'is-interactive' : ''}`}>
-      <img className="lp-liquid__base" src={base} alt="Procedural demonstration composite, revision 2, of a fictional profile" width="900" height="1125" fetchPriority="high" />
+      <img className="lp-liquid__base" src={base} alt="Pencil-style demonstration sketch, revision 2, of a fictional profile" width="900" height="1125" fetchPriority="high" />
       <img className={`lp-liquid__alt ${showReveal ? 'is-on' : ''}`} src={reveal} alt="" aria-hidden="true" loading="lazy" />
       {interactive && <canvas ref={canvas} className="lp-liquid__canvas" aria-hidden="true" />}
       {!interactive && (
@@ -248,9 +248,9 @@ export default function Hero() {
               <span className="lp-case__hint lp-mono" aria-hidden="true">Move to reveal R1</span>
             </div>
             <div className="lp-case__meta lp-mono">
-              <span><b>Method</b> procedural v1</span>
+              <span><b>Method</b> AI sketch</span>
               <span><b>Output</b> 900 × 1125 PNG</span>
-              <span className="lp-case__notai">Not AI-generated</span>
+              <span className="lp-case__notai">AI-generated · fictional</span>
             </div>
           </div>
 

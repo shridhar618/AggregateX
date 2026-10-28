@@ -71,10 +71,19 @@ if(method==='eth_getTransactionByHash')return {hash:'TX',type:'0x2',chainId:'0x1
 if(method==='eth_getTransactionReceipt')return null;
 throw new Error('Unexpected wallet method '+method);
 }};""".replace('ADDRESS',ADDRESS).replace('TX',TX))
+            page.route('**/api/speech', lambda route: route.fulfill(json={'available': False}))
+            page.add_init_script('''window.SpeechRecognition=class {start(){window.testRecognition=this;}stop(){this.onend?.();}abort(){}}''')
             page.goto(origin+'/app#/new')
             page.locator('#wt-case').select_option(case['id'])
             expect(page.get_by_role('heading',name='Blockchain Integrity')).to_be_visible(timeout=20000)
             expect(page.get_by_text('NOT REGISTERED',exact=True)).to_be_visible()
+            # Preserve remote dictation in the same studio as blockchain integrity.
+            dictate=page.get_by_role('button',name='Dictate',exact=True).first
+            expect(dictate).to_be_enabled()
+            dictate.click()
+            page.evaluate("""() => {const result=[{transcript:'Synthetic voice clarification.'}];result.isFinal=true;window.testRecognition.onresult({resultIndex:0,results:[result]});}""")
+            expect(page.locator('#wt-clarify')).to_have_value('Synthetic voice clarification.')
+            page.get_by_role('button',name='Stop',exact=True).click()
             page.get_by_role('button',name='Connect MetaMask',exact=True).click()
             expect(page.get_by_text('Wallet: '+ADDRESS)).to_be_visible()
             assert page.evaluate('window.walletChain')=='0x14a34'
@@ -111,7 +120,7 @@ throw new Error('Unexpected wallet method '+method);
             files[0].write_bytes(files[0].read_bytes()+b'tampered')
             page.get_by_role('button',name='Verify Integrity',exact=True).click();expect(page.get_by_text('TAMPERED',exact=True)).to_be_visible()
             browser.close()
-            print('PASS: authenticated gateway, saved-byte digest, chain switch, MetaMask rejection, ethers zero-value commitment, pending persistence, reload, independent verification, safe RPC rate-limit diagnostics and recovery without resubmission, tamper detection, BaseScan link')
+            print('PASS: authenticated gateway, saved-byte digest, dictation alongside blockchain, chain switch, MetaMask rejection, ethers zero-value commitment, pending persistence, reload, independent verification, safe RPC rate-limit diagnostics and recovery without resubmission, tamper detection, BaseScan link')
       finally:
         for process in processes: process.terminate()
         for process in processes: process.wait(timeout=15)

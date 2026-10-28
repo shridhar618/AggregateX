@@ -1,22 +1,16 @@
-import { useState } from 'react'
 import Icon from './Icon'
-import { applyTheme, getStoredTheme } from '../../lib/theme'
+import { useTheme } from '../../lib/theme'
 
 export default function ThemeToggle({ className = '' }) {
-  const [theme, setTheme] = useState(getStoredTheme)
+  const [theme, setTheme] = useTheme()
   const nextTheme = theme === 'dark' ? 'light' : 'dark'
   const label = `Switch to ${nextTheme} theme`
-
-  const toggle = () => {
-    const next = applyTheme(nextTheme)
-    setTheme(next)
-  }
 
   return (
     <button
       type="button"
       className={className}
-      onClick={toggle}
+      onClick={() => setTheme(nextTheme)}
       aria-label={label}
       title={label}
     >
