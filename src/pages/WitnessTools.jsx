@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { witness, imageUrl, downloadUrl } from '../api/witnesstrace'
 import { useApp } from '../state/AppContext'
-import { applyTheme, getStoredTheme } from '../lib/theme'
+import { useTheme } from '../lib/theme'
 import { navigate } from '../lib/router'
 import CompareSlider from '../components/sketch/CompareSlider'
 import DictateButton from '../components/ui/DictateButton'
@@ -115,6 +115,6 @@ export function WitnessCompare() {
 }
 
 export function WitnessSettings() {
-  const { wt, prefs, updatePrefs } = useApp(); const [theme, changeTheme] = useState(getStoredTheme)
-  return <section className="panel"><div className="panel__body wt-fields"><h2>Application settings</h2><label>Interface theme<select value={theme} onChange={e => changeTheme(applyTheme(e.target.value))}><option value="dark">Dark</option><option value="light">Light</option></select></label><label><input type="checkbox" checked={prefs.reduceMotion} onChange={e => updatePrefs({ reduceMotion: e.target.checked })} /> Reduce motion</label><button className="btn" onClick={wt.reconnect}>Check backend health</button><p>Codex CLI: {wt.connection?.codex_installed ? 'installed' : 'unavailable / disconnected'}. Installation does not establish current authentication or quota.</p><pre className="wt-prompt">{JSON.stringify(wt.connection, null, 2)}</pre><p>WitnessTrace owns cases, testimony, images and reports in its configured SQLite and file store. Revelio owns local account sessions and interface preferences. Signed-in users share this local collection.</p>{wt.error && <p role="alert">{wt.error}</p>}</div></section>
+  const { wt, prefs, updatePrefs } = useApp(); const [theme, changeTheme] = useTheme()
+  return <section className="panel"><div className="panel__body wt-fields"><h2>Application settings</h2><div className="field"><span className="label" id="wt-theme">Interface theme</span><div className="segmented wt-theme" role="group" aria-labelledby="wt-theme">{[['dark', 'Dark'], ['light', 'Light']].map(([id, label]) => <button key={id} type="button" aria-pressed={theme === id} onClick={() => changeTheme(id)}>{label}</button>)}</div></div><label><input type="checkbox" checked={prefs.reduceMotion} onChange={e => updatePrefs({ reduceMotion: e.target.checked })} /> Reduce motion</label><button className="btn" onClick={wt.reconnect}>Check backend health</button><p>Codex CLI: {wt.connection?.codex_installed ? 'installed' : 'unavailable / disconnected'}. Installation does not establish current authentication or quota.</p><pre className="wt-prompt">{JSON.stringify(wt.connection, null, 2)}</pre><p>WitnessTrace owns cases, testimony, images and reports in its configured SQLite and file store. Revelio owns local account sessions and interface preferences. Signed-in users share this local collection.</p>{wt.error && <p role="alert">{wt.error}</p>}</div></section>
 }
