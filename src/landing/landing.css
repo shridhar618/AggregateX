@@ -3738,3 +3738,174 @@ html:not([data-theme='light']) .lp-brand .logo-mark {
     margin-top: -0.5rem;
   }
 }
+
+/* ==========================================================================
+   Light theme: live demo and editor showcase
+   Cream "lab bench" surfaces with sage accents instead of the dark-theme navy.
+   ========================================================================== */
+html[data-theme='light'] .lp-demo::before {
+  background: radial-gradient(48rem 24rem at 50% 50%, rgba(160, 200, 120, 0.22), transparent 70%);
+}
+
+html[data-theme='light'] .lp-demo__panel {
+  border-color: #d5e1b9;
+  background:
+    radial-gradient(40rem 18rem at 0% 0%, rgba(160, 200, 120, 0.18), transparent 65%),
+    radial-gradient(36rem 18rem at 100% 100%, rgba(221, 181, 95, 0.12), transparent 65%),
+    linear-gradient(160deg, #fffdf6 0%, #f5f3e6 100%);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.9) inset, 0 40px 90px -52px rgba(82, 118, 66, 0.55);
+}
+
+html[data-theme='light'] .lp-demo__panel:hover {
+  border-color: #b9cf94;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.9) inset, 0 46px 100px -50px rgba(82, 118, 66, 0.6);
+}
+
+html[data-theme='light'] .lp-demo__input,
+html[data-theme='light'] .lp-demo__stage,
+html[data-theme='light'] .lp-demo__controls {
+  position: relative;
+  overflow: hidden;
+  border-color: rgba(160, 200, 120, 0.55);
+  background: rgba(255, 254, 250, 0.88);
+  box-shadow: 0 1px 0 #fff inset, 0 16px 36px -30px rgba(82, 118, 66, 0.5);
+}
+
+/* A thin sage-to-gold rule across the top of each card. */
+html[data-theme='light'] .lp-demo__input::before,
+html[data-theme='light'] .lp-demo__stage::before,
+html[data-theme='light'] .lp-demo__controls::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto;
+  height: 3px;
+  background: linear-gradient(90deg, #a0c878, #7fa95b 55%, #ddb55f);
+  opacity: 0.85;
+}
+
+html[data-theme='light'] .lp-demo .lp-label {
+  color: #5f6d52;
+}
+
+html[data-theme='light'] .lp-demo .lp-textarea,
+html[data-theme='light'] .lp-demo .lp-select {
+  border-color: #dfe8c8;
+  background-color: #fbf9f0;
+  color: #273323;
+}
+
+html[data-theme='light'] .lp-demo .lp-textarea:focus,
+html[data-theme='light'] .lp-demo .lp-select:focus {
+  border-color: #7fa95b;
+  box-shadow: 0 0 0 3px rgba(160, 200, 120, 0.3);
+}
+
+html[data-theme='light'] .lp-demo__extract {
+  border-top-color: #d5e1b9;
+}
+
+html[data-theme='light'] .lp-chip {
+  border-color: #d5e1b9;
+  background: #fbf9f0;
+  color: #56634c;
+}
+
+html[data-theme='light'] .lp-chip b {
+  color: #273323;
+}
+
+html[data-theme='light'] .lp-chip--extracted {
+  border-color: rgba(82, 118, 66, 0.35);
+  background: rgba(160, 200, 120, 0.22);
+}
+
+html[data-theme='light'] .lp-tag--procedural {
+  color: #3f6b34;
+  border-color: rgba(82, 118, 66, 0.4);
+  background: rgba(160, 200, 120, 0.2);
+}
+
+html[data-theme='light'] .lp-demo__frame {
+  border-color: #d5e1b9;
+  background: #f6f4ea;
+  box-shadow: 0 24px 50px -36px rgba(82, 118, 66, 0.6);
+}
+
+html[data-theme='light'] .lp-demo__empty {
+  color: #56634c;
+  background-color: #f8f6ec;
+  background-image:
+    radial-gradient(circle at 50% 45%, rgba(160, 200, 120, 0.25), transparent 55%),
+    linear-gradient(rgba(82, 118, 66, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(82, 118, 66, 0.08) 1px, transparent 1px);
+  background-size: auto, 24px 24px, 24px 24px;
+}
+
+html[data-theme='light'] .lp-demo__empty > .icon {
+  color: #527642;
+}
+
+html[data-theme='light'] .lp-demo__empty strong {
+  color: #273323;
+}
+
+html[data-theme='light'] .lp-demo__empty code {
+  color: #527642;
+}
+
+html[data-theme='light'] .lp-demo__scan {
+  background: linear-gradient(180deg, transparent, rgba(160, 200, 120, 0.3) 85%, rgba(127, 169, 91, 0.85));
+  border-bottom-color: #7fa95b;
+}
+
+html[data-theme='light'] .lp-demo__err {
+  border-color: rgba(179, 38, 30, 0.35);
+  background: #fff2f0;
+  color: #9c2a20;
+}
+
+html[data-theme='light'] .lp-demo__note {
+  color: #6b7660;
+}
+
+html[data-theme='light'] .lp-editor {
+  border-color: #d5e1b9;
+  box-shadow: 0 50px 110px -60px rgba(82, 118, 66, 0.6);
+}
+
+html[data-theme='light'] .lp-editor__bar {
+  background: linear-gradient(180deg, #f8f6ea, #f3f1e2);
+  border-bottom-color: #d5e1b9;
+}
+
+html[data-theme='light'] .lp-editor__dots i:nth-child(1) { background: #e9a48f; }
+html[data-theme='light'] .lp-editor__dots i:nth-child(2) { background: #e8c977; }
+html[data-theme='light'] .lp-editor__dots i:nth-child(3) { background: #a0c878; }
+
+html[data-theme='light'] .lp-editor__view {
+  background:
+    radial-gradient(circle at 50% 38%, rgba(160, 200, 120, 0.35), transparent 58%),
+    linear-gradient(rgba(82, 118, 66, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(82, 118, 66, 0.06) 1px, transparent 1px),
+    linear-gradient(160deg, #f3f5e7, #e9eed9);
+  background-size: auto, 28px 28px, 28px 28px, auto;
+}
+
+html[data-theme='light'] .lp-editor__view > img,
+html[data-theme='light'] .lp-editor__compare {
+  box-shadow: 0 0 0 1px rgba(82, 118, 66, 0.2), 0 34px 70px -34px rgba(82, 118, 66, 0.65);
+}
+
+html[data-theme='light'] .lp-editor__busy {
+  background: rgba(255, 253, 246, 0.95);
+  border-color: rgba(82, 118, 66, 0.4);
+  color: #527642;
+}
+
+html[data-theme='light'] .lp-editor__panel {
+  border-color: #d5e1b9;
+}
+
+html[data-theme='light'] .lp-editor__traits li {
+  border-color: #e1e8cc;
+}
