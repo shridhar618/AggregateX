@@ -57,6 +57,17 @@ export default function useWitnessCases() {
     if (witnessMode) void reconnect()
     return () => { mounted.current = false; poller.current?.abort() }
   }, [reconnect])
+  useEffect(() => {
+    const sync = async event => {
+      if (event.origin !== location.origin || event.data?.type !== 'witness-saved' || !/^[a-f0-9]{32}$/.test(event.data.caseId) || ![...document.querySelectorAll('iframe')].some(frame => frame.contentWindow === event.source)) return
+      try {
+        const saved = await witness.getCase(event.data.caseId)
+        if (mounted.current) setRecord(current => current?.id === saved.id ? saved : current)
+      } catch (e) { if (mounted.current) setError(e.message) }
+    }
+    window.addEventListener('message', sync)
+    return () => window.removeEventListener('message', sync)
+  }, [])
   const act = async operation => {
     if (lock.current) return
     lock.current = true; setBusy(true); setError('')

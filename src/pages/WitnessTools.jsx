@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { witness, imageUrl, downloadUrl } from '../api/witnesstrace'
 import { useApp } from '../state/AppContext'
 import { applyTheme, getStoredTheme } from '../lib/theme'
+import { navigate } from '../lib/router'
 import CompareSlider from '../components/sketch/CompareSlider'
 
 const empty = () => ({ value: null, confidence: 'unknown', source: 'operator', quote: '' })
@@ -60,7 +61,7 @@ export function Refinement() {
 }
 
 export function ProcessingTools() {
-  const { wt } = useApp(); const theme = getStoredTheme(); const [tool, setTool] = useState('sketch'); const [opened, setOpened] = useState(false); const frame = useRef(null)
+  const { wt } = useApp(); const [tool, setTool] = useState('sketch'); const [opened, setOpened] = useState(false); const frame = useRef(null)
   const open = name => { if (opened && frame.current?.contentWindow) { const w = frame.current.contentWindow; w.document.documentElement.dataset.tool = name; w.selectTab?.(name); } else { setTool(name); setOpened(true) } }
   const id = wt.record.id
   useEffect(() => {
@@ -71,19 +72,17 @@ export function ProcessingTools() {
     window.addEventListener('witness-before-case', guard)
     return () => window.removeEventListener('witness-before-case', guard)
   }, [id])
-  return <section className="panel wt-process"><div className="panel__head"><h2 className="panel__title">Image editing</h2></div><div className="panel__body wt-fields"><p>The preserved editing engine keeps layers and exact enhancement pixels. Save edits before switching tools or leaving this studio.</p><div><button className="btn" onClick={() => { open('sketch') }}>Digital Sketchpad</button> <button className="btn" onClick={() => { open('enhance') }}>Enhance</button> <button className="btn" onClick={wt.refresh}>Reload saved revisions</button></div>{opened && <iframe ref={frame} className="wt-tool-frame" title="WitnessTrace image editing" src={`/wt-api/tools/index.html?case=${id}&tool=${tool}&theme=${theme || 'dark'}`} />}</div></section>
+  return <section className="panel wt-process"><div className="panel__head"><h2 className="panel__title">Image editing</h2></div><div className="panel__body wt-fields"><p>The preserved editing engine keeps layers and exact enhancement pixels. Canvas state stays open during navigation. Save edits to retain them after refresh or case switching.</p><div><button className="btn" onClick={() => { open('sketch') }}>Digital Sketchpad</button> <button className="btn" onClick={() => { open('enhance') }}>Enhance</button> <button className="btn" onClick={wt.refresh}>Reload saved revisions</button></div>{opened && <iframe ref={frame} className="wt-tool-frame" title="WitnessTrace image editing" src={`/wt-api/tools/index.html?case=${id}&tool=${tool}`} />}</div></section>
 }
 
 export function Deliverables() {
   const { wt } = useApp(); const r = wt.record
-  const [reports, setReports] = useState([]); const [views, setViews] = useState(null); const [error, setError] = useState(''); const [review, setReview] = useState(null)
+  const [reports, setReports] = useState([]); const [views, setViews] = useState(null); const [error, setError] = useState('')
   const selected = r.selected_version_id || r.versions.at(-1)?.id
   const run = async op => { try { setError(''); return await op() } catch (e) { setError(e.message) } }
   return <section className="panel"><div className="panel__head"><h2 className="panel__title">Multi-view & case reports</h2></div><div className="panel__body wt-fields"><p>AI-generated 2D interpretations, not geometrically accurate reconstructed 3D models.</p>
-    <button className="btn" disabled={!selected} onClick={() => run(async () => setReview(await call(r, '/multiview-preview', { parent_id: selected, revision: r.revision, request_key: key(), draft: r.draft, reviewed_prompt: '' })))}>Review angle-sheet prompt</button>
-    {review && <pre className="wt-prompt">{JSON.stringify(review, null, 2)}</pre>}
     <button className="btn" onClick={() => run(async () => setViews(await call(r, '/multiview')))}>Load saved angle sheets</button>
-    {views && <pre className="wt-prompt">{JSON.stringify(views, null, 2)}</pre>}
+    {views?.requests.map(view => <div key={view.job_id}><p className="mono wt-id">{view.created_at} · {view.status} · Parent {view.parent_id}</p>{view.image_url && <a href={imageUrl({id: view.job_id, image_url: view.image_url})} target="_blank" rel="noreferrer"><img className="wt-sheet-thumb" src={imageUrl({id: view.job_id, image_url: view.image_url})} alt="Saved 2D concept sheet" /></a>}</div>)}
     <p>Angle generation and reviewed crops are available in the preserved multi-view workspace below.</p>
     <details><summary>Multi-view workspace</summary><iframe className="wt-tool-frame" title="WitnessTrace multi-view and reports" src={`/wt-api/tools/index.html?case=${r.id}&tool=multiview`} /></details>
     {selected && <p><a href={downloadUrl(r.id, selected)} download>Download PNG</a> · <a href={`/wt-api/api/cases/${r.id}/versions/${selected}/export.json`} download>Download case JSON</a></p>}
@@ -93,8 +92,18 @@ export function Deliverables() {
 }
 
 export function WitnessLibrary() {
-  const { wt } = useApp(); const [search, setSearch] = useState('')
-  return <div className="wt-fields"><h2>Case library</h2><input aria-label="Search cases" placeholder="Search case titles" value={search} onChange={e => setSearch(e.target.value)} /><div className="wt-case-grid">{wt.cases.filter(c => c.title.toLowerCase().includes(search.toLowerCase())).map(c => <button className="panel btn" key={c.id} onClick={() => wt.select(c.id)} aria-pressed={c.id === wt.record?.id}>{c.title}<br /><span className="mono wt-id">{c.id}</span></button>)}</div>{wt.record && <><h3>{wt.record.title}</h3><RevisionList /><details><summary>Persisted case activity</summary><pre className="wt-prompt">{JSON.stringify(wt.record.events || wt.record.history, null, 2)}</pre></details><Deliverables /></>}</div>
+  const { wt } = useApp(); const [search, setSearch] = useState(''); const [records, setRecords] = useState({})
+  useEffect(() => {
+    const controller = new AbortController()
+    Promise.allSettled(wt.cases.map(c => witness.getCase(c.id, controller.signal))).then(results => {
+      if (!controller.signal.aborted) setRecords(Object.fromEntries(results.filter(r => r.status === 'fulfilled').map(r => [r.value.id, r.value])))
+    })
+    return () => controller.abort()
+  }, [wt.cases])
+  return <div className="wt-fields"><div className="toolbar panel"><h2>Case library</h2><input aria-label="Search cases" placeholder="Search case titles" value={search} onChange={e => setSearch(e.target.value)} /></div><div className="library__grid">{wt.cases.filter(c => c.title.toLowerCase().includes(search.toLowerCase())).map(c => {
+    const record = records[c.id]; const v = record?.versions.find(v => v.id === record.selected_version_id) || record?.versions.at(-1)
+    return <article className="lib-card panel" key={c.id}><button className="lib-card__img" onClick={() => wt.select(c.id)} aria-label={'Select ' + c.title}>{v ? <img src={imageUrl(v)} alt={'Saved composite for ' + c.title} loading="lazy" /> : <span>{record ? 'No saved image' : 'Loading saved image…'}</span>}</button><div className="lib-card__body"><h3 className="lib-card__title">{c.title}</h3><p className="lib-card__meta mono wt-id">{c.id}</p><p>{c.synthetic ? 'Synthetic' : 'Witness case'} · {c.frozen_at ? 'Original frozen' : 'Original draft'} · {record?.versions.length ?? '…'} revisions</p><p className="mono">{c.created_at}</p><div className="lib-card__actions"><button className="btn btn--sm" disabled={wt.busy} onClick={() => wt.select(c.id)} aria-pressed={c.id === wt.record?.id}>Select case</button><button className="btn btn--sm" onClick={async () => { await wt.select(c.id); navigate('new') }}>Open studio</button></div></div></article>
+  })}</div>{wt.record && <><h3>{wt.record.title}</h3><RevisionList /><details><summary>Persisted case activity</summary>{wt.record.events.map(event => <p className="mono wt-id" key={event.id}>{event.created_at} · {event.kind} · {event.detail}</p>)}</details><Deliverables /></>}</div>
 }
 
 export function WitnessCompare() {

@@ -130,7 +130,7 @@ function Shell() {
       <div className="app__main">
         <Topbar title={title} eyebrow={eyebrow} onMenu={() => setNavOpen(true)} />
         <main id="main" className="content" key={witnessMode ? 'witness' : page}>
-          {witnessMode && <p className="alert">Local integration · synthetic cases only · Codex generation uses the authenticated CLI.</p>}
+          {witnessMode && <p className="alert">Local shared collection · Codex generation uses the authenticated CLI.</p>}
           <Suspense fallback={<PageFallback />}>{content}</Suspense>
           {witnessMode && wt.record && <div hidden={page !== 'new'}><ProcessingTools key={wt.record.id} /></div>}
         </main>
