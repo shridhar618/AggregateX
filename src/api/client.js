@@ -21,14 +21,15 @@ export class ApiError extends Error {
   }
 }
 
-async function request(path, { method = 'GET', body, signal, raw = false } = {}) {
+async function request(path, { method = 'GET', body, blob, signal, raw = false } = {}) {
   let res
   try {
     res = await fetch(`${BASE}${path}`, {
       method,
       signal,
-      headers: body !== undefined ? { 'Content-Type': 'application/json' } : undefined,
-      body: body !== undefined ? JSON.stringify(body) : undefined,
+      headers: body !== undefined ? { 'Content-Type': 'application/json' }
+        : blob ? { 'Content-Type': blob.type || 'application/octet-stream' } : undefined,
+      body: body !== undefined ? JSON.stringify(body) : blob,
     })
   } catch (err) {
     if (err?.name === 'AbortError') throw err
@@ -67,6 +68,8 @@ export const api = {
   logout: () => request('/auth/logout', { method: 'POST' }),
 
   health: (signal) => request('/health', { signal }),
+  speech: () => request('/speech'),
+  transcribe: (audio, lang) => request(`/speech/transcribe?lang=${encodeURIComponent(lang || '')}`, { method: 'POST', blob: audio }),
   catalog: () => request('/catalog'),
   stats: () => request('/stats'),
   activity: (limit = 20) => request(`/activity?limit=${limit}`),

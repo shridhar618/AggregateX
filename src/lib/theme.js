@@ -1,4 +1,7 @@
+import { useEffect, useState } from 'react'
+
 export const THEME_KEY = 'revelio.theme'
+const THEME_EVENT = 'revelio-theme'
 export const THEMES = ['dark', 'light']
 
 export function getStoredTheme() {
@@ -18,7 +21,19 @@ export function applyTheme(theme) {
   } catch {
     // Theme remains active for the current session when storage is unavailable.
   }
+  window.dispatchEvent(new CustomEvent(THEME_EVENT, { detail: nextTheme }))
   return nextTheme
+}
+
+// Current theme, kept in sync across every control that changes it.
+export function useTheme() {
+  const [theme, setTheme] = useState(getStoredTheme)
+  useEffect(() => {
+    const sync = (e) => setTheme(e.detail)
+    window.addEventListener(THEME_EVENT, sync)
+    return () => window.removeEventListener(THEME_EVENT, sync)
+  }, [])
+  return [theme, applyTheme]
 }
 
 export function initializeTheme() {

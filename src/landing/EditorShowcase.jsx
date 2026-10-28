@@ -5,16 +5,11 @@ import Icon from '../components/ui/Icon'
 import { optionLabel } from '../lib/format'
 import { useEngine } from './engine'
 import { Reveal, SplitLines } from './motion'
+import { matchSketch } from './sketches'
 
 const SEED = 'An adult with an oval face, short dark hair, thick eyebrows, a narrow nose, and a small scar on the left cheek.'
-const SLIDERS = [
-  ['face_width', 'Face width'],
-  ['jaw_width', 'Jaw width'],
-  ['eye_spacing', 'Eye spacing'],
-  ['nose_width', 'Nose width'],
-  ['nose_length', 'Nose length'],
-  ['mouth_width', 'Mouth width'],
-]
+// Traits the reference sketches vary in, so each button visibly changes the face.
+const CONTROLS = ['facial_hair', 'eyewear', 'hair_style']
 
 export default function EditorShowcase() {
   const { status, catalog, retry } = useEngine()
@@ -22,27 +17,13 @@ export default function EditorShowcase() {
   const [current, setCurrent] = useState(null) // { url }
   const [revisions, setRevisions] = useState([]) // [{ n, url, profile }]
   const [compare, setCompare] = useState(false)
-  const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
-  const urls = useRef(new Set())
-  const timer = useRef(0)
   const started = useRef(false)
 
-  const renderSvg = async (p) => {
-    setLoading(true)
-    try {
-      const r = await api.render(p, 'DEMO')
-      const url = URL.createObjectURL(new Blob([r.svg], { type: 'image/svg+xml' }))
-      urls.current.add(url)
-      setCurrent({ url })
-      setError(null)
-      return url
-    } catch (err) {
-      setError(err.message)
-      return null
-    } finally {
-      setLoading(false)
-    }
+  const show = (p) => {
+    const { url } = matchSketch(p)
+    setCurrent({ url })
+    return url
   }
 
   // Seed the showcase from the demo description once the engine is reachable.
@@ -50,32 +31,17 @@ export default function EditorShowcase() {
     if (status !== 'online' || started.current) return
     started.current = true
     api.extract(SEED)
-      .then(async (ex) => {
+      .then((ex) => {
         setProfile(ex.profile)
-        const url = await renderSvg(ex.profile)
-        if (url) setRevisions([{ n: 1, url, profile: ex.profile }])
+        const url = show(ex.profile)
+        setRevisions([{ n: 1, url, profile: ex.profile }])
       })
       .catch((err) => setError(err.message))
   }, [status])
 
-  useEffect(() => {
-    const set = urls.current
-    return () => {
-      clearTimeout(timer.current)
-      set.forEach((u) => URL.revokeObjectURL(u))
-    }
-  }, [])
-
   const change = (next) => {
     setProfile(next)
-    clearTimeout(timer.current)
-    timer.current = setTimeout(() => renderSvg(next), 90)
-  }
-  const setAdj = (key, v) => {
-    const next = structuredClone(profile)
-    if (Math.abs(v) < 0.001) delete next.adjustments[key]
-    else next.adjustments[key] = v
-    change(next)
+    show(next)
   }
   const setTrait = (key, value) => {
     const next = structuredClone(profile)
@@ -98,8 +64,6 @@ export default function EditorShowcase() {
   const traitByKey = Object.fromEntries((catalog?.traits || []).map((t) => [t.key, t]))
   const known = profile ? Object.entries(profile.traits).filter(([, t]) => t.value) : []
   const before = dirty ? last : revisions[revisions.length - 2]
-  const hairline = traitByKey.hairline
-  const facial = traitByKey.facial_hair
 
   return (
     <section id="editor" className="lp-section" aria-labelledby="editor-title">
@@ -107,13 +71,13 @@ export default function EditorShowcase() {
         <div className="lp-section__head lp-section__head--split">
           <div>
             <Reveal><span className="lp-eyebrow">Interactive editor</span></Reveal>
-            <SplitLines lines={['Every control', 'redraws the face.']} className="lp-h2" />
+            <SplitLines lines={['Every choice', 'changes the sketch.']} className="lp-h2" />
             <span id="editor-title" className="sr-only">Interactive editor showcase</span>
           </div>
           <Reveal delay={150}>
             <p className="lp-section__lead">
-              A second live instance of the procedural renderer. Move a slider and the composite is redrawn on the local engine in milliseconds.
-              The full workspace adds undo and redo, saved revisions, and exports.
+              Pick a trait and the closest pencil sketch from the reference set appears. Save revisions and compare them side by side.
+              The full workspace adds undo and redo, saved history, and exports.
             </p>
           </Reveal>
         </div>
@@ -122,7 +86,7 @@ export default function EditorShowcase() {
           <div className="lp-editor__bar">
             <span className="lp-editor__dots" aria-hidden="true"><i /><i /><i /></span>
             <span className="lp-mono">RV-DEMO-0002</span>
-            <span className="lp-tag lp-tag--procedural">Procedural · not AI</span>
+            <span className="lp-tag lp-tag--ai">AI sketch · fictional</span>
             <span className="lp-mono lp-faint lp-editor__rev">
               {revisions.length ? `R${dirty ? `${last.n} + edits` : last.n}` : '—'} · demo only, not stored
             </span>
@@ -134,7 +98,7 @@ export default function EditorShowcase() {
                   <CompareSlider before={before.url} after={current.url} beforeLabel={`R${before.n}`} afterLabel={dirty ? 'Current' : `R${last.n}`} />
                 </div>
               ) : current ? (
-                <img src={current.url} alt="Live procedural composite in the editor showcase" />
+                <img src={current.url} alt="Pencil reference sketch matching the selected traits" />
               ) : status === 'offline' ? (
                 <div className="lp-demo__empty">
                   <Icon name="cpu" />
@@ -145,42 +109,25 @@ export default function EditorShowcase() {
               ) : (
                 <div className="lp-skel" aria-busy="true" />
               )}
-              {loading && <span className="lp-editor__busy lp-mono"><span className="lp-spinner" /> rendering</span>}
               {error && <p className="lp-error lp-editor__err" role="alert">{error}</p>}
             </div>
 
             <div className="lp-editor__panel">
               <div className="lp-editor__group">
-                <span className="lp-label">Proportions</span>
-                {SLIDERS.map(([key, label]) => {
-                  const v = profile?.adjustments?.[key] ?? 0
-                  return (
-                    <label key={key} className="lp-slider">
-                      <span>{label} <span className="lp-mono">{v > 0 ? '+' : ''}{v.toFixed(2)}</span></span>
-                      <input type="range" min={-1} max={1} step={0.05} value={v} disabled={!profile}
-                        style={{ '--fill': `${((v + 1) / 2) * 100}%` }} onChange={(e) => setAdj(key, Number(e.target.value))} />
-                    </label>
-                  )
+                {CONTROLS.map((key) => {
+                  const t = traitByKey[key]
+                  if (!t) return null
+                  return [
+                    <span key={`${key}-l`} className="lp-label">{t.label}</span>,
+                    <div key={key} className="lp-seg" role="group" aria-label={t.label}>
+                      {t.options.map((o) => (
+                        <button key={o} type="button" disabled={!profile} aria-pressed={profile?.traits[key]?.value === o}
+                          onClick={() => setTrait(key, o)}>{optionLabel(t, o)}</button>
+                      ))}
+                    </div>,
+                  ]
                 })}
               </div>
-              {hairline && facial && (
-                <div className="lp-editor__group">
-                  <span className="lp-label">Hairline</span>
-                  <div className="lp-seg" role="group" aria-label="Hairline">
-                    {hairline.options.map((o) => (
-                      <button key={o} type="button" disabled={!profile} aria-pressed={profile?.traits.hairline?.value === o}
-                        onClick={() => setTrait('hairline', o)}>{optionLabel(hairline, o)}</button>
-                    ))}
-                  </div>
-                  <span className="lp-label">Facial hair</span>
-                  <div className="lp-seg" role="group" aria-label="Facial hair">
-                    {facial.options.map((o) => (
-                      <button key={o} type="button" disabled={!profile} aria-pressed={profile?.traits.facial_hair?.value === o}
-                        onClick={() => setTrait('facial_hair', o)}>{optionLabel(facial, o)}</button>
-                    ))}
-                  </div>
-                </div>
-              )}
               <div className="lp-editor__group">
                 <span className="lp-label">Trait list</span>
                 <ul className="lp-editor__traits">

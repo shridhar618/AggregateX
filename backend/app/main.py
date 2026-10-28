@@ -15,7 +15,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 from . import __version__
-from .api import auth, sketches, system, traits, witness_gateway
+from .api import auth, sketches, speech, system, traits, witness_gateway
 from .config import get_settings
 from .database import init_db
 from .providers.base import ProviderError, ProviderUnavailable
@@ -74,7 +74,7 @@ def create_app() -> FastAPI:
         log.exception("Unhandled error: %s", type(exc).__name__)
         return JSONResponse(status_code=500, content={"detail": "Internal error. See the server log."})
 
-    for r in (auth.router, system.router, traits.router, sketches.router):
+    for r in (auth.router, system.router, traits.router, sketches.router, speech.router):
         app.include_router(r, prefix="/api")
     app.include_router(witness_gateway.router)
     return app
