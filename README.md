@@ -89,21 +89,19 @@ Building a facial composite from a verbal description is slow. Witnesses remembe
 
 ### Screenshots
 
-| Workspace overview (`/app`) | New sketch editor (`/app#/new`) |
+Captured from the current integrated app (Docker build), with the pencil-sketch landing demos.
+
+| Workspace overview (`/app`) | New sketch studio (`/app#/new`) |
 |---|---|
 | ![Workspace](docs/screenshots/workspace.png) | ![New sketch](docs/screenshots/new-sketch.png) |
-| **Light theme · workspace** | **Light theme · editor** |
+| **Light theme · workspace** | **Light theme · studio** |
 | ![Workspace, light theme](docs/screenshots/workspace-light.png) | ![Editor, light theme](docs/screenshots/new-sketch-light.png) |
 | **Landing · live demo** | **Landing · editor showcase** |
 | ![Landing live demo](docs/screenshots/landing-demo.png) | ![Landing editor showcase](docs/screenshots/landing-editor.png) |
-| **Compare revisions** | **Library** |
-| ![Compare](docs/screenshots/compare.png) | ![Library](docs/screenshots/library.png) |
-| **Settings & providers** | **Landing · light theme** |
-| ![Settings](docs/screenshots/settings.png) | ![Landing, light theme](docs/screenshots/landing-light.png) |
-
-Procedural composites generated from eight different descriptions. The bottom-left one has no hair description, so its hair is drawn as “unspecified”:
-
-![Procedural composites](docs/screenshots/composites.png)
+| **Case library** | **Settings** |
+| ![Library](docs/screenshots/library.png) | ![Settings](docs/screenshots/settings.png) |
+| **Landing · light theme** | |
+| ![Landing, light theme](docs/screenshots/landing-light.png) | |
 
 ---
 
