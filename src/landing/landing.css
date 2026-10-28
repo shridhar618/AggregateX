@@ -3716,4 +3716,25 @@ html:not([data-theme='light']) .lp-brand .logo-mark {
   .lp-nav__links .lp-nav__links-login a {
     color: var(--cyan);
   }
+
+  /* Theme toggle: laid out in the same row as the stacked links, just to their left,
+     so it can never overlap them whatever their width. */
+  html .lp-nav__inner > .lp-nav__links,
+  html .lp-nav__inner > .lp-nav__right {
+    position: static;
+  }
+
+  html .lp-nav__inner > .lp-brand {
+    margin-right: auto;
+  }
+
+  html .lp-nav__inner > .lp-nav__links {
+    order: 2;
+    margin-top: -0.3rem;
+  }
+
+  html .lp-nav__inner > .lp-nav__right {
+    order: 1;
+    margin-top: -0.5rem;
+  }
 }
