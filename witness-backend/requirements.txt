@@ -1,4 +1,0 @@
-fastapi>=0.115,<2
-uvicorn>=0.32,<1
-pillow>=11,<13
-reportlab>=4.4,<5

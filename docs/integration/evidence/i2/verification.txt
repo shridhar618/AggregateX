@@ -1,4 +1,0 @@
-PASS: 57 verified imports, 52 byte-identical; app worker/model/route AST unchanged.
-PASS: React/API/Vite/package assets preserved; only reviewed ESLint exclusion differs.
-PASS: 56 pytest tests, 33 isolated HTTP checks, 35 static assets, actual restart and external runtime.
-PASS: 34 explicit API operations, ignored runtime directories, no original-project symlinks.
