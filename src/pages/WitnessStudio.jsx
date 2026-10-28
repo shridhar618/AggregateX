@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { downloadUrl, imageUrl } from '../api/witnesstrace'
 import { LogoMark } from '../components/brand/Logo'
 import SketchViewer from '../components/sketch/SketchViewer'
+import DictateButton from '../components/ui/DictateButton'
 import { navigate } from '../lib/router'
 import { useApp } from '../state/AppContext'
 import { CharacterLab, Refinement, RevisionList, Deliverables } from './WitnessTools'
@@ -44,10 +45,10 @@ export default function WitnessStudio() {
   return <div className="studio wt-studio"><div className="studio__head"><div className="studio__ident"><h2>{record?.title || 'New Sketch'}</h2><span className="mono faint wt-id">{record?.id || 'Select or create a synthetic case'}</span></div><span className="tag">Codex CLI · explicit generation</span></div>
     <div className="studio__grid"><div className="studio__input"><CaseControls wt={wt} />
       {record && <section className="panel" key={record.id}><div className="panel__head"><h2 className="panel__title">Witness description</h2></div><div className="panel__body wt-fields">
-        <label htmlFor="wt-description" className="label">{record.frozen_at ? 'Original testimony · immutable' : 'Original testimony · save once'}</label>
+        <span className="merge__wlabel"><label htmlFor="wt-description" className="label">{record.frozen_at ? 'Original testimony · immutable' : 'Original testimony · save once'}</label>{!record.frozen_at && <DictateButton value={text} onChange={setText} maxLength={1800} />}</span>
         <textarea id="wt-description" rows={8} readOnly={!!record.frozen_at} maxLength={1800} value={record.frozen_at ? original : text} onChange={e => setText(e.target.value)} />
         {!record.frozen_at && <button className="btn" disabled={wt.busy || text.trim().length < 10} onClick={() => wt.freeze(text)}>Save original testimony</button>}
-        {record.frozen_at && <><label htmlFor="wt-clarify" className="label">Append sourced clarification</label><textarea id="wt-clarify" rows={3} maxLength={1800} value={clarification} onChange={e => setClarification(e.target.value)} /><select aria-label="Clarification source" value={source} onChange={e => setSource(e.target.value)}><option value="operator">Operator</option><option value="witness">Witness</option></select><button className="btn" disabled={wt.busy || pending || !clarification.trim()} onClick={async () => { await wt.clarify(clarification, source) }}>Add clarification</button></>}
+        {record.frozen_at && <><span className="merge__wlabel"><label htmlFor="wt-clarify" className="label">Append sourced clarification</label><DictateButton value={clarification} onChange={setClarification} maxLength={1800} /></span><textarea id="wt-clarify" rows={3} maxLength={1800} value={clarification} onChange={e => setClarification(e.target.value)} /><select aria-label="Clarification source" value={source} onChange={e => setSource(e.target.value)}><option value="operator">Operator</option><option value="witness">Witness</option></select><button className="btn" disabled={wt.busy || pending || !clarification.trim()} onClick={async () => { await wt.clarify(clarification, source) }}>Add clarification</button></>}
         <button className="btn btn--primary" onClick={wt.generate} disabled={!record.frozen_at || wt.busy || pending || !wt.connection?.codex_installed}>{wt.busy ? 'Submitting…' : pending ? 'Generation running…' : 'Generate composite'}</button>
         <p className="faint">Original account: 1,800 characters maximum. Complete generation prompt: 2,500. Generation is prompt-based; identity consistency is not guaranteed.</p>
       </div></section>}
