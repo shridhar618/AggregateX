@@ -1,9 +1,11 @@
 import { useEffect, useRef, useState } from 'react'
 import { witness, imageUrl, downloadUrl } from '../api/witnesstrace'
+import { api } from '../api/client'
 import { useApp } from '../state/AppContext'
 import { useTheme } from '../lib/theme'
 import { navigate } from '../lib/router'
 import CompareSlider from '../components/sketch/CompareSlider'
+import EmptyState from '../components/ui/EmptyState'
 import DictateButton from '../components/ui/DictateButton'
 
 const empty = () => ({ value: null, confidence: 'unknown', source: 'operator', quote: '' })
@@ -101,7 +103,15 @@ export function WitnessLibrary() {
     })
     return () => controller.abort()
   }, [wt.cases])
-  return <div className="wt-fields"><div className="toolbar panel"><h2>Case library</h2><input aria-label="Search cases" placeholder="Search case titles" value={search} onChange={e => setSearch(e.target.value)} /></div><div className="library__grid">{wt.cases.filter(c => c.title.toLowerCase().includes(search.toLowerCase())).map(c => {
+  const shown = wt.cases.filter(c => c.title.toLowerCase().includes(search.toLowerCase()))
+  const empty = !wt.cases.length
+    ? <EmptyState icon="library" title={wt.connection ? 'No cases yet' : 'Case library unavailable'} action={wt.connection
+      ? <button className="btn btn--primary" onClick={() => navigate('new')}>Create a case</button>
+      : <button className="btn" onClick={wt.reconnect}>Reconnect</button>}>
+      {wt.connection ? 'Cases you create in New Sketch appear here with their saved images and revisions.' : wt.error || 'WitnessTrace is not connected.'}
+    </EmptyState>
+    : !shown.length && <EmptyState compact icon="search" title={`No cases match “${search}”`} action={<button className="btn btn--sm" onClick={() => setSearch('')}>Clear search</button>} />
+  return <div className="wt-fields"><div className="toolbar panel"><h2>Case library</h2><input aria-label="Search cases" placeholder="Search case titles" value={search} onChange={e => setSearch(e.target.value)} /></div>{empty && <section className="panel">{empty}</section>}<div className="library__grid">{shown.map(c => {
     const record = records[c.id]; const v = record?.versions.find(v => v.id === record.selected_version_id) || record?.versions.at(-1)
     return <article className="lib-card panel" key={c.id}><button className="lib-card__img" onClick={() => wt.select(c.id)} aria-label={'Select ' + c.title}>{v ? <img src={imageUrl(v)} alt={'Saved composite for ' + c.title} loading="lazy" /> : <span>{record ? 'No saved image' : 'Loading saved image…'}</span>}</button><div className="lib-card__body"><h3 className="lib-card__title">{c.title}</h3><p className="lib-card__meta mono wt-id">{c.id}</p><p>{c.synthetic ? 'Synthetic' : 'Witness case'} · {c.frozen_at ? 'Original frozen' : 'Original draft'} · {record?.versions.length ?? '…'} revisions</p><p className="mono">{c.created_at}</p><div className="lib-card__actions"><button className="btn btn--sm" disabled={wt.busy} onClick={() => wt.select(c.id)} aria-pressed={c.id === wt.record?.id}>Select case</button><button className="btn btn--sm" onClick={async () => { await wt.select(c.id); navigate('new') }}>Open studio</button></div></div></article>
   })}</div>{wt.record && <><h3>{wt.record.title}</h3><RevisionList /><details><summary>Persisted case activity</summary>{wt.record.events.map(event => <p className="mono wt-id" key={event.id}>{event.created_at} · {event.kind} · {event.detail}</p>)}</details><Deliverables /></>}</div>
@@ -114,7 +124,38 @@ export function WitnessCompare() {
   return <section className="panel"><div className="panel__body wt-fields"><h2>Compare saved revisions</h2>{['Before', 'After'].map((label, i) => <label key={label}>{label}<select value={(i ? after : before)?.id || ''} onChange={e => (i ? setB : setA)(e.target.value)}>{versions.map((v, n) => <option value={v.id} key={v.id}>V{n + 1} · {v.workspace} · {v.id.slice(0, 8)}</option>)}</select></label>)}<button className="btn" onClick={() => setSplit(!split)}>{split ? 'Before / after slider' : 'Side by side'}</button>{before && after ? split ? <div className="wt-side-by-side"><img src={imageUrl(before)} alt="Before revision" /><img src={imageUrl(after)} alt="After revision" /></div> : <CompareSlider before={imageUrl(before)} after={imageUrl(after)} beforeLabel="Before" afterLabel="After" /> : <p>Select a case with at least two saved revisions.</p>}<RevisionList /></div></section>
 }
 
+const HAS_BROWSER_SPEECH = typeof window !== 'undefined' && Boolean(window.SpeechRecognition || window.webkitSpeechRecognition)
+
 export function WitnessSettings() {
-  const { wt, prefs, updatePrefs } = useApp(); const [theme, changeTheme] = useTheme()
-  return <section className="panel"><div className="panel__body wt-fields"><h2>Application settings</h2><div className="field"><span className="label" id="wt-theme">Interface theme</span><div className="segmented wt-theme" role="group" aria-labelledby="wt-theme">{[['dark', 'Dark'], ['light', 'Light']].map(([id, label]) => <button key={id} type="button" aria-pressed={theme === id} onClick={() => changeTheme(id)}>{label}</button>)}</div></div><label><input type="checkbox" checked={prefs.reduceMotion} onChange={e => updatePrefs({ reduceMotion: e.target.checked })} /> Reduce motion</label><button className="btn" onClick={wt.reconnect}>Check backend health</button><p>Codex CLI: {wt.connection?.codex_installed ? 'installed' : 'unavailable / disconnected'}. Installation does not establish current authentication or quota.</p><pre className="wt-prompt">{JSON.stringify(wt.connection, null, 2)}</pre><p>WitnessTrace owns cases, testimony, images and reports in its configured SQLite and file store. Revelio owns local account sessions and interface preferences. Signed-in users share this local collection.</p>{wt.error && <p role="alert">{wt.error}</p>}</div></section>
+  const { wt, prefs, updatePrefs, health, refreshHealth } = useApp(); const [theme, changeTheme] = useTheme()
+  const [speech, setSpeech] = useState(null)
+  const [checking, setChecking] = useState(false)
+  const [checkedAt, setCheckedAt] = useState(null)
+  const loadSpeech = () => api.speech().then(setSpeech, () => setSpeech({ available: false }))
+  useEffect(() => { loadSpeech(); setCheckedAt(new Date()) }, [])
+  const recheck = async () => {
+    setChecking(true)
+    try { await Promise.all([wt.reconnect(), refreshHealth(), loadSpeech()]) } finally { setChecking(false); setCheckedAt(new Date()) }
+  }
+  const c = wt.connection
+  const rows = [
+    ['Revelio engine', health ? 'ok' : 'err', health ? `Online · v${health.version}` : 'Offline', 'Accounts, sessions and the gateway to WitnessTrace.'],
+    ['WitnessTrace', c ? 'ok' : 'err', c ? 'Connected' : 'Not connected', c ? 'Cases, testimony, images and reports.' : wt.error || 'The case service is not reachable.'],
+    ['Codex CLI', c?.codex_installed ? 'ok' : 'warn', c?.codex_installed ? 'Installed' : 'Not found', c?.codex_installed ? 'Sign-in and quota are only confirmed by a real generation.' : 'AI generation needs the Codex CLI signed in on this machine.'],
+    ['Dictation', speech?.available ? 'ok' : speech && HAS_BROWSER_SPEECH ? 'warn' : speech ? 'err' : 'idle',
+      !speech ? 'Checking…' : speech.available ? `Local · ${speech.model}` : HAS_BROWSER_SPEECH ? 'Browser speech service' : 'Unavailable',
+      !speech ? '' : speech.available ? 'Audio is transcribed on this machine and never sent elsewhere.' : 'Install backend/requirements-speech.txt on the server for offline dictation. The browser service sends audio to its vendor and may fail outside Chrome, Edge and Safari.'],
+  ]
+  return <div className="wt-settings">
+    <section className="panel"><div className="panel__head"><h2 className="panel__title">Application settings</h2></div><div className="panel__body wt-fields">
+      <div className="field"><span className="label" id="wt-theme">Interface theme</span><div className="segmented wt-theme" role="group" aria-labelledby="wt-theme">{[['dark', 'Dark'], ['light', 'Light']].map(([id, label]) => <button key={id} type="button" aria-pressed={theme === id} onClick={() => changeTheme(id)}>{label}</button>)}</div></div>
+      <label className="switch"><input type="checkbox" checked={prefs.reduceMotion} onChange={e => updatePrefs({ reduceMotion: e.target.checked })} /><span className="switch__track" aria-hidden="true" /><span><strong>Reduce motion</strong><span className="faint">Also follows your operating-system setting automatically.</span></span></label>
+    </div></section>
+    <section className="panel"><div className="panel__head"><h2 className="panel__title">System status</h2><button className="btn btn--sm" onClick={recheck} disabled={checking}>{checking ? <span className="spinner" /> : null}{checking ? 'Checking…' : 'Check again'}</button></div><div className="panel__body wt-fields">
+      <ul className="wt-status-list">{rows.map(([name, state, value, note]) => <li key={name}><span className={`dot dot--${state}`} aria-hidden="true" /><div><span className="wt-status-list__name">{name}</span>{note && <span className="faint">{note}</span>}</div><strong>{value}</strong></li>)}</ul>
+      {checkedAt && <p className="faint mono wt-id">Last checked {checkedAt.toLocaleTimeString()}</p>}
+      {c && <details><summary>Raw diagnostics</summary><pre className="wt-prompt">{JSON.stringify({ revelio: health && { version: health.version, status: health.status }, witnesstrace: c, speech }, null, 2)}</pre></details>}
+    </div></section>
+    <section className="panel"><div className="panel__head"><h2 className="panel__title">Data</h2></div><div className="panel__body"><p className="muted">WitnessTrace owns cases, testimony, images and reports in its configured SQLite and file store. Revelio owns local account sessions and interface preferences. Signed-in users share this local collection.</p>{c?.generated_images_directory && <p className="faint mono wt-id">Codex images: {c.generated_images_directory}</p>}</div></section>
+  </div>
 }
