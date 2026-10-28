@@ -1,0 +1,16 @@
+.git
+**/node_modules
+**/.venv
+**/__pycache__
+**/.pytest_cache
+dist
+docs
+backend/data
+backend/.env
+**/.env
+witness-backend/data
+witness-backend/outputs
+witness-backend/work
+witness-backend/tests
+*.log
+.DS_Store
