@@ -1,5 +1,8 @@
 import { useState, useRef, useEffect } from 'react';
 import { parseTraits } from '../utils/parser';
+import PhaseHeader from './ui/PhaseHeader';
+import CompletenessPanel from './ui/CompletenessPanel';
+import Icon from './ui/Icon';
 
 const CONFIDENCE_LEVELS = {
   low: { label: 'Not so confident', value: 0.45 },
@@ -175,281 +178,204 @@ const WitnessInterview = ({ advancePhase, onDataChange, data, apiKey }) => {
     return 'low';
   };
 
+  const traitCount = Object.keys(traits).length;
+  const canAdvance = traitCount > 0 && !needsClarification;
+
   return (
-    <div className="glass-panel animate-fade-in" style={{ width: '100%', maxWidth: '920px', margin: '0 auto', padding: '24px 28px', display: 'flex', flexDirection: 'column', minHeight: '82vh' }}>
-      <div style={{ borderBottom: '1px solid var(--surface-border)', paddingBottom: '20px', marginBottom: '18px', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: '8px' }}>
-        <span style={{ fontSize: '0.72rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--text-secondary)', background: 'rgba(59, 130, 246, 0.12)', border: '1px solid rgba(59, 130, 246, 0.3)', borderRadius: '999px', padding: '4px 12px', fontWeight: '700' }}>
-          Phase 1
-        </span>
-        <h2 style={{ margin: 0, fontSize: '2rem', letterSpacing: '-0.02em' }}>Witness Interview</h2>
-        <p style={{ color: 'var(--text-secondary)', marginTop: '2px', maxWidth: '640px', fontSize: '0.98rem' }}>
-          Please describe the subject in natural language.
-        </p>
-      </div>
+    <div className="phase phase--interview animate-fade-in">
+      <PhaseHeader
+        index="01"
+        eyebrow={`Witness interview · ${data.name}`}
+        title="Witness Interview"
+        description="Please describe the subject in natural language."
+      />
 
-      <div className="glass-panel" style={{ padding: '18px', borderRadius: '16px', marginBottom: '18px' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '8px' }}>
-          <h3 style={{ margin: 0, fontSize: '1.05rem' }}>Case Completeness</h3>
-          <span style={{ color: scoreTone, fontWeight: '800', fontSize: '1rem' }}>{caseCompletenessScore}%</span>
-        </div>
-        <div style={{ height: '10px', borderRadius: '999px', background: 'rgba(255,255,255,0.08)', overflow: 'hidden', marginBottom: '12px' }}>
-          <div style={{ width: `${caseCompletenessScore}%`, height: '100%', background: `linear-gradient(90deg, ${scoreTone}, rgba(255,255,255,0.85))`, transition: 'width 0.35s ease' }} />
-        </div>
-
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: '10px' }}>
-          <div style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid var(--surface-border)', borderRadius: '10px', padding: '10px' }}>
-            <div style={{ fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--text-secondary)', marginBottom: '6px' }}>Missing Traits</div>
-            <div style={{ fontSize: '0.86rem', color: missingCoreTraits.length ? 'var(--warning)' : 'var(--success)' }}>
-              {missingCoreTraits.length ? missingCoreTraits.slice(0, 3).join(', ') + (missingCoreTraits.length > 3 ? '…' : '') : 'None'}
-            </div>
-          </div>
-
-          <div style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid var(--surface-border)', borderRadius: '10px', padding: '10px' }}>
-            <div style={{ fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--text-secondary)', marginBottom: '6px' }}>Confidence Gaps</div>
-            <div style={{ fontSize: '0.86rem', color: (lowConfidenceTraits.length || mediumConfidenceTraits.length) ? 'var(--warning)' : 'var(--success)' }}>
-              {lowConfidenceTraits.length
-                ? `Low: ${lowConfidenceTraits.slice(0, 2).join(', ')}${lowConfidenceTraits.length > 2 ? '…' : ''}`
-                : mediumConfidenceTraits.length
-                  ? `Mid: ${mediumConfidenceTraits.slice(0, 2).join(', ')}${mediumConfidenceTraits.length > 2 ? '…' : ''}`
-                  : 'Strong'}
-            </div>
-          </div>
-
-          <div style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid var(--surface-border)', borderRadius: '10px', padding: '10px' }}>
-            <div style={{ fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--text-secondary)', marginBottom: '6px' }}>Potential Contradictions</div>
-            <div style={{ fontSize: '0.86rem', color: contradictions.length ? 'var(--warning)' : 'var(--success)' }}>
-              {contradictions.length ? contradictions[0] : 'None detected'}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Chat Area */}
-      <div ref={scrollRef} style={{ flex: '0 1 auto', minHeight: '280px', maxHeight: '42vh', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '16px', paddingRight: '12px', marginBottom: '8px' }}>
-        {messages.map((msg, index) => {
-          const isAi = msg.sender === 'ai';
-          const isInitialAi = isAi && index === 0;
-
-          return (
-          <div
-            key={msg.id}
-            style={{
-              alignSelf: msg.sender === 'user' ? 'flex-end' : 'flex-start',
-              maxWidth: '85%',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '4px',
-              alignItems: msg.sender === 'user' ? 'flex-end' : 'flex-start'
-            }}
-          >
-            <span style={{
-              fontSize: '0.7rem',
-              fontWeight: 'bold',
-              color: isAi ? '#93c5fd' : 'var(--text-secondary)',
-              textTransform: 'uppercase',
-              letterSpacing: '0.05em',
-              marginLeft: isAi ? '12px' : '0',
-              marginRight: isAi ? '0' : '12px',
-              background: isAi ? 'rgba(59, 130, 246, 0.18)' : 'transparent',
-              border: isAi ? '1px solid rgba(96, 165, 250, 0.35)' : 'none',
-              borderRadius: '999px',
-              padding: isAi ? '4px 10px' : '0'
-            }}>
-              {msg.sender === 'ai' ? '🤖 Forensic Artist' : '👤 Witness'}
-            </span>
-            <div style={{
-              padding: '14px 20px',
-              borderRadius: msg.sender === 'ai' ? '4px 20px 20px 20px' : '20px 4px 20px 20px',
-              background: msg.sender === 'ai'
-                ? (isInitialAi
-                  ? 'linear-gradient(135deg, rgba(59, 130, 246, 0.32) 0%, rgba(37, 99, 235, 0.18) 50%, rgba(30, 64, 175, 0.12) 100%)'
-                  : 'linear-gradient(135deg, rgba(59, 130, 246, 0.18) 0%, rgba(37, 99, 235, 0.08) 100%)')
-                : 'rgba(255, 255, 255, 0.05)',
-              border: `1px solid ${msg.sender === 'ai' ? (isInitialAi ? 'rgba(96, 165, 250, 0.55)' : 'rgba(59, 130, 246, 0.35)') : 'var(--surface-border)'}`,
-              backdropFilter: 'blur(10px)',
-              boxShadow: msg.sender === 'ai'
-                ? (isInitialAi ? '0 8px 20px rgba(59, 130, 246, 0.25)' : '0 4px 15px rgba(0, 0, 0, 0.1)')
-                : '0 4px 15px rgba(0, 0, 0, 0.1)',
-              color: '#fff',
-              lineHeight: '1.5',
-              fontSize: '0.95rem'
-            }}>
-              {msg.text}
-            </div>
-          </div>
-        )})}
-        {isTyping && (
-          <div className="animate-pulse" style={{ alignSelf: 'flex-start', background: 'rgba(255, 255, 255, 0.03)', padding: '12px 20px', borderRadius: '4px 16px 16px 16px', border: '1px solid var(--surface-border)', display: 'flex', gap: '4px', marginLeft: '12px' }}>
-            <span style={{ display: 'inline-block', width: '6px', height: '6px', background: 'var(--accent-blue)', borderRadius: '50%' }}></span>
-            <span style={{ display: 'inline-block', width: '6px', height: '6px', background: 'var(--accent-blue)', borderRadius: '50%' }}></span>
-            <span style={{ display: 'inline-block', width: '6px', height: '6px', background: 'var(--accent-blue)', borderRadius: '50%' }}></span>
-          </div>
-        )}
-      </div>
-
-      {/* Input Area */}
-      <div className="glass-panel" style={{ marginTop: '24px', padding: '18px', borderRadius: '16px' }}>
-        <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-          <input
-            type="file"
-            id="imageUpload"
-            accept="image/*"
-            style={{ display: 'none' }}
-            onChange={handleImageUpload}
-          />
-          <label htmlFor="imageUpload" className="btn" style={{ cursor: 'pointer', padding: '8px 12px', background: 'rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            📷
-          </label>
-          <input
-            className="input-glass"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder="e.g. He had a crooked nose, dark hair, and maybe a sharp jawline..."
-            onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-            style={{ flex: 1 }}
-          />
-          <button className="btn btn-primary" onClick={handleSend}>Send</button>
-        </div>
-
-        {/* Image Preview Area */}
-        {uploadedImage && (
-          <div className="animate-fade-in" style={{ marginTop: '12px', display: 'flex', alignItems: 'center', gap: '12px', background: 'rgba(0,0,0,0.2)', padding: '8px 12px', borderRadius: '8px', border: '1px solid var(--surface-border)' }}>
-             <img src={uploadedImage} alt="Uploaded evidence" style={{ height: '40px', width: '40px', objectFit: 'cover', borderRadius: '4px' }} />
-             <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', flex: 1 }}>Reference Image Attached</span>
-             <button onClick={() => {
-               setUploadedImage(null);
-               onDataChange({ ...data, sourceImage: null });
-             }} style={{ background: 'none', border: 'none', color: 'var(--warning)', cursor: 'pointer', fontSize: '0.85rem' }}>✕ Remove</button>
-          </div>
-        )}
-      </div>
-
-      {/* Schema Live View & Actions */}
-      <div className="animate-fade-in" style={{
-        marginTop: '28px',
-        background: 'rgba(0,0,0,0.4)',
-        padding: '32px',
-        borderRadius: 'var(--radius-lg)',
-        border: '1px solid var(--surface-border)',
-        minHeight: '640px',
-        overflowY: 'visible',
-        boxShadow: 'inset 0 0 20px rgba(0,0,0,0.2)'
-      }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+      <div className="interview-grid">
+        {/* Chat Area */}
+        <section className="panel chat-panel" aria-labelledby="testimony-title">
+          <div className="panel-head">
             <div>
-              <h4 style={{ color: 'var(--accent-blue)', margin: 0, fontSize: '1.1rem', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Forensic Profile</h4>
-              <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', margin: '4px 0 0' }}>Real-time trait synchronization active</p>
+              <h2 id="testimony-title" className="panel-title">Testimony log</h2>
+              <p className="panel-sub">Statements are parsed into structured traits as you type.</p>
             </div>
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '8px' }}>
-              <button
-                className={`btn btn-primary ${(!needsClarification && Object.keys(traits).length > 0) ? 'glow-active' : ''}`}
-                onClick={advancePhase}
-                disabled={Object.keys(traits).length === 0 || needsClarification}
-                style={{
-                  opacity: (Object.keys(traits).length > 0 && !needsClarification) ? 1 : 0.4,
-                  minWidth: '220px',
-                  height: '44px',
-                  fontSize: '0.9rem',
-                  letterSpacing: '0.05em'
-                }}
-              >
-                {needsClarification ? '🔒 Locked (Clarify Details)' : '✨ Generate Candidates'}
-              </button>
-              {needsClarification && (
-                <div style={{
-                  background: 'rgba(245, 158, 11, 0.1)',
-                  border: '1px solid rgba(245, 158, 11, 0.3)',
-                  padding: '6px 12px',
-                  borderRadius: '6px',
-                  fontSize: '0.75rem',
-                  color: 'var(--warning)',
-                  animation: 'fadeIn 0.3s ease'
-                }}>
-                  Required: <b>{lowConfidenceTraits[0]}</b>
-                </div>
-              )}
-            </div>
+            <span className="chip mono">{messages.length} entries</span>
           </div>
-            {Object.keys(data.structuredTraits).length === 0 && (
-              <div style={{
-                background: 'rgba(255,255,255,0.04)',
-                border: '1px solid var(--surface-border)',
-                borderRadius: '12px',
-                padding: '16px',
-                color: 'var(--text-secondary)',
-                fontSize: '0.95rem'
-              }}>
-                Not determined yet.
-              </div>
-            )}
-            {Object.entries(data.structuredTraits).map(([key, trait]) => {
-              const isLow = trait.confidence < 0.6;
+
+          <div ref={scrollRef} className="chat-log" role="log" aria-live="polite">
+            {messages.map((msg, index) => {
+              const isAi = msg.sender === 'ai';
+              const isInitialAi = isAi && index === 0;
+
               return (
-                <div key={key} style={{
-                  display: 'grid',
-                  gridTemplateColumns: 'minmax(100px, 150px) minmax(100px, 1fr) minmax(170px, 220px) minmax(120px, 160px)',
-                  alignItems: 'center',
-                  gap: '12px',
-                  background: 'rgba(255,255,255,0.05)',
-                  padding: '10px 16px',
-                  borderRadius: '10px',
-                  position: 'relative',
-                  borderLeft: isLow ? '3px solid var(--warning)' : '3px solid transparent',
-                  minWidth: 0
-                }}>
-                  <div style={{ fontWeight: 500, textTransform: 'capitalize', fontSize: '0.9rem' }}>
-                    {key.replaceAll('_', ' ')}
-                  </div>
-                  <div style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                    {trait.value}
-                  </div>
-                  <select
-                    value={getConfidenceLevel(trait.confidence)}
-                    onChange={(e) => {
-                      const newLevel = e.target.value;
-                      const mappedConfidence = CONFIDENCE_LEVELS[newLevel].value;
-                      onDataChange({
-                        ...data,
-                        structuredTraits: {
-                          ...data.structuredTraits,
-                          [key]: { ...trait, confidence: mappedConfidence }
-                        }
-                      });
-                    }}
-                    style={{
-                      cursor: 'pointer',
-                      width: '100%',
-                      background: 'rgba(0,0,0,0.25)',
-                      color: 'var(--text-primary)',
-                      border: '1px solid var(--surface-border)',
-                      borderRadius: '8px',
-                      padding: '8px 10px'
-                    }}
-                  >
-                    <option value="low">Not so confident</option>
-                    <option value="mid">Middle</option>
-                    <option value="high">Very confident</option>
-                  </select>
-                  <div style={{ textAlign: 'right', fontWeight: 'bold', color: isLow ? 'var(--warning)' : 'var(--success)', fontSize: '0.9rem' }}>
-                    {CONFIDENCE_LEVELS[getConfidenceLevel(trait.confidence)].label}
-                  </div>
-                  {isLow && (
-                    <div style={{
-                      position: 'absolute',
-                      bottom: '-4px',
-                      left: '136px',
-                      fontSize: '0.65rem',
-                      color: 'var(--warning)',
-                      background: 'var(--surface)',
-                      padding: '0 4px',
-                      borderRadius: '4px'
-                    }}>
-                      Clarification suggested
-                    </div>
-                  )}
+                <div
+                  key={msg.id}
+                  className={`chat-msg ${isAi ? 'chat-msg--ai' : 'chat-msg--user'} ${isInitialAi ? 'chat-msg--intro' : ''}`}
+                >
+                  <span className="chat-msg__author">
+                    {isAi ? 'VeriSketch AI' : 'Witness'}
+                  </span>
+                  <div className="chat-msg__bubble">{msg.text}</div>
                 </div>
               );
             })}
+            {isTyping && (
+              <div className="chat-msg chat-msg--ai">
+                <span className="chat-msg__author">VeriSketch AI</span>
+                <div className="chat-msg__bubble chat-typing" aria-label="Analyzing statement">
+                  <span /><span /><span />
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Input Area */}
+          <div className="composer">
+            <input
+              type="file"
+              id="imageUpload"
+              accept="image/*"
+              className="sr-only"
+              onChange={handleImageUpload}
+            />
+            <label htmlFor="imageUpload" className="btn btn-icon composer__attach" title="Attach reference image">
+              <Icon name="camera" />
+              <span className="sr-only">Attach reference image</span>
+            </label>
+            <input
+              className="input-glass composer__input"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              placeholder="e.g. He had a crooked nose, dark hair, and maybe a sharp jawline..."
+              onKeyDown={(e) => e.key === 'Enter' && handleSend()}
+              aria-label="Witness statement"
+            />
+            <button className="btn btn-primary" onClick={handleSend}>
+              Send
+              <Icon name="send" />
+            </button>
+          </div>
+
+          {/* Image Preview Area */}
+          {uploadedImage && (
+            <div className="attachment animate-fade-in">
+              <img src={uploadedImage} alt="Uploaded evidence" className="attachment__thumb" />
+              <div className="attachment__text">
+                <strong>Reference image attached</strong>
+                <span>Sent to Gemini as visual context when candidates are generated.</span>
+              </div>
+              <button
+                type="button"
+                className="btn btn-sm btn-ghost text-danger"
+                onClick={() => {
+                  setUploadedImage(null);
+                  onDataChange({ ...data, sourceImage: null });
+                }}
+              >
+                <Icon name="close" />
+                Remove
+              </button>
+            </div>
+          )}
+        </section>
+
+        <aside className="interview-side">
+          <CompletenessPanel
+            score={caseCompletenessScore}
+            toneColor={scoreTone}
+            stats={[
+              {
+                label: 'Missing traits',
+                value: missingCoreTraits.length ? missingCoreTraits.slice(0, 3).join(', ') + (missingCoreTraits.length > 3 ? '…' : '') : 'None',
+                color: missingCoreTraits.length ? 'var(--warning)' : 'var(--success)'
+              },
+              {
+                label: 'Confidence gaps',
+                value: lowConfidenceTraits.length
+                  ? `Low: ${lowConfidenceTraits.slice(0, 2).join(', ')}${lowConfidenceTraits.length > 2 ? '…' : ''}`
+                  : mediumConfidenceTraits.length
+                    ? `Mid: ${mediumConfidenceTraits.slice(0, 2).join(', ')}${mediumConfidenceTraits.length > 2 ? '…' : ''}`
+                    : 'Strong',
+                color: (lowConfidenceTraits.length || mediumConfidenceTraits.length) ? 'var(--warning)' : 'var(--success)'
+              },
+              {
+                label: 'Contradictions',
+                value: contradictions.length ? contradictions[0] : 'None detected',
+                color: contradictions.length ? 'var(--warning)' : 'var(--success)'
+              }
+            ]}
+          />
+
+          {/* Schema Live View & Actions */}
+          <section className="panel profile-panel" aria-labelledby="profile-title">
+            <div className="panel-head">
+              <div>
+                <h2 id="profile-title" className="panel-title">Forensic Profile</h2>
+                <p className="panel-sub">Real-time trait synchronization active</p>
+              </div>
+              <span className="chip mono">{traitCount} traits</span>
+            </div>
+
+            {traitCount === 0 && (
+              <div className="empty-state">
+                <Icon name="scan" />
+                <span>Not determined yet.</span>
+              </div>
+            )}
+
+            <ul className="trait-list">
+              {Object.entries(data.structuredTraits).map(([key, trait]) => {
+                const isLow = trait.confidence < 0.6;
+                return (
+                  <li key={key} className={`trait-row trait-row--compact ${isLow ? 'is-low' : ''}`}>
+                    <span className="trait-row__name">{key.replaceAll('_', ' ')}</span>
+                    <span className={`trait-row__level ${isLow ? 'text-warning' : 'text-success'}`}>
+                      {CONFIDENCE_LEVELS[getConfidenceLevel(trait.confidence)].label}
+                    </span>
+                    <span className="trait-row__value" title={trait.value}>{trait.value}</span>
+                    <select
+                      className="select trait-row__select"
+                      aria-label={`Confidence for ${key.replaceAll('_', ' ')}`}
+                      value={getConfidenceLevel(trait.confidence)}
+                      onChange={(e) => {
+                        const newLevel = e.target.value;
+                        const mappedConfidence = CONFIDENCE_LEVELS[newLevel].value;
+                        onDataChange({
+                          ...data,
+                          structuredTraits: {
+                            ...data.structuredTraits,
+                            [key]: { ...trait, confidence: mappedConfidence }
+                          }
+                        });
+                      }}
+                    >
+                      <option value="low">Not so confident</option>
+                      <option value="mid">Middle</option>
+                      <option value="high">Very confident</option>
+                    </select>
+                    {isLow && <span className="trait-row__hint">Clarification suggested</span>}
+                  </li>
+                );
+              })}
+            </ul>
+
+            <div className="profile-panel__action">
+              {needsClarification && (
+                <div className="notice notice--warning">
+                  <Icon name="alert" />
+                  <span>Required: clarify <strong>{lowConfidenceTraits[0]}</strong> before generating.</span>
+                </div>
+              )}
+              <button
+                className={`btn btn-primary btn-block btn-lg ${canAdvance ? 'glow-active' : ''}`}
+                onClick={advancePhase}
+                disabled={traitCount === 0 || needsClarification}
+              >
+                <Icon name={needsClarification ? 'lock' : 'sparkle'} />
+                {needsClarification ? 'Locked — clarify details' : 'Generate candidates'}
+              </button>
+            </div>
+          </section>
+        </aside>
       </div>
     </div>
   );
