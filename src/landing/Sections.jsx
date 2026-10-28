@@ -67,7 +67,7 @@ function useSpotlight() {
 const MINI = {
   describe: (
     <div className="lp-mini lp-mini--describe" aria-hidden="true">
-      <span className="lp-mini__text">“…oval face, short dark hair, thick eyebrows…”</span>
+      <span className="lp-mini__text">“…oval face, short curly dark hair, thick eyebrows…”</span>
       <Icon name="arrowRight" />
       <img src="/landing/demo-r1.webp" alt="" loading="lazy" />
     </div>
@@ -91,7 +91,7 @@ const MINI = {
   refine: (
     <div className="lp-mini lp-mini--revs" aria-hidden="true">
       {['R1', 'R2', 'R3'].map((r, i) => (
-        <span key={r} className={i === 2 ? 'is-on' : ''}><b className="lp-mono">{r}</b><em>{['Initial', 'Thicker brows', 'Add goatee'][i]}</em></span>
+        <span key={r} className={i === 2 ? 'is-on' : ''}><b className="lp-mono">{r}</b><em>{['Initial', 'Longer hair', 'Add full beard'][i]}</em></span>
       ))}
     </div>
   ),

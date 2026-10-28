@@ -97,7 +97,7 @@ export default function AuthPage({ mode }) {
         <aside className="lp-auth__side" aria-hidden="true">
           <div className="lp-auth__frame">
             <img src="/landing/demo-r2.webp" alt="" />
-            <span className="lp-tag lp-tag--procedural">Procedural · not AI</span>
+            <span className="lp-tag lp-tag--ai">AI sketch · fictional</span>
           </div>
           <p className="lp-eyebrow">Forensic composite workspace</p>
           <p className="lp-auth__quote">From witness description to forensic sketch.</p>
