@@ -3,18 +3,20 @@ import { downloadUrl, imageUrl } from '../api/witnesstrace'
 import SketchViewer from '../components/sketch/SketchViewer'
 import { navigate } from '../lib/router'
 import { useApp } from '../state/AppContext'
+import { CharacterLab, Refinement, RevisionList, Deliverables } from './WitnessTools'
 import './witness.css'
 
 function CaseControls({ wt }) {
   const [title, setTitle] = useState('')
+  const [synthetic, setSynthetic] = useState(true)
   return <section className="panel"><div className="panel__head"><h2 className="panel__title">WitnessTrace cases</h2></div><div className="panel__body wt-fields">
     <p role="status">{wt.connection ? `Connected · Codex CLI ${wt.connection.codex_installed ? 'installed' : 'unavailable'}` : 'Backend not connected'}</p>
     <button className="btn btn--sm" onClick={wt.reconnect} disabled={wt.busy}>Reconnect / reload cases</button>
     <label className="label" htmlFor="wt-case">Select case</label>
     <select id="wt-case" value={wt.record?.id || ''} disabled={wt.busy} onChange={e => e.target.value && wt.select(e.target.value)}><option value="">Choose a case</option>{wt.cases.map(c => <option key={c.id} value={c.id}>{c.title}</option>)}</select>
-    <form onSubmit={async e => { e.preventDefault(); const saved = await wt.create(title); if (saved) { setTitle(''); navigate('new') } }} className="wt-fields">
-      <label htmlFor="wt-title" className="label">New synthetic case title</label><input id="wt-title" required maxLength={120} value={title} onChange={e => setTitle(e.target.value)} />
-      <button className="btn btn--primary" disabled={wt.busy || !title.trim()}>Create case</button>
+    <form onSubmit={async e => { e.preventDefault(); const saved = await wt.create(title, synthetic); if (saved) { setTitle(''); navigate('new') } }} className="wt-fields">
+      <label htmlFor="wt-title" className="label">New case title</label><input id="wt-title" required maxLength={120} value={title} onChange={e => setTitle(e.target.value)} />
+      <label><input type="checkbox" checked={synthetic} onChange={e => setSynthetic(e.target.checked)} /> Synthetic fictional case</label><button className="btn btn--primary" disabled={wt.busy || !title.trim()}>Create case</button>
     </form>
     {wt.error && <p className="alert alert--error" role="alert">{wt.error}</p>}
   </div></section>
@@ -22,7 +24,7 @@ function CaseControls({ wt }) {
 
 export function WitnessWorkspace() {
   const { wt } = useApp()
-  return <div className="workspace wt-workspace"><section className="hero panel panel--corners"><div className="hero__text"><span className="label label--cyan">Revelio · WitnessTrace</span><h2 className="hero__title">From witness description<br />to forensic sketch.</h2><p className="hero__lead">Create a synthetic case, preserve the original account and explicitly request a Codex composite. A composite is not proof of identity.</p><button className="btn btn--primary" onClick={() => navigate('new')}>Open composite studio</button></div></section><section className="stats"><div className="stat panel"><span className="label">Saved cases</span><strong className="stat__value mono">{wt.connection ? wt.cases.length : '—'}</strong></div></section><CaseControls wt={wt} /></div>
+  return <div className="workspace wt-workspace"><section className="hero panel panel--corners"><div className="hero__text"><span className="label label--cyan">Revelio · WitnessTrace</span><h2 className="hero__title">From witness description<br />to forensic sketch.</h2><p className="hero__lead">Create a case, preserve the original account and explicitly request a Codex composite. A composite is not proof of identity.</p><button className="btn btn--primary" onClick={() => navigate('new')}>Open composite studio</button></div></section><section className="stats"><div className="stat panel"><span className="label">Saved cases</span><strong className="stat__value mono">{wt.connection ? wt.cases.length : '—'}</strong></div></section><CaseControls wt={wt} />{wt.record && <section className="panel"><div className="panel__body wt-fields"><h2>{wt.record.title}</h2><p>Generation: {wt.job?.status || 'idle'} · {wt.record.versions.length} saved revisions</p><RevisionList /><details><summary>Recent case activity</summary>{wt.record.events?.slice(-10).reverse().map((event, index) => <p className="mono wt-id" key={index}>{event.created_at} · {event.kind || event.type} · {event.detail}</p>)}</details></div></section>}</div>
 }
 
 export default function WitnessStudio() {
@@ -46,6 +48,7 @@ export default function WitnessStudio() {
       </div></section>}
     </div><div className="studio__center"><SketchViewer src={version ? imageUrl(version) : null} kind="ai" label={record?.title || 'Composite preview'} sublabel={version?.id} loading={pending} error={wt.error} onDownload={() => { if (version) window.location.assign(downloadUrl(record.id, version.id)) }} meta={version ? [['Revision', version.id], ['SHA-256', version.sha256]] : []} empty={<p>{pending ? 'Codex is working. You can navigate away and return.' : 'Save a witness description and explicitly generate a composite.'}</p>} />
       <section className="panel"><div className="panel__body" role="status" aria-live="polite">{job ? `${job.status === 'complete' && !version ? 'Verifying saved output' : job.status} · ${job.message}` : 'No generation submitted in this case.'}</div></section>
-    </div><aside className="studio__side panel"><div className="panel__head"><h2 className="panel__title">Saved revisions</h2></div><div className="panel__body wt-fields">{record?.versions.map(v => <a key={v.id} href={imageUrl(v)} target="_blank" rel="noreferrer" className="mono wt-id">{v.id} · {v.workspace}</a>)}<p className="faint">Character Lab, refinement, comparison, Sketchpad, Enhance, Multi-view and Reports integration are deferred to I4.</p></div></aside></div>
+    </div><aside className="studio__side panel"><div className="panel__head"><h2 className="panel__title">Saved revisions</h2></div><div className="panel__body wt-fields"><RevisionList /></div></aside></div>
+    {record && <div className="wt-tools-grid"><div><CharacterLab key={record.id} /><Refinement /><Deliverables /></div></div>}
   </div>
 }
