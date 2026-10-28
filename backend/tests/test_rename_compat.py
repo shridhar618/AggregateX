@@ -22,7 +22,7 @@ def test_legacy_env_names_still_work(tmp_path, monkeypatch):
     assert get_settings().data_dir == (tmp_path / "new").resolve()   # new name wins
 
 
-def test_legacy_database_is_migrated_with_its_data(tmp_path, monkeypatch, client):
+def test_legacy_database_is_migrated_with_its_data(tmp_path, monkeypatch, anon_client):
     data = tmp_path / "migrate"
     (data / "images").mkdir(parents=True)
     legacy = sqlite3.connect(data / "verisketch.db")
@@ -35,5 +35,7 @@ def test_legacy_database_is_migrated_with_its_data(tmp_path, monkeypatch, client
     from app.database import init_db
     init_db()
     assert (data / "revelio.db").exists() and not (data / "verisketch.db").exists()
-    titles = [s["title"] for s in client.get("/api/sketches").json()["sketches"]]
+    # Accounts are added to the migrated database; its sketches stay intact.
+    anon_client.post("/api/auth/register", json={"name": "A", "email": "a@example.test", "password": "password123"})
+    titles = [s["title"] for s in anon_client.get("/api/sketches").json()["sketches"]]
     assert titles == ["Old case"]

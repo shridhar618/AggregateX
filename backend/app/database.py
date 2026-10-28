@@ -42,6 +42,19 @@ CREATE TABLE IF NOT EXISTS activity (
     message    TEXT NOT NULL,
     created_at TEXT NOT NULL
 );
+CREATE TABLE IF NOT EXISTS users (
+    id            INTEGER PRIMARY KEY AUTOINCREMENT,
+    name          TEXT NOT NULL,
+    email         TEXT NOT NULL UNIQUE,
+    password_hash TEXT NOT NULL,
+    created_at    TEXT NOT NULL
+);
+CREATE TABLE IF NOT EXISTS sessions (
+    token_hash TEXT PRIMARY KEY,
+    user_id    INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    created_at TEXT NOT NULL,
+    expires_at TEXT NOT NULL
+);
 CREATE INDEX IF NOT EXISTS idx_revisions_sketch ON revisions(sketch_id);
 CREATE INDEX IF NOT EXISTS idx_activity_created ON activity(created_at);
 """

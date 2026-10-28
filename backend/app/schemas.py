@@ -163,3 +163,44 @@ class MergeRequest(BaseModel):
     @classmethod
     def _descs(cls, v):
         return [validate_description(d) for d in v]
+
+
+# ---- Accounts ---------------------------------------------------------------
+
+EMAIL_RE = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
+
+
+def _email(v: str) -> str:
+    v = v.strip().lower()
+    if len(v) > 254 or not EMAIL_RE.match(v):
+        raise ValueError("Enter a valid email address.")
+    return v
+
+
+class RegisterRequest(BaseModel):
+    name: str = Field(min_length=1, max_length=80)
+    email: str
+    password: str = Field(min_length=8, max_length=128)
+
+    @field_validator("name")
+    @classmethod
+    def _name(cls, v: str) -> str:
+        v = " ".join(v.split())
+        if not v:
+            raise ValueError("Enter your name.")
+        return v
+
+    @field_validator("email")
+    @classmethod
+    def _valid_email(cls, v: str) -> str:
+        return _email(v)
+
+
+class LoginRequest(BaseModel):
+    email: str = Field(max_length=254)
+    password: str = Field(min_length=1, max_length=128)
+
+    @field_validator("email")
+    @classmethod
+    def _norm(cls, v: str) -> str:
+        return v.strip().lower()

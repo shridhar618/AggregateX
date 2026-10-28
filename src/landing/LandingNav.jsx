@@ -83,6 +83,12 @@ function MobileMenu({ open, onClose }) {
               <span>Open Workspace</span>
             </a>
           </li>
+          <li style={{ '--i': NAV_LINKS.length + 1 }}>
+            <a href="/login">
+              <span className="lp-mono">0{NAV_LINKS.length + 2}</span>
+              <span>Log in</span>
+            </a>
+          </li>
         </ul>
       </nav>
       <div className="lp-shell lp-menu__foot">
@@ -142,6 +148,7 @@ export default function LandingNav() {
           <div className="lp-nav__right">
             <EngineStatus />
             <ThemeToggle className="lp-theme-toggle" />
+            <a href="/login" className="lp-nav__login">Log in</a>
             <a href="/app" className="lp-btn lp-btn--primary lp-btn--sm">
               Open Workspace <Icon name="arrowRight" />
             </a>

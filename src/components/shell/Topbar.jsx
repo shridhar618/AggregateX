@@ -8,11 +8,8 @@ import ThemeToggle from '../ui/ThemeToggle'
 
 const KIND_ICON = { ok: 'ok', info: 'info', warn: 'alert', error: 'error' }
 
-const Topbar = ({ title, eyebrow, onMenu }) => {
-  const { activeCase, notifications, clearNotifications, health } = useApp()
-  const [open, setOpen] = useState(false)
-  const ref = useRef(null)
-
+// Closes a dropdown on an outside click or Escape.
+function useDismiss(open, setOpen, ref) {
   useEffect(() => {
     if (!open) return undefined
     const onDoc = (e) => {
@@ -25,7 +22,50 @@ const Topbar = ({ title, eyebrow, onMenu }) => {
       document.removeEventListener('mousedown', onDoc)
       document.removeEventListener('keydown', onKey)
     }
-  }, [open])
+  }, [open, setOpen, ref])
+}
+
+const initials = (name) => name.split(' ').filter(Boolean).slice(0, 2).map((w) => w[0].toUpperCase()).join('')
+
+function AccountMenu({ user, onLogout }) {
+  const [open, setOpen] = useState(false)
+  const [busy, setBusy] = useState(false)
+  const ref = useRef(null)
+  useDismiss(open, setOpen, ref)
+
+  return (
+    <div className="account" ref={ref}>
+      <button type="button" className="btn btn--ghost account__btn" onClick={() => setOpen((v) => !v)}
+        aria-expanded={open} aria-haspopup="true" aria-label={`Account: ${user.name}`}>
+        <span className="account__avatar mono" aria-hidden="true">{initials(user.name) || '?'}</span>
+      </button>
+      {open && (
+        <div className="account__panel panel" role="dialog" aria-label="Account">
+          <div className="account__who">
+            <span className="account__avatar account__avatar--lg mono" aria-hidden="true">{initials(user.name) || '?'}</span>
+            <div>
+              <strong>{user.name}</strong>
+              <span className="mono faint">{user.email}</span>
+            </div>
+          </div>
+          <p className="account__note faint">Signed in on this machine. Logging out also clears the unsaved draft in this browser.</p>
+          <div className="account__foot">
+            <button type="button" className="btn btn--ghost btn--sm" disabled={busy}
+              onClick={() => { setBusy(true); onLogout() }}>
+              {busy ? <span className="spinner" /> : <Icon name="logout" />} Log out
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
+const Topbar = ({ title, eyebrow, onMenu }) => {
+  const { activeCase, notifications, clearNotifications, health, user, logout } = useApp()
+  const [open, setOpen] = useState(false)
+  const ref = useRef(null)
+  useDismiss(open, setOpen, ref)
 
   return (
     <header className="topbar">
@@ -98,6 +138,8 @@ const Topbar = ({ title, eyebrow, onMenu }) => {
             </div>
           )}
         </div>
+
+        {user && <AccountMenu user={user} onLogout={logout} />}
       </div>
     </header>
   )

@@ -8,6 +8,7 @@ from ..catalog import catalog_payload
 from ..config import get_settings
 from ..providers.registry import all_providers
 from ..services import sketch_service
+from .auth import AUTH
 
 router = APIRouter(tags=["system"])
 
@@ -28,17 +29,17 @@ def providers():
     return {"providers": all_providers()}
 
 
-@router.get("/stats")
+@router.get("/stats", dependencies=AUTH)
 def stats():
     return sketch_service.stats()
 
 
-@router.get("/activity")
+@router.get("/activity", dependencies=AUTH)
 def activity(limit: int = Query(default=20, ge=1, le=100)):
     return {"activity": sketch_service.activity(limit)}
 
 
-@router.get("/storage")
+@router.get("/storage", dependencies=AUTH)
 def storage():
     s = get_settings()
     return {"data_dir": str(s.data_dir), "database": "SQLite", "images": "PNG/SVG files on local disk",
@@ -49,7 +50,7 @@ class WipeRequest(BaseModel):
     confirm: str
 
 
-@router.post("/data/delete-all")
+@router.post("/data/delete-all", dependencies=AUTH)
 def delete_all(req: WipeRequest):
     if req.confirm != "DELETE":
         from fastapi import HTTPException

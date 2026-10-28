@@ -834,6 +834,20 @@ html.lp-locked {
   gap: 0.6rem;
 }
 
+.lp-nav__login {
+  padding: 0.4rem 0.6rem;
+  border-radius: var(--r-pill);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-2);
+  transition: color 0.2s ease;
+}
+
+.lp-nav__login:hover,
+.lp-nav__login:focus-visible {
+  color: var(--text);
+}
+
 .lp-theme-toggle {
   display: grid;
   place-items: center;
@@ -2946,6 +2960,7 @@ html[data-theme='light'] .lp-nav.is-scrolled {
 
 @media (max-width: 639px) {
   .lp-nav__right .lp-btn--primary { display: none; }
+  .lp-nav__login { display: none; }
   .lp-hero { padding-top: 5rem; }
   .lp-demo__selects { grid-template-columns: 1fr; }
   .lp-faq__a { padding-left: 0.5rem; }
