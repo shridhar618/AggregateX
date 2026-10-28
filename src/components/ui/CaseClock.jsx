@@ -1,33 +1,21 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react'
 
-const formatTime = (date) =>
-  date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
+const pad = (n) => String(n).padStart(2, '0')
 
-const zoneLabel = (() => {
-  try {
-    const parts = new Intl.DateTimeFormat([], { timeZoneName: 'short' }).formatToParts(new Date());
-    return parts.find((p) => p.type === 'timeZoneName')?.value || 'LOCAL';
-  } catch {
-    return 'LOCAL';
-  }
-})();
-
-// Live local clock — a timestamp anchor for the case session.
-const CaseClock = ({ className = '' }) => {
-  const [now, setNow] = useState(() => new Date());
-
+const CaseClock = () => {
+  const [now, setNow] = useState(() => new Date())
   useEffect(() => {
-    const id = setInterval(() => setNow(new Date()), 1000);
-    return () => clearInterval(id);
-  }, []);
-
+    const id = setInterval(() => setNow(new Date()), 1000)
+    return () => clearInterval(id)
+  }, [])
+  const time = `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`
+  const date = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`
   return (
-    <div className={`case-clock ${className}`} aria-label={`Local time ${formatTime(now)}`}>
-      <span className="case-clock__dot" aria-hidden="true" />
-      <time className="mono" dateTime={now.toISOString()}>{formatTime(now)}</time>
-      <span className="case-clock__zone">{zoneLabel}</span>
+    <div className="clock mono" aria-label={`Local time ${time}`}>
+      <span className="clock__date">{date}</span>
+      <time dateTime={now.toISOString()}>{time}</time>
     </div>
-  );
-};
+  )
+}
 
-export default CaseClock;
+export default CaseClock
