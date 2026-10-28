@@ -18,11 +18,23 @@ def isolated_env(tmp_path, monkeypatch):
 
 
 @pytest.fixture
-def client():
+def anon_client():
+    """A client with no session: only public routes are usable."""
     from fastapi.testclient import TestClient
     from app.main import create_app
+    from app.services.auth_service import reset_throttle
+    reset_throttle()
     with TestClient(create_app()) as c:
         yield c
+
+
+@pytest.fixture
+def client(anon_client):
+    """A logged-in client (most tests exercise saved data, which requires a session)."""
+    r = anon_client.post("/api/auth/register", json={"name": "Test Officer", "email": "officer@example.test",
+                                                     "password": "correct horse battery"})
+    assert r.status_code == 201
+    return anon_client
 
 
 SPEC_DESCRIPTION = ("An adult male with an oval face, short dark hair, thick eyebrows, a narrow nose, "

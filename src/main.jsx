@@ -5,11 +5,13 @@ import { initializeTheme } from './lib/theme'
 
 /* eslint-disable react-refresh/only-export-components -- entry file, not a component module */
 
-// Two entry points, one Vite build:
-//   /      → marketing landing page
-//   /app   → the Revelio workspace (unchanged; uses #/hash routes internally)
+// Entry points, one Vite build:
+//   /                   → marketing landing page
+//   /login, /register   → local account pages
+//   /app                → the Revelio workspace (requires a login; uses #/hash routes internally)
 const App = lazy(() => import('./App.jsx'))
 const LandingPage = lazy(() => import('./landing/LandingPage.jsx'))
+const AuthPage = lazy(() => import('./auth/AuthPage.jsx'))
 
 // One-time carry-over of browser storage saved before the project was renamed.
 try {
@@ -31,10 +33,15 @@ if ((pathname === '/' || pathname === '') && hash.startsWith('#/')) {
 }
 
 const isApp = pathname === '/app' || pathname.startsWith('/app/')
+const authMode = { '/login': 'login', '/register': 'register' }[pathname.replace(/\/$/, '')]
 document.title = isApp ? 'Revelio — Forensic Composite Workspace' : 'Revelio — From Witness Description to Forensic Sketch'
+
+let page = <LandingPage />
+if (isApp) page = <App />
+else if (authMode) page = <AuthPage mode={authMode} />
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <Suspense fallback={null}>{isApp ? <App /> : <LandingPage />}</Suspense>
+    <Suspense fallback={null}>{page}</Suspense>
   </StrictMode>,
 )

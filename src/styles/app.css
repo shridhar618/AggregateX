@@ -588,6 +588,84 @@
   transform-origin: top right;
 }
 
+.account {
+  position: relative;
+}
+
+.account__btn {
+  padding: 3px;
+  border-radius: 999px;
+}
+
+.account__avatar {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 999px;
+  border: 1px solid var(--cyan-line, var(--border));
+  background: var(--cyan-soft, var(--surface-2));
+  color: var(--cyan);
+  font-size: 11.5px;
+  font-weight: 600;
+}
+
+.account__avatar--lg {
+  flex: none;
+  width: 40px;
+  height: 40px;
+  font-size: 14px;
+}
+
+.account__panel {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 8px);
+  z-index: 40;
+  width: min(300px, calc(100vw - 24px));
+  box-shadow: var(--shadow-lg);
+  animation: scaleIn var(--t) var(--ease) both;
+  transform-origin: top right;
+}
+
+.account__who {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.account__who div {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  gap: 2px;
+}
+
+.account__who strong,
+.account__who span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.account__who span {
+  font-size: 11.5px;
+}
+
+.account__note {
+  padding: 12px 16px 0;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.account__foot {
+  display: flex;
+  justify-content: flex-end;
+  padding: 12px 16px 14px;
+}
+
 .notif__empty {
   padding: 20px 16px;
   font-size: 13px;

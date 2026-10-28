@@ -6,7 +6,7 @@ const AppContext = createContext(null)
 
 const PREFS_KEY = 'revelio.prefs'
 
-export function AppProvider({ children }) {
+export function AppProvider({ user = null, children }) {
   const [catalog, setCatalog] = useState(null)
   const [health, setHealth] = useState(null) // null = unknown yet
   const [engineError, setEngineError] = useState(null)
@@ -33,6 +33,17 @@ export function AppProvider({ children }) {
     const c = await api.catalog()
     setCatalog(c)
     return c
+  }, [])
+
+  // Ends the session and drops this browser's unsaved draft, so the next person at this machine can't read it.
+  const logout = useCallback(async () => {
+    try {
+      await api.logout()
+    } catch {
+      /* the session cookie is cleared server-side when reachable; leave either way */
+    }
+    safeStorage.remove('revelio.draft')
+    window.location.assign('/login')
   }, [])
 
   const dismissToast = useCallback((id) => setToasts((t) => t.filter((x) => x.id !== id)), [])
@@ -78,9 +89,9 @@ export function AppProvider({ children }) {
     () => ({
       catalog, loadCatalog, health, providers, engineError, refreshHealth,
       toasts, notify, dismissToast, notifications, clearNotifications: () => setNotifications([]),
-      activeCase, setActiveCase, prefs, updatePrefs,
+      activeCase, setActiveCase, prefs, updatePrefs, user, logout,
     }),
-    [catalog, loadCatalog, health, providers, engineError, refreshHealth, toasts, notify, dismissToast,
+    [user, logout, catalog, loadCatalog, health, providers, engineError, refreshHealth, toasts, notify, dismissToast,
       notifications, activeCase, prefs, updatePrefs],
   )
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>

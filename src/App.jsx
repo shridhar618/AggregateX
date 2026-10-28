@@ -1,9 +1,11 @@
 import { lazy, Suspense, useEffect, useState } from 'react'
+import { api } from './api/client'
 import BootScreen from './components/shell/BootScreen'
 import Sidebar from './components/shell/Sidebar'
 import Toasts from './components/shell/Toasts'
 import Topbar from './components/shell/Topbar'
 import Icon from './components/ui/Icon'
+import { loginUrl } from './lib/auth'
 import { NAV } from './lib/nav'
 import { useRoute } from './lib/router'
 import Workspace from './pages/Workspace'
@@ -137,8 +139,21 @@ function Shell() {
 }
 
 export default function App() {
+  const [auth, setAuth] = useState({ checked: false, user: null })
+
+  useEffect(() => {
+    api.me()
+      .then((r) => setAuth({ checked: true, user: r.user }))
+      .catch((err) => {
+        if (err.status === 401) window.location.replace(loginUrl())
+        // Engine unreachable: render the shell, which explains how to start it.
+        else setAuth({ checked: true, user: null })
+      })
+  }, [])
+
+  if (!auth.checked) return null
   return (
-    <AppProvider>
+    <AppProvider user={auth.user}>
       <Shell />
     </AppProvider>
   )

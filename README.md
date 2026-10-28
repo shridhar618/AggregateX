@@ -31,6 +31,7 @@ Building a facial composite from a verbal description is slow. Witnesses remembe
 | **Revisions & comparison** | Every save is an immutable revision in SQLite. Compare any two revisions with a drag-to-reveal slider or side by side, alongside a trait-by-trait diff. There are no similarity scores or identity probabilities. |
 | **Multi-witness merge** | Compare 2–4 independent accounts. Traits are classified as shared, conflicting, single-source or unmentioned. The operator must resolve every conflict before the combined profile can be applied. |
 | **Exports** | PNG, JSON (confirmed traits, unknown traits, conflicts, revision history) and a printable HTML report (print to PDF) with the required disclaimer. |
+| **Local accounts** | Register with your name, email and password at `/register`, and log in at `/login`. You need an account to use the workspace and saved sketches. Accounts live in the local database only. See [Accounts](#accounts). |
 | **Light and dark themes** | A theme toggle in the workspace top bar and the landing-page nav. Dark uses charcoal with coral accents, and light uses cream with green accents. The choice is remembered in this browser. |
 | **Optional AI providers** | A replaceable provider interface. Hosted Gemini is **off by default** and configured on the backend only. A local diffusion model is detected and documented, but not shipped (see below). AI output is always labelled AI-generated, and failures never fall back silently. |
 
@@ -87,13 +88,14 @@ backend/
     catalog.py           Trait catalog — single source of truth for options & renderability
     schemas.py           Pydantic models and validation
     database.py          SQLite (stdlib) schema and helpers
-    api/                 system.py · traits.py · sketches.py
-    services/            trait_extractor · procedural_renderer · refinement_service
+    api/                 auth.py · system.py · traits.py · sketches.py
+    services/            auth_service · trait_extractor · procedural_renderer · refinement_service
                          merge_service · sketch_service · report · uploads
     providers/           base · offline_provider · local_provider · hosted_provider · registry
-  tests/                 59 pytest tests
+  tests/                 76 pytest tests
 src/
   main.jsx             Route switch: / → landing page, /app → workspace (separate lazy bundles)
+  auth/                  Login and registration pages
   landing/             Landing page (Lumora-inspired); reuses the API client, renderer and CompareSlider
   api/client.js          API client (no credentials ever pass through the browser)
   state/AppContext.jsx   Catalog, engine status, toasts, preferences, active case
@@ -125,12 +127,13 @@ backend/.venv/bin/pip install -r backend/requirements.txt      # Windows: backen
 npm run dev         # starts the API and the interface together
 ```
 
-Open **http://127.0.0.1:5173** for the landing page, or **http://127.0.0.1:5173/app** for the workspace. The workspace boot screen checks the local engine. If the engine isn't running, you'll see instructions instead of a broken UI.
+Open **http://127.0.0.1:5173** for the landing page, or **http://127.0.0.1:5173/register** to create an account and open the workspace. The workspace boot screen checks the local engine. If the engine isn't running, you'll see instructions instead of a broken UI.
 
 | Route | What it is |
 |---|---|
-| `/` | Marketing landing page with a live demo running on the real procedural renderer |
-| `/app` | The Revelio workspace (`/app#/new`, `/app#/library`, `/app#/compare`, `/app#/settings`) |
+| `/` | Marketing landing page with a live demo running on the real procedural renderer (no account needed) |
+| `/register` · `/login` | Create a local account or log in |
+| `/app` | The Revelio workspace (`/app#/new`, `/app#/library`, `/app#/compare`, `/app#/settings`). Redirects to `/login` when you're not logged in, then returns you to the page you asked for. |
 
 Old links such as `/#/library` redirect to `/app#/library`. For static hosting, serve `index.html` for `/app` as an SPA fallback. Vite's dev and preview servers already do this.
 
@@ -146,7 +149,7 @@ npm run dev:web     # Vite only, on http://127.0.0.1:5173 (proxies /api to the e
 ```bash
 npm run lint        # ESLint
 npm run build       # production build
-npm run test:api    # backend pytest suite (59 tests)
+npm run test:api    # backend pytest suite (76 tests)
 ```
 
 ### Offline use
@@ -167,6 +170,17 @@ The landing page at `/` opens with a short intro (skip it with <kbd>Esc</kbd> or
 - **Pricing:** Pro and Team are labelled as proposals. Their buttons open a notice that collects no data, and only implemented features get a checkmark.
 
 If the local engine isn't running, the demos say so and offer a retry. They never fall back to a static image.
+
+## Accounts
+
+Revelio has simple **local** accounts. They protect the workspace on a shared computer. They are not cloud sign-in.
+
+- **What you need to register:** your full name, an email address and a password of 8–128 characters. The email is only a login name. Revelio never sends email, so there is no verification email and no password reset.
+- **Storage:** accounts are stored in `revelio.db` next to your sketches. Passwords are stored as salted **scrypt** hashes, using Python's standard library with no new dependencies, and are never logged or returned by the API.
+- **Sessions:** logging in sets an `HttpOnly`, `SameSite=Strict` cookie that lasts 7 days. The database stores only a SHA-256 hash of the session token. Logging out deletes the session and clears the unsaved draft in that browser.
+- **Failed logins:** a wrong email and a wrong password give the same message, so the login page doesn't reveal which emails are registered. After 5 failed attempts, that email is locked out for 60 seconds.
+- **What needs a login:** everything that reads or changes saved data: sketches, revisions, images, exports, reports, stats, activity, storage info and *delete all*. The landing page's demos stay public because they store nothing: health, catalog, trait extraction, refinement, merge and live rendering.
+- **Shared library:** all accounts on one machine share **one sketch library**. Accounts control who can open the workspace. They don't keep each person's cases separate.
 
 ## Generation modes
 
@@ -205,6 +219,7 @@ A local diffusion model (for example Stable Diffusion 1.5) needs roughly **8 GB 
 - **Validated input.** Pydantic validates description length, trait options, slider ranges and IDs. Sketch IDs are pattern-checked, and image paths are resolved inside the data directory only.
 - **Safe uploads.** Reference images are checked for type allow-list, magic bytes, size (5 MB by default), dimensions and decompression bombs. They are then re-encoded, which strips EXIF and GPS metadata, used for one hosted request, and **never stored**.
 - **No biometric processing.** There is no face detection, recognition, identity matching or sensitive-attribute inference.
+- **Local accounts.** You must log in to see saved sketches and exports. Passwords are hashed with scrypt, and session cookies can't be read by page scripts. See [Accounts](#accounts).
 - **Deletion.** Delete a single sketch with all its revisions and image files from the Library, or wipe all local data from Settings (type `DELETE` to confirm).
 - **Data location.** `backend/data/` holds `revelio.db` and `images/` (override with `REVELIO_DATA_DIR`).
 - **Browser storage.** The browser keeps only interface preferences, the theme choice and one unsaved draft (`revelio.*` keys in local storage).
@@ -226,7 +241,7 @@ The project was previously called VeriSketch AI. Existing installs keep working:
 - The procedural renderer is stylised and monochrome. It draws a front-facing composite, not a photorealistic likeness. Eye colour and skin tone are recorded but not drawn.
 - Trait extraction is rule-based English. Unusual phrasing may be missed, but missed traits stay **unknown** rather than becoming wrong. The guided questions cover every trait.
 - Real hosted generation has not been verified with a working API key.
-- Single-user, local-only: no accounts, sync or audit-grade chain of custody.
+- Local-only: accounts share one sketch library, and there are no roles, no password reset, no sync and no audit-grade chain of custody.
 - Voice dictation depends on browser support. It is unavailable in Firefox, Brave and embedded browser views.
 
 ## Future improvements

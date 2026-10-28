@@ -1,5 +1,8 @@
 // Thin client for the local Revelio API. No provider credentials ever pass
 // through the browser: hosted providers are configured on the backend only.
+// The session lives in an HttpOnly cookie that page scripts cannot read.
+import { loginUrl } from '../lib/auth'
+
 const BASE = (import.meta.env.VITE_API_BASE || '/api').replace(/\/$/, '')
 
 export class ApiError extends Error {
@@ -32,6 +35,10 @@ async function request(path, { method = 'GET', body, signal, raw = false } = {})
     throw new ApiError(0, 'The local Revelio engine is not reachable. Start it with “npm run dev:api”.')
   }
   if (!res.ok) {
+    // Session expired or logged out elsewhere: send the workspace back to the login page.
+    if (res.status === 401 && !path.startsWith('/auth/') && window.location.pathname.startsWith('/app')) {
+      window.location.assign(loginUrl())
+    }
     let data = {}
     try {
       data = await res.json()
@@ -54,6 +61,11 @@ export const assetUrl = (path) => {
 }
 
 export const api = {
+  me: () => request('/auth/me'),
+  register: (name, email, password) => request('/auth/register', { method: 'POST', body: { name, email, password } }),
+  login: (email, password) => request('/auth/login', { method: 'POST', body: { email, password } }),
+  logout: () => request('/auth/logout', { method: 'POST' }),
+
   health: (signal) => request('/health', { signal }),
   catalog: () => request('/catalog'),
   stats: () => request('/stats'),
