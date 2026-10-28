@@ -895,6 +895,7 @@ button.chip:hover {
   --amber-soft: rgba(160, 200, 120, 0.18);
   --red-soft: rgba(174, 63, 68, 0.09);
   --green-soft: rgba(160, 200, 120, 0.2);
+  --display: 'Syne', 'Inter', 'Helvetica Neue', Arial, sans-serif;
   --shadow: 0 1px 0 rgba(255, 255, 255, 0.9) inset, 0 10px 28px rgba(70, 91, 48, 0.08);
   --shadow-lg: 0 1px 0 rgba(255, 255, 255, 0.94) inset, 0 22px 52px rgba(70, 91, 48, 0.13);
   --focus: 0 0 0 2px var(--bg), 0 0 0 4px #527642;
@@ -922,7 +923,13 @@ button.chip:hover {
 }
 
 :root[data-theme='light'] .hero__title {
-  background-image: linear-gradient(130deg, #293623, #527642);
+  background-image: linear-gradient(130deg, #273323, #527642);
+  font-family: var(--display);
+  font-size: clamp(28px, 3.1vw, 44px);
+  font-weight: 800;
+  letter-spacing: -0.065em;
+  line-height: 0.98;
+  text-transform: uppercase;
 }
 
 :root:not([data-theme='light']) {
