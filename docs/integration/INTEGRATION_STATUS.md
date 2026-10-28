@@ -1,79 +1,33 @@
-# Integration status
+# Revelio + WitnessTrace integration status
 
-Updated: 2026-10-29. Active worktree: `/home/god/Documents/github/ssdnexus-t1-20-integration`.
-Branch: `integration/revelio-witnesstrace`; base `f89093eaa45ace99b134093b563d1f30d3bbe5c0`.
+Updated 2026-10-29. The continuous-execution instruction supersedes the historical NEXT gates in I0–I3 documents. No further phase confirmation is required.
 
-## I0 — PASS: audit and architecture recommendation
+**Local integration: PASS. Remote publication: BLOCKED by OWNER-SEC-01 pending owner remediation and explicit push approval.**
 
-Completed:
-- Audited required branch/status/diff/tree/log/remote commands and fetched remote refs. main/b/backend refs match remote; original main checkout clean and preserved.
-- Created isolated integration worktree/branch from main. Verified complete-history Git bundle outside repository.
-- Located/read full committed handoff after supplied parent-path file proved absent; cross-checked frontend/API/auth/CSS and complete backend source.
-- Established b really contains committed Phase 08 code. All 94 core/static/test files match original and migrated copies. Separate migration already exists at newBackend.
-- Backed up both source/runtime copies privately, hashed files, restored SQLite backups and checked integrity/FKs/counts. Verified 23/23 original and 25/25 migrated revision images.
-- Selected Option A, actual React frontend plus preserved WitnessTrace services/engines. Recorded authentication integration and imperative-engine risks.
+| Phase | Final result |
+|---|---|
+| I0 audit | Preserved source/data/history inventory; baseline main f89093e, b 49f63ee |
+| I1 UI foundation | Existing React/landing/auth/design retained; reference evidence preserved |
+| I2 backend foundation | Safe source-only WitnessTrace import; original worker/stores/static algorithms retained |
+| I3 connection | Existing 4d3b17f verified and reused; no repeated real generation |
+| I4 feature parity | 45-field Lab, refinement, immutable revision selection/preference, comparison, Sketchpad, Enhance, multi-view, library, reports and settings connected |
+| I5 visual QA | Actual studio and Settings matrices at 1920/1440/1280/768/390 in dark/light; sidebar, contrast, proportions and overflow corrections |
+| I6 security/data | Session-protected allowlisted gateway, case-resource validation, staged-data audit, six-revision/report checksum and SQLite verification |
+| I7 regression | 100 Revelio/gateway tests; 56 WitnessTrace tests; 100 Revelio tests also on the unified runtime; seven adapter tests; lint/build; 61 integrated + 131 legacy Chromium checks; five startup checks |
+| I8 Git delivery | Separate safe checkpoint commits; clean local main fast-forward at final delivery; no b-history merge, reset or remote push |
 
-Files created: `INTEGRATION_BASELINE.md`, `ARCHITECTURE_DECISION.md`, this status file. No production source edits. Private manifests/backups/logs are under `/home/god/Documents/github/integration-audit-private` (0700) and are not staged.
+## Recovery and architecture
 
-Fresh tests: npm ci; npm run lint PASS; npm run build PASS; Revelio pytest 76 passed (20.42s); WitnessTrace pytest 54 passed (28.26s), one existing Starlette/httpx deprecation warning; pip check PASS in both environments; Git bundle and archive hash verification PASS; database restore/integrity/FK checks PASS. WitnessTrace initially had 2 missing-fixture failures in the isolated test copy; copying original code-only historical fixtures fixed them; full suite rerun passed.
+`git worktree list --porcelain` verified the dirty old integration directory remained on b at 49f63ee. I3 commit 4d3b17f was a valid integration tip based on main, through I0/I1/I2. A fresh worktree was created at `/home/god/Documents/github/ssdnexus-t1-20-final-merge`, branch `integration/final-ui-backend-merge`. The dirty b checkout, runtime directories and private data were untouched.
 
-Known baseline limitations: npm audit reports 13 advisories (10 high/2 moderate/1 low); original Revelio Pydantic/core pins are yanked; committed b already contains private runtime artifacts on remote; no comprehensive secret scan or history rewrite performed. Existing original-to-migrated differences are a case revision counter and selected/preferred state, with all original statements/versions retained. No fresh screenshots/browser regression, live generation, service restart or integrated endpoint tests in I0. These are not claimed as completed. No port 8000 contact or management.
+React is primary and integrated mode is now the default. Original Revelio account sessions protect `/wt-api`; WitnessTrace owns all integrated case/image/revision/report data and still invokes the original Codex worker. Sketchpad/Enhance reuse the original engine document in a bounded, authenticated, themed surface; its mounted document survives hash navigation. There is no second WitnessTrace case database or provider substitution.
 
-Checkpoint: the documentation-only commit titled `docs: audit integration sources and record I0 architecture` is the I0 checkpoint (resolve SHA with `git log -1` after commit). Existing main, b and backend unchanged. No push/merge performed.
+## Evidence and operating boundaries
 
-## I1 — PASS: frontend preservation and visual baseline
+See FINAL_INTEGRATION_REPORT.md, FEATURE_PARITY.md, API_MAPPING.md, VISUAL_QA.md, SECURITY_REVIEW.md and STARTUP_GUIDE.md. Fresh evidence is under `evidence/final/`; earlier I1/I2/I3 evidence remains historical reference. I3's one real Codex result and checksum evidence were retained; all new generation regression jobs use a labelled geometric CLI fixture, never a fake face passed off as AI.
 
-Completed only I1 on explicit NEXT. The React source, CSS layers, original backend, package manifests and assets remain unchanged: 69 frontend/config/asset files match main base f89093e byte-for-byte. Option A remains selected; no WitnessTrace source/API integration started.
+Completed case/selection/testimony/image/report records survived actual owned-process restarts. Every one of the six source image hashes and all report-file manifest hashes verified. Enhancement preview pixels exactly matched saved pixels. Original data stores were not migrated or overwritten. Ports 8000/8001 were not contacted or managed; listener snapshots compared unchanged.
 
-Evidence: 116 real Chromium screenshots, eight surfaces × five widths × two actual DOM themes (80 matrix states) plus 36 section/modal/editor/loading/error captures. Screenshots were visually reviewed in contact sheets and selected native-resolution images. Computed tokens, typography, grid/shell dimensions, routes and per-image overflow/asset checks are recorded. Password fields are masked; all accounts/descriptions/images are isolated synthetic Revelio procedural fixtures. Neither paid generation nor Codex was invoked.
+Local shared collection only: underlying WitnessTrace is still unauthenticated on loopback, and local OS processes can reach it directly. No public deployment or per-user tenancy is claimed. OWNER-SEC-01 concerns private artifacts already in remote b history; no history rewrite or remote push occurred. Compatible dependency updates resolved the 13 npm advisories; final audit reports zero. Historical legacy Python pins are not the unified startup environment.
 
-Tests: npm run lint PASS; npm run build PASS (70 modules); 131 browser/API checks PASS, including all 80 active-theme checks; evidence verifier PASS for all screenshot hashes and 69 unchanged source files. Zero JavaScript page exceptions, zero failed requests/broken images. Console resource messages: 45 expected 401 auth responses and two controlled health 503s. Owned services ran only on 5182/8021 and were stopped; original 8001 PID 143217 remains unchanged; ports 8000/8001 were never contacted or managed.
-
-Created `I1_VISUAL_BASELINE.md`, `I1_FRONTEND_API_DEPENDENCIES.md`, `I1_DEPENDENCY_SECURITY.md` and `evidence/i1/` (capture/verification Python scripts, screenshot index/hashes, browser results, source manifest, audit risk summary and lint/build/audit logs). Full changed paths are recorded in `evidence/i1/files-changed.txt`.
-
-Baseline defects retained/documented: Settings overflow (812/768 and 518/390 in both themes), landing headline clipping, long sidebar label clipping, layered/legacy theme colors, unreadable light-theme dark-block captions, stale privacy copy and auth offline classification. No CSS/functionality changes were made to hide defects. Real mobile touch, full accessibility certification, hosted generation, destructive execution and live WitnessTrace workflows were not verified in this phase.
-
-Security gates: **OWNER-SEC-01 OPEN** — owners must classify/remediate already-pushed runtime material in b and record clearance before final shared merge; limited key/token-pattern scan is not privacy clearance. No history rewrite/force-push/deletion performed. **DEP-01 OPEN** — 13 dev-toolchain npm advisories (10 high/2 moderate/1 low); runtime-only audit reports zero. Compatible fix candidates documented; no upgrades applied.
-
-Checkpoint: local commit titled `docs: preserve Revelio visual baseline and record I1 risks` (resolve SHA from git log). No merge, cherry-pick or push. I2 requires a new explicit NEXT.
-
-## I2 — PASS: WitnessTrace backend preservation and safe import
-
-Imported 57 allowlisted files from committed b `49f63ee4e242efe0c5aa4aef0a524652e75cfd5a` into `witness-backend/`. No merge/cherry-pick, private runtime data or remote operation. 52 files are byte-identical; five reviewed relocation-only differences cover app output/work environment paths, isolated launcher, test runtime roots and two code-only fixture paths. Every app function/class/route/model AST is unchanged; all six store/schema modules and 35 static assets retain original bytes.
-
-Preserved all original eight-phase functionality and all 54 pytest tests. Original private historical ledgers/IDs/browser evidence were excluded; safe README/demo/phase summaries are provided. The 41 non-pytest historical browser drivers remain in original source/history because they target 8001/private evidence; no fresh browser regression pass is claimed.
-
-Fresh tests: original suite54 passed; full suite with two relocation/launcher checks **56 passed** (27.62s, one existing Starlette/httpx deprecation warning); pip check PASS. **33 isolated HTTP checks** pass through actual launcher/start/restart on8022 with disposable synthetic data and an explicitly fake CLI. All35 static assets match hashes over HTTP; two cases/six revisions, exact statements, selection/preferred and all report/image bytes persist after actual owned-process restart; SQLite integrity/FKs pass. No real AI image call was submitted. CodexCLI0.165.0 is installed and privately reports authenticated login; quota/tool availability remains unproven.
-
-Frontend build and lint pass. React/source/assets/API client/Vite/package/lock and existing Revelio backend remain untouched. I1 manifest68/69 files match; the only configuration exception is adding witness-backend to existing ESLint backend/dist exclusions. Root .gitignore now prevents new runtime/SQLite/Codex auth additions. No source redesign or API connection occurred.
-
-Created `I2_BACKEND_PRESERVATION.md`, `I2_BACKEND_API_INVENTORY.md` (all34 application routes plus framework/static behavior), source/test/docs tree and `evidence/i2/` verification/provenance/logs/OpenAPI. Exact selected hashes/diffs and changed paths are in evidence manifests. Original94-file source hashes still match in both original/migrated projects; original data was not opened for tests. Private recovery bundles/backups verified. Ports8000/8001 never contacted or signaled; original8001 PID143217 unchanged; owned8022 stopped.
-
-**OWNER-SEC-01 OPEN** before final shared merge; .gitignore does not remediate remote b history. **DEP-01 OPEN** from I1. Original WitnessTrace has no authentication; I3 must apply real auth without fake login. Shared-output attribution, process-local locking, text-only drift, 2D rather than3D and absent private data remain documented limitations.
-
-Checkpoint: local commit titled `feat: preserve WitnessTrace backend with isolated runtime and tests` (resolve SHA from git log). Main/b/backend unchanged; no push/merge. I3 requires explicit NEXT and has not started.
-
-## Remaining phases
-
-| Phase | Status | Next required work |
-|---|---|---|
-| I1 frontend preservation | PASS | See I1 reports/evidence; source preserved unchanged |
-| I2 backend preservation | PASS | Preserved source and tests; independent service verified; see I2 reports |
-| I3 API integration | PASS | Local authenticated case/generation/image slice, including one real Codex result; see I3 reports |
-| I4 complete features | NOT STARTED | Coherent full UI and engine lifecycle parity; create FEATURE_PARITY.md |
-| I5 visual fidelity | NOT STARTED | All viewport/theme screenshots and fixes; create VISUAL_QA.md |
-| I6 data/security | NOT STARTED | Transactional path/data/auth/security verification |
-| I7 automated QA | NOT STARTED | Full browser workflow, restart/export checks and permitted real CLI generation |
-| I8 final Git | NOT STARTED | Final reviewed integration commit/merge preparation; create FINAL_INTEGRATION_REPORT.md |
-
-STOPPED: awaiting explicit NEXT. I3 is complete; I4 has not begun. Do not merge main before I8; do not push remote main without explicit approval of final commit/push.
-
-## I3 — PASS: real frontend/backend API vertical slice
-
-Implemented: opt-in local React case Workspace/Studio, dedicated WitnessTrace adapter, existing AppProvider state, immutable testimony/clarifications, explicit asynchronous generation/polling, canonical saved PNG viewer/download and refresh recovery. A narrow server-side gateway reuses the existing real Revelio session dependency; no login bypass. Vite /wt-api proxy is separate from preserved /api. No WitnessTrace backend/worker files changed; 64/69 I1 frontend-manifest files are unchanged relative to I2, with five reviewed shell/context/viewer/proxy edits. Existing legacy pages/components remain in source.
-
-Tests: WitnessTrace 56 passed; Revelio 84 passed (76 original + eight gateway checks); adapter seven passed; lint/build PASS. Chromium 30 checks, eight visually inspected screenshots at all four requested widths in both themes; no horizontal overflow or page exceptions. Actual owned backend restart retained saved data. Exactly one real UI-triggered Codex generation succeeded, displayed the persisted validated image and verified source/export download checksums. No generated face image or private record/credential was staged. All integration services stopped; 8000/8001 untouched.
-
-Documents: I3_API_ADAPTER.md, I3_VERTICAL_SLICE.md, API_MAPPING.md and evidence/i3/. Local checkpoint title: `feat: connect Revelio cases and Codex generation through authenticated gateway` (resolve exact SHA with git log). Full changed paths are in evidence/i3/files-changed.txt.
-
-Deferred: all full Lab/refinement/comparison/Library/Settings/editor/multi-view/report integration to I4. Localhost-only direct upstream remains unauthenticated; no public-deployment/tenancy claim. OWNER-SEC-01 remains OPEN before final shared merge; DEP-01 remains OPEN before deployment. No merge/push. I4 NOT STARTED; awaiting explicit NEXT.
+Final local main/ref delivery is recorded in FINAL_INTEGRATION_REPORT.md and the final handoff. Rollback and safe startup are documented in STARTUP_GUIDE.md.
