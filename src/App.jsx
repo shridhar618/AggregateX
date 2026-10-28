@@ -1,7 +1,21 @@
-import { useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import WitnessInterview from './components/WitnessInterview';
 import CandidateExploration from './components/CandidateExploration';
 import MultiWitnessConsensus from './components/MultiWitnessConsensus';
+import PageLoader from './components/ui/PageLoader';
+import NavMenu from './components/ui/NavMenu';
+import CaseClock from './components/ui/CaseClock';
+import SiteFooter from './components/ui/SiteFooter';
+import Icon from './components/ui/Icon';
+import './styles/shell.css';
+import './styles/phases.css';
+import './styles/motion.css';
+
+const PHASES = [
+  { id: 'interview', index: '01', label: 'Interview' },
+  { id: 'candidates', index: '02', label: 'Refinement' },
+  { id: 'consensus', index: '03', label: 'Consensus' }
+];
 
 function App() {
   const [currentPhase, setCurrentPhase] = useState('interview'); // interview, candidates, consensus
@@ -14,7 +28,7 @@ function App() {
     faceDescription: "",
     structuredTraits: {},
     messages: [
-      { id: 1, text: `Hi Witness ${id} — I’m ShareLock, your AI sketch artist. Take your time and describe the person you saw, and I’ll help build a clear profile with you.`, sender: "ai" }
+      { id: 1, text: `Hi Witness ${id} — I’m VeriSketch AI, your forensic sketch assistant. Take your time and describe the person you saw, and I’ll help build a clear profile with you.`, sender: "ai" }
     ],
     candidates: [],
     selectedCandidate: null,
@@ -55,103 +69,108 @@ function App() {
     localStorage.setItem('gemini_api_key', val);
   };
 
-  return (
-    <div className="app-container">
-      <header className="glass-header">
-        <div style={{ padding: '14px 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', maxWidth: '1400px', margin: '0 auto', gap: '20px' }}>
+  // ---- Presentation-only state (redesign) ----
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [booted, setBooted] = useState(false);
+  const menuButtonRef = useRef(null);
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', minWidth: '190px' }}>
-            <div style={{ width: '34px', height: '34px', background: 'var(--accent-gradient)', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', boxShadow: '0 8px 18px rgba(59, 130, 246, 0.35)' }}>S</div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-              <h3 style={{ margin: 0, fontSize: '1.05rem', letterSpacing: '0.12em' }}>SHARELOCK</h3>
-              <span style={{ fontSize: '0.66rem', color: 'var(--text-secondary)', letterSpacing: '0.09em', textTransform: 'uppercase' }}>Witness Reconstruction</span>
+  const closeMenu = useCallback(() => {
+    setMenuOpen(false);
+    menuButtonRef.current?.focus();
+  }, []);
+
+  const openMenu = () => setMenuOpen(true);
+
+  const phaseIndex = PHASES.findIndex(p => p.id === currentPhase);
+  const confirmedCount = witnesses.filter(w => w.selectedCandidate).length;
+
+  return (
+    <div className={`app-container ${booted ? 'is-booted' : ''}`}>
+      <PageLoader onDone={() => setBooted(true)} />
+
+      <header className="app-header">
+        <div className="app-header__inner">
+          <div className="app-header__left">
+            <button
+              ref={menuButtonRef}
+              type="button"
+              className="btn btn-sm menu-trigger"
+              onClick={openMenu}
+              aria-haspopup="dialog"
+              aria-expanded={menuOpen}
+            >
+              <Icon name="menu" />
+              <span>Menu</span>
+              {!apiKey && <span className="menu-trigger__dot" title="Gemini API key not set" />}
+            </button>
+            <div className="brand">
+              <span className="brand__mark" aria-hidden="true">
+                <svg viewBox="0 0 32 32"><rect width="32" height="32" rx="9" fill="currentColor" /><path d="M9 10.5l7 12 7-12" stroke="#fff" strokeWidth="2.4" fill="none" strokeLinecap="round" strokeLinejoin="round" /><circle cx="16" cy="10.5" r="1.8" fill="#b15f2c" /></svg>
+              </span>
+              <span className="brand__text">
+                <span className="brand__name">VeriSketch<span className="brand__ai">AI</span></span>
+                <span className="brand__tag">Forensic composite workspace</span>
+              </span>
             </div>
           </div>
 
-          {/* Phase indicator */}
-          <div style={{ display: 'flex', gap: '24px', fontSize: '0.9rem', color: 'var(--text-secondary)', alignItems: 'center', background: 'rgba(0,0,0,0.22)', border: '1px solid var(--surface-border)', borderRadius: '14px', padding: '8px 12px', backdropFilter: 'blur(10px)' }}>
-            <div style={{ display: 'flex', gap: '8px', background: 'rgba(255,255,255,0.02)', padding: '6px', borderRadius: '10px', border: '1px solid var(--surface-border)' }}>
-              {witnesses.map(w => {
-                const isDone = Boolean(w.selectedCandidate);
-                const isActive = activeWitnessId === w.id;
-                return (
+          <nav className="witness-tabs" aria-label="Witnesses">
+            {witnesses.map(w => {
+              const isDone = Boolean(w.selectedCandidate);
+              const isActive = activeWitnessId === w.id;
+              return (
                 <button
                   key={w.id}
+                  type="button"
                   onClick={() => {
                     setActiveWitnessId(w.id);
                   }}
-                  className={isActive ? 'glow-active' : ''}
-                  style={{
-                    padding: '8px 16px',
-                    borderRadius: '8px',
-                    border: isDone ? '1px solid rgba(16, 185, 129, 0.4)' : 'none',
-                    background: isDone
-                      ? (isActive ? 'rgba(16, 185, 129, 0.25)' : 'rgba(16, 185, 129, 0.12)')
-                      : (isActive ? 'var(--accent-gradient)' : 'transparent'),
-                    color: isDone ? '#34d399' : (isActive ? 'white' : 'var(--text-secondary)'),
-                    fontWeight: '700',
-                    cursor: 'pointer',
-                    transition: 'all 0.3s ease',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '6px'
-                  }}
+                  className={`witness-tab ${isActive ? 'is-active' : ''} ${isDone ? 'is-done' : ''}`}
+                  aria-current={isActive ? 'true' : undefined}
                 >
-                  {w.name} {isDone ? '✅' : ''}
+                  <span className="witness-tab__id">{w.id}</span>
+                  <span className="witness-tab__name">{w.name}</span>
+                  {isDone && <Icon name="check" className="icon witness-tab__check" title="Match confirmed" />}
                 </button>
-              )})}
-              <button
-                onClick={addWitness}
-                style={{
-                  width: '36px',
-                  height: '36px',
-                  borderRadius: '8px',
-                  border: '1px dashed var(--surface-border)',
-                  background: 'rgba(255,255,255,0.02)',
-                  color: 'var(--text-secondary)',
-                  fontWeight: 'bold',
-                  cursor: 'pointer',
-                  fontSize: '1.2rem',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  transition: 'all 0.3s ease'
-                }}
-                className="btn-hover-cute"
-                title="Add Witness"
-              >
-                +
-              </button>
-            </div>
+              );
+            })}
+            <button
+              type="button"
+              onClick={addWitness}
+              className="witness-tab witness-tab--add"
+              title="Add Witness"
+              aria-label="Add witness"
+            >
+              <Icon name="plus" />
+            </button>
+          </nav>
 
-            <div style={{ width: '1px', height: '24px', background: 'var(--surface-border)', opacity: 0.8 }}></div>
-
-            <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
-              <span style={{
-                color: currentPhase === 'interview' ? 'var(--accent-blue)' : 'inherit',
-                fontWeight: '700',
-                opacity: currentPhase === 'interview' ? 1 : 0.5
-              }}>1. Interview</span>
-              <span style={{ opacity: 0.3 }}>→</span>
-              <span style={{
-                color: currentPhase === 'candidates' ? 'var(--accent-blue)' : 'inherit',
-                fontWeight: '700',
-                opacity: currentPhase === 'candidates' ? 1 : 0.5
-              }}>2. Refinement</span>
-              <span style={{ opacity: 0.3 }}>→</span>
-              <span style={{
-                color: currentPhase === 'consensus' ? 'var(--accent-blue)' : 'inherit',
-                fontWeight: '700',
-                opacity: currentPhase === 'consensus' ? 1 : 0.5
-              }}>3. Consensus</span>
-            </div>
-          </div>
-
-          <div style={{ width: '190px' }}></div> {/* Spacer for symmetry */}
+          <CaseClock className="app-header__clock" />
         </div>
       </header>
 
-      <main style={{ padding: '100px 32px 32px', maxWidth: '1200px', margin: '0 auto', width: '100%' }}>
+      <main className="app-main">
+        <div className="phase-band" aria-label="Workflow progress">
+          <span className="phase-band__case">
+            <span className="eyebrow eyebrow--plain">Active witness</span>
+            <strong>{activeWitness?.name}</strong>
+          </span>
+          <ol className="phase-band__pills">
+            {PHASES.map((p, i) => (
+              <li key={p.id} className="phase-band__item">
+                {i > 0 && <span className="phase-band__arrow" aria-hidden="true"><Icon name="arrowRight" /></span>}
+                <span
+                  className={`phase-pill ${i === phaseIndex ? 'is-current' : ''} ${i < phaseIndex ? 'is-done' : ''}`}
+                  aria-current={i === phaseIndex ? 'step' : undefined}
+                >
+                  <span className="phase-pill__index mono">{p.index}</span>
+                  {p.label}
+                </span>
+              </li>
+            ))}
+          </ol>
+        </div>
+
         {currentPhase === 'interview' && (
           <WitnessInterview
             key={activeWitnessId}
@@ -169,6 +188,7 @@ function App() {
             returnPhase={() => setCurrentPhase('interview')}
             data={activeWitness}
             onDataChange={(newData) => updateWitness(activeWitnessId, newData)}
+            onOpenSettings={openMenu}
           />
         )}
         {currentPhase === 'consensus' && (
@@ -176,9 +196,24 @@ function App() {
             witnesses={witnesses}
             apiKey={apiKey}
             returnPhase={() => setCurrentPhase('candidates')}
+            onOpenSettings={openMenu}
           />
         )}
       </main>
+
+      <SiteFooter witnessCount={witnesses.length} confirmedCount={confirmedCount} />
+
+      <NavMenu
+        open={menuOpen}
+        onClose={closeMenu}
+        witnesses={witnesses}
+        activeWitnessId={activeWitnessId}
+        currentPhase={currentPhase}
+        onSelectWitness={setActiveWitnessId}
+        onAddWitness={addWitness}
+        apiKey={apiKey}
+        onApiKeyChange={handleKeyChange}
+      />
     </div>
   );
 }

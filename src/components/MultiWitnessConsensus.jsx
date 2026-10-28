@@ -1,6 +1,11 @@
 import { useState, useEffect, useRef } from 'react';
+import { isPlaceholderImage } from '../utils/imageSource';
+import PhaseHeader from './ui/PhaseHeader';
+import LiquidReveal from './ui/LiquidReveal';
+import Icon from './ui/Icon';
+import SafeImage from './ui/SafeImage';
 
-const MultiWitnessConsensus = ({ witnesses, apiKey, returnPhase }) => {
+const MultiWitnessConsensus = ({ witnesses, apiKey, returnPhase, onOpenSettings }) => {
   const [isMerging, setIsMerging] = useState(true);
   const [consensusImage, setConsensusImage] = useState(null);
   const [agreedTraits, setAgreedTraits] = useState([]);
@@ -12,6 +17,11 @@ const MultiWitnessConsensus = ({ witnesses, apiKey, returnPhase }) => {
     .map(w => `${w.id}:${w.selectedCandidate || 'none'}`)
     .sort()
     .join('|');
+
+  // Presentation-only: did any witness confirm a stock placeholder instead of a generated sketch?
+  const usesPlaceholderInputs = confirmedWitnesses.some(w =>
+    isPlaceholderImage(w.candidates.find(c => c.id === w.selectedCandidate)?.image)
+  );
 
   const traitSummary = confirmedWitnesses.reduce((acc, witness) => {
     Object.entries(witness.structuredTraits || {}).forEach(([key, trait]) => {
@@ -76,13 +86,15 @@ const MultiWitnessConsensus = ({ witnesses, apiKey, returnPhase }) => {
       <html>
       <head>
         <meta charset="utf-8" />
-        <title>Printable Case Report</title>
+        <title>VeriSketch AI — Case Report</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&display=swap" rel="stylesheet" />
         <style>
           body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+            font-family: 'Onest', -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
             margin: 0;
-            padding: 24px;
-            color: #0f172a;
+            padding: 32px 24px;
+            color: #0a0a0a;
             background: #ffffff;
           }
           .wrapper {
@@ -90,29 +102,63 @@ const MultiWitnessConsensus = ({ witnesses, apiKey, returnPhase }) => {
             margin: 0 auto;
           }
           .header {
-            text-align: center;
-            border-bottom: 2px solid #1e293b;
-            padding-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            gap: 16px;
+            border-bottom: 2px solid #0a0a0a;
+            padding-bottom: 14px;
             margin-bottom: 18px;
+          }
+          .brand {
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: #b15f2c;
+            margin-bottom: 6px;
+          }
+          .case-meta {
+            text-align: right;
+            font-size: 12px;
+            color: #5f5c57;
+            line-height: 1.5;
+          }
+          .disclaimer {
+            font-size: 12.5px;
+            color: #5f5c57;
+            border-left: 3px solid #b15f2c;
+            padding: 6px 12px;
+            margin: 0 0 14px;
+          }
+          .placeholder-warning {
+            background: #fff7dd;
+            border: 1px solid #f1d27a;
+            color: #5c4500;
+            border-radius: 8px;
+            padding: 10px 12px;
+            margin: 0 0 14px;
+            font-size: 13px;
+            font-weight: 600;
           }
           .title {
             margin: 0;
-            font-size: 28px;
-            letter-spacing: 0.01em;
+            font-size: 30px;
+            font-weight: 600;
+            letter-spacing: -0.025em;
           }
           .subtitle {
             margin: 5px 0 0;
             font-size: 14px;
-            color: #334155;
+            color: #5f5c57;
           }
           .notice {
-            background: #f1f5f9;
-            border: 1px solid #cbd5e1;
-            border-radius: 8px;
+            background: #0a0a0a;
+            color: #ffffff !important;
+            border-radius: 12px;
             padding: 12px;
             margin: 12px 0 18px;
-            font-weight: 700;
-            color: #0f172a;
+            font-weight: 600;
           }
           .image-wrap {
             text-align: center;
@@ -122,9 +168,9 @@ const MultiWitnessConsensus = ({ witnesses, apiKey, returnPhase }) => {
             width: 300px;
             height: 300px;
             object-fit: cover;
-            border: 2px solid #1e293b;
-            border-radius: 10px;
-            background: #e2e8f0;
+            border: 1px solid #0a0a0a;
+            border-radius: 16px;
+            background: #f1f0ee;
           }
           .section-title {
             font-size: 18px;
@@ -136,18 +182,25 @@ const MultiWitnessConsensus = ({ witnesses, apiKey, returnPhase }) => {
             margin-top: 4px;
           }
           th, td {
-            border: 1px solid #cbd5e1;
+            border-bottom: 1px solid #e7e5e1;
             padding: 9px;
             text-align: left;
             font-size: 14px;
           }
           th {
-            background: #f8fafc;
+            background: #f1f0ee;
+            font-size: 11px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: #5f5c57;
+          }
+          td:first-child {
+            text-transform: capitalize;
           }
           .meta {
             margin-top: 14px;
             font-size: 13px;
-            color: #475569;
+            color: #5f5c57;
           }
           .actions {
             margin-top: 18px;
@@ -156,11 +209,12 @@ const MultiWitnessConsensus = ({ witnesses, apiKey, returnPhase }) => {
             gap: 8px;
           }
           .actions button {
-            border: 1px solid #334155;
+            border: 1px solid #0a0a0a;
             background: #ffffff;
-            color: #0f172a;
-            border-radius: 8px;
-            padding: 8px 12px;
+            color: #0a0a0a;
+            border-radius: 999px;
+            padding: 9px 18px;
+            font: inherit;
             cursor: pointer;
           }
           @media print {
@@ -176,11 +230,18 @@ const MultiWitnessConsensus = ({ witnesses, apiKey, returnPhase }) => {
       <body>
         <div class="wrapper">
           <div class="header">
-            <h1 class="title">Person of Interest Report</h1>
-            <p class="subtitle">Generated from multi-witness consensus</p>
+            <div>
+              <div class="brand">VeriSketch AI</div>
+              <h1 class="title">Person of Interest Report</h1>
+              <p class="subtitle">Generated from multi-witness consensus</p>
+            </div>
+            <div class="case-meta">Target ID: 24-Alpha<br />${escapeHtml(reportDate)}</div>
           </div>
 
           <div class="notice">If you have seen this person, contact the police immediately and provide any relevant location/time details.</div>
+
+          <p class="disclaimer">This image is an AI-generated composite built from witness descriptions. It is an investigative lead, not a photograph of a real person and not evidence of identity.</p>
+          ${usesPlaceholderInputs ? '<div class="placeholder-warning">Warning: at least one witness confirmed a stock placeholder photo instead of an AI-generated sketch. The composite is partly based on that stock photo.</div>' : ''}
 
           <div class="image-wrap">
             ${consensusImage ? `<img class="photo" src="${consensusImage}" alt="Person of interest" />` : '<div class="photo" style="display:inline-flex;align-items:center;justify-content:center;">No image available</div>'}
@@ -365,111 +426,159 @@ const MultiWitnessConsensus = ({ witnesses, apiKey, returnPhase }) => {
   }, [apiKey, confirmedSignature]);
 
   return (
-    <div className="animate-fade-in" style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <div>
-          <h2>Multi-Witness Consensus</h2>
-          <p style={{ color: 'var(--text-secondary)' }}>Fusing independent accounts into a definitive target.</p>
-        </div>
-        <button className="btn" onClick={returnPhase}>← Back</button>
-      </div>
+    <div className="phase phase--consensus animate-fade-in">
+      <PhaseHeader
+        index="03"
+        eyebrow="Multi-witness consensus"
+        title="Multi-Witness Consensus"
+        description="Fusing independent accounts into a definitive target."
+        meta={<span className="chip mono">{confirmedWitnesses.length} of {witnesses.length} witnesses confirmed</span>}
+        actions={
+          <button className="btn" onClick={returnPhase}>
+            <Icon name="arrowLeft" />
+            Back
+          </button>
+        }
+      />
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '48px', alignItems: 'start' }}>
+      {usesPlaceholderInputs && (
+        <div className="notice notice--placeholder" role="status">
+          <Icon name="alert" />
+          <div>
+            <strong>Composite inputs include placeholder photos.</strong> At least one witness confirmed a stock placeholder
+            instead of an AI-generated sketch. Any composite below is partly based on that stock photo, not on witness testimony.
+          </div>
+        </div>
+      )}
+
+      <div className="consensus-grid">
 
         {/* Left Side: Witnesses */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-          <h3 style={{ borderBottom: '1px solid var(--surface-border)', paddingBottom: '8px' }}>Individual Witness Matches</h3>
+        <section className="consensus-witnesses" aria-labelledby="matches-title">
+          <h2 id="matches-title" className="section-label">Individual Witness Matches</h2>
           {confirmedWitnesses.length === 0 ? (
-            <p style={{ color: 'var(--text-secondary)' }}>No witnesses have confirmed a match yet.</p>
-          ) : (
-            confirmedWitnesses.map(w => {
-              const matchedCand = w.candidates.find(c => c.id === w.selectedCandidate);
-              return (
-                <div key={w.id} className="glass-panel" style={{ display: 'flex', gap: '16px', alignItems: 'center', padding: '12px' }}>
-                  <div style={{ width: '80px', height: '80px', borderRadius: '8px', overflow: 'hidden', background: '#000' }}>
-                    <img src={matchedCand?.image} alt={w.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                  </div>
-                  <div>
-                    <h4 style={{ margin: 0, fontSize: '1.1rem' }}>{w.name}</h4>
-                    <div style={{ color: 'var(--success)', fontSize: '0.85rem', fontWeight: 'bold' }}>Match Confirmed</div>
-                  </div>
-                </div>
-              );
-            })
-          )}
-        </div>
-
-        {/* Right Side: Consensus */}
-        <div className="glass-panel" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '32px', minHeight: '500px', position: 'relative' }}>
-          {isMerging ? (
-            <div style={{ textAlign: 'center' }}>
-              <div className="animate-pulse" style={{ width: '64px', height: '64px', border: '4px solid var(--primary)', borderTopColor: 'transparent', borderRadius: '50%', margin: '0 auto 24px', animation: 'spin 1s linear infinite' }}></div>
-              <h3 className="animate-pulse">Reconciling Memory Discrepancies...</h3>
-              <p style={{ color: 'var(--text-secondary)' }}>Identifying common facial anchors across {confirmedWitnesses.length} witnesses</p>
+            <div className="empty-state">
+              <Icon name="user" />
+              <span>No witnesses have confirmed a match yet.</span>
             </div>
           ) : (
-            <div className="animate-fade-in" style={{ textAlign: 'center', width: '100%' }}>
-              <div
-                className="glow-active"
-                style={{
-                  width: '100%',
-                  maxWidth: '320px',
-                  aspectRatio: '1/1',
-                  background: '#000',
-                  borderRadius: '24px',
-                  overflow: 'hidden',
-                  margin: '0 auto 32px',
-                  boxShadow: '0 0 50px rgba(59, 130, 246, 0.3)',
-                  border: '2px solid rgba(59, 130, 246, 0.6)'
-                }}
-              >
-                <img src={consensusImage || "/placeholder_composite.png"} alt="Consensus Target" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-              </div>
-              <h2 style={{ marginBottom: '12px', fontSize: '2.2rem', letterSpacing: '-0.02em' }}>Target ID: 24-Alpha</h2>
+            <ul className="witness-matches">
+              {confirmedWitnesses.map((w, i) => {
+                const matchedCand = w.candidates.find(c => c.id === w.selectedCandidate);
+                const isPlaceholder = isPlaceholderImage(matchedCand?.image);
+                return (
+                  <li key={w.id} className="witness-match">
+                    <span className="witness-match__index mono">{String(i + 1).padStart(2, '0')}</span>
+                    <div className={`witness-match__thumb ${isPlaceholder ? 'is-placeholder' : ''}`}>
+                      <SafeImage src={matchedCand?.image} alt={`${w.name} selected ${isPlaceholder ? 'placeholder photo' : 'candidate'}`} fallbackLabel="Unavailable" />
+                    </div>
+                    <div className="witness-match__text">
+                      <h3>{w.name}</h3>
+                      <span className="text-success witness-match__status"><Icon name="check" /> Match Confirmed</span>
+                      <span className="witness-match__label">{matchedCand?.label}</span>
+                    </div>
+                    {isPlaceholder ? (
+                      <span className="badge badge--placeholder">Placeholder</span>
+                    ) : (
+                      <span className="chip">AI-generated</span>
+                    )}
+                  </li>
+                );
+              })}
+            </ul>
+          )}
+        </section>
 
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', marginTop: '32px', textAlign: 'left' }}>
-                <div style={{ background: 'rgba(0,0,0,0.2)', padding: '20px', borderRadius: '16px', border: '1px solid var(--surface-border)' }}>
-                  <h4 style={{ color: 'var(--success)', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.15em', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <span style={{ fontSize: '1.2rem' }}>✨</span> Shared Consensus
+        {/* Right Side: Consensus */}
+        <section className="consensus-stage surface-ink" aria-live="polite" aria-busy={isMerging}>
+          {isMerging ? (
+            <div className="consensus-stage__loading">
+              <div className="scan-frame" aria-hidden="true">
+                <span className="scan-frame__line" />
+                <Icon name="user" className="icon scan-frame__icon" strokeWidth={1} />
+              </div>
+              <h3 className="animate-pulse">Reconciling Memory Discrepancies...</h3>
+              <p>Identifying common facial anchors across {confirmedWitnesses.length} witnesses</p>
+            </div>
+          ) : (
+            <div className="consensus-stage__result animate-fade-in">
+              {consensusImage ? (
+                <figure className="composite">
+                  <LiquidReveal
+                    baseSrc={consensusImage}
+                    baseAlt="AI-generated consensus composite"
+                    baseBadge={<span className="badge badge--ai"><Icon name="sparkle" /> AI-generated composite</span>}
+                    compareSources={confirmedWitnesses
+                      .map(w => {
+                        const c = w.candidates.find(cand => cand.id === w.selectedCandidate);
+                        return c?.image ? { id: w.id, label: w.name, src: c.image, isPlaceholder: isPlaceholderImage(c.image) } : null;
+                      })
+                      .filter(Boolean)}
+                  />
+                </figure>
+              ) : (
+                <div className="composite composite--missing">
+                  <Icon name="image" className="icon composite__missing-icon" />
+                  <strong>No composite generated</strong>
+                  <span>
+                    {!apiKey
+                      ? 'A Gemini API key is required to fuse witness matches.'
+                      : confirmedWitnesses.length === 0
+                        ? 'Confirm at least one witness match first.'
+                        : 'Gemini did not return a composite image. Nothing is shown in its place.'}
+                  </span>
+                  {!apiKey && onOpenSettings && (
+                    <button type="button" className="btn btn-sm btn-primary" onClick={onOpenSettings}>
+                      Open menu <Icon name="arrowRight" />
+                    </button>
+                  )}
+                </div>
+              )}
+
+              <div className="composite__title">
+                <span className="eyebrow">Composite subject</span>
+                <h2>Target ID: 24-Alpha</h2>
+              </div>
+
+              <div className="trait-groups">
+                <div className="trait-group">
+                  <h4 className="trait-group__title text-success">
+                    <Icon name="check" /> Shared Consensus
                   </h4>
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
+                  <ul className="trait-group__list">
                     {agreedTraits.length > 0 ? agreedTraits.map((t, idx) => (
-                      <span key={idx} style={{ background: 'rgba(16, 185, 129, 0.08)', border: '1px solid rgba(16, 185, 129, 0.2)', padding: '6px 12px', borderRadius: '8px', fontSize: '0.85rem' }}>
-                        {t.key}: <b style={{ color: '#fff' }}>{t.value}</b>
-                      </span>
-                    )) : <span style={{ color: 'var(--text-secondary)', fontSize: '0.8rem' }}>No perfect shared matches.</span>}
-                  </div>
+                      <li key={idx} className="consensus-row">
+                        <span className="consensus-row__key">{t.key}</span>
+                        <b className="consensus-row__value">{t.value}</b>
+                      </li>
+                    )) : <li className="consensus-row consensus-row--empty">No perfect shared matches.</li>}
+                  </ul>
                 </div>
 
-                <div style={{ background: 'rgba(0,0,0,0.2)', padding: '20px', borderRadius: '16px', border: '1px solid var(--surface-border)' }}>
-                  <h4 style={{ color: 'var(--warning)', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.15em', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <span style={{ fontSize: '1.2rem' }}>⚖️</span> Dissimilar Traits
+                <div className="trait-group">
+                  <h4 className="trait-group__title text-warning">
+                    <Icon name="layers" /> Dissimilar Traits
                   </h4>
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
+                  <ul className="trait-group__list">
                     {dissimilarTraits.length > 0 ? dissimilarTraits.map((t, idx) => (
-                      <span key={idx} style={{ background: 'rgba(245, 158, 11, 0.08)', border: '1px solid rgba(245, 158, 11, 0.2)', padding: '6px 12px', borderRadius: '8px', fontSize: '0.85rem' }}>
-                        {t.key}: <b style={{ color: '#fff' }}>{t.values.join(' / ')}</b>
-                      </span>
-                    )) : <span style={{ color: 'var(--text-secondary)', fontSize: '0.8rem' }}>No major discrepancies.</span>}
-                  </div>
+                      <li key={idx} className="consensus-row">
+                        <span className="consensus-row__key">{t.key}</span>
+                        <b className="consensus-row__value">{t.values.join(' / ')}</b>
+                      </li>
+                    )) : <li className="consensus-row consensus-row--empty">No major discrepancies.</li>}
+                  </ul>
                 </div>
               </div>
 
-              <button className="btn btn-primary glow-active" style={{ marginTop: '40px', width: '100%', height: '50px', fontSize: '1.1rem' }} onClick={handleGeneratePrintableReport}>
-                🖨️ Generate Printable Report
+              <button className="btn btn-primary btn-block btn-lg" onClick={handleGeneratePrintableReport}>
+                <Icon name="printer" />
+                Generate Printable Report
               </button>
             </div>
           )}
-        </div>
+        </section>
 
       </div>
-
-      <style>{`
-        @keyframes spin {
-          0% { transform: rotate(0deg); }
-          100% { transform: rotate(360deg); }
-        }
-      `}</style>
     </div>
   );
 };

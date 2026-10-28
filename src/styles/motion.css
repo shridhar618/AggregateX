@@ -1,0 +1,143 @@
+/* ==========================================================================
+   Motion components — text reveal, liquid reveal
+   ========================================================================== */
+
+/* ---------- RevealText: masked word slide-up ---------- */
+.reveal-text__mask {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+  padding-bottom: 0.1em;
+  margin-bottom: -0.1em;
+}
+
+.reveal-text__word {
+  display: inline-block;
+  transform: translateY(110%);
+}
+
+.is-booted .reveal-text__word {
+  animation: reveal-up 0.95s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes reveal-up {
+  from { transform: translateY(110%); }
+  to { transform: translateY(0); }
+}
+
+/* Phase content rises in after the loader, then on every phase change */
+.app-main > .phase-band,
+.app-main > .phase {
+  opacity: 0;
+}
+
+.is-booted .app-main > .phase-band {
+  animation: slideUp 0.8s var(--ease-out) both;
+}
+
+.is-booted .app-main > .phase {
+  animation: slideUp 0.8s var(--ease-out) 0.08s both;
+}
+
+/* ---------- LiquidReveal ---------- */
+.liquid-reveal-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.liquid-reveal {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--ink-3);
+  touch-action: pan-y;
+  user-select: none;
+}
+
+.liquid-reveal.is-interactive {
+  cursor: crosshair;
+}
+
+.liquid-reveal__base,
+.liquid-reveal__canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.liquid-reveal__base {
+  object-fit: cover;
+}
+
+.liquid-reveal__canvas {
+  pointer-events: none;
+}
+
+.liquid-reveal__tag {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  pointer-events: none;
+}
+
+.liquid-reveal__controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  text-align: center;
+}
+
+.liquid-reveal__hint {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.liquid-reveal__chips {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+}
+
+.liquid-reveal__chip {
+  cursor: pointer;
+  background: transparent;
+  transition: background var(--dur-fast) ease, color var(--dur-fast) ease, border-color var(--dur-fast) ease;
+}
+
+.liquid-reveal__chip:hover {
+  border-color: var(--line-strong);
+  color: var(--text-primary);
+}
+
+.liquid-reveal__chip.is-active {
+  background: var(--text-primary);
+  border-color: var(--text-primary);
+  color: var(--ink);
+}
+
+.liquid-reveal__ph {
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #f6c64a;
+}
+
+.liquid-reveal__chip.is-active .liquid-reveal__ph {
+  color: #8a6400;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal-text__word,
+  .app-main > .phase-band,
+  .app-main > .phase {
+    transform: none;
+    opacity: 1;
+    animation: none !important;
+  }
+}
