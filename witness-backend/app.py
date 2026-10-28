@@ -464,3 +464,15 @@ def export_case_metadata(case_id: str, version_id: str):
     png=report_store.png_export(case_id,version_id)
     data=report_store.snapshot(case_id,version_id,uuid.uuid4().hex,case_store.now(),png)
     return Response(json.dumps(data,ensure_ascii=False,indent=2).encode('utf-8'),media_type='application/json',headers={'Content-Disposition':f'attachment; filename="witnesstrace-{case_id}-{version_id}.json"','Cache-Control':'no-store'})
+
+# Accessible in React only through the authenticated Revelio gateway.
+import integrity_store
+integrity_store.initialize()
+
+@app.get('/api/cases/{case_id}/versions/{version_id}/integrity')
+def image_integrity(case_id: str, version_id: str):
+    return integrity_store.verify(case_id, version_id)
+
+@app.post('/api/cases/{case_id}/versions/{version_id}/integrity')
+def register_image_integrity(case_id: str, version_id: str, request: integrity_store.Registration):
+    return integrity_store.register(case_id, version_id, request)
