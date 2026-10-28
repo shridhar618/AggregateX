@@ -1,6 +1,6 @@
 # Integration status
 
-Updated: 2026-10-28. Active worktree: `/home/god/Documents/github/ssdnexus-t1-20-integration`.
+Updated: 2026-10-29. Active worktree: `/home/god/Documents/github/ssdnexus-t1-20-integration`.
 Branch: `integration/revelio-witnesstrace`; base `f89093eaa45ace99b134093b563d1f30d3bbe5c0`.
 
 ## I0 — PASS: audit and architecture recommendation
@@ -59,11 +59,21 @@ Checkpoint: local commit titled `feat: preserve WitnessTrace backend with isolat
 |---|---|---|
 | I1 frontend preservation | PASS | See I1 reports/evidence; source preserved unchanged |
 | I2 backend preservation | PASS | Preserved source and tests; independent service verified; see I2 reports |
-| I3 API integration | NOT STARTED | Actual contracts/adapter/auth/proxy and integration tests; create API_MAPPING.md |
+| I3 API integration | PASS | Local authenticated case/generation/image slice, including one real Codex result; see I3 reports |
 | I4 complete features | NOT STARTED | Coherent full UI and engine lifecycle parity; create FEATURE_PARITY.md |
 | I5 visual fidelity | NOT STARTED | All viewport/theme screenshots and fixes; create VISUAL_QA.md |
 | I6 data/security | NOT STARTED | Transactional path/data/auth/security verification |
 | I7 automated QA | NOT STARTED | Full browser workflow, restart/export checks and permitted real CLI generation |
 | I8 final Git | NOT STARTED | Final reviewed integration commit/merge preparation; create FINAL_INTEGRATION_REPORT.md |
 
-STOPPED: awaiting explicit NEXT. I2 is complete; I3 has not begun. Do not merge main before I8; do not push remote main without explicit approval of final commit/push.
+STOPPED: awaiting explicit NEXT. I3 is complete; I4 has not begun. Do not merge main before I8; do not push remote main without explicit approval of final commit/push.
+
+## I3 — PASS: real frontend/backend API vertical slice
+
+Implemented: opt-in local React case Workspace/Studio, dedicated WitnessTrace adapter, existing AppProvider state, immutable testimony/clarifications, explicit asynchronous generation/polling, canonical saved PNG viewer/download and refresh recovery. A narrow server-side gateway reuses the existing real Revelio session dependency; no login bypass. Vite /wt-api proxy is separate from preserved /api. No WitnessTrace backend/worker files changed; 64/69 I1 frontend-manifest files are unchanged relative to I2, with five reviewed shell/context/viewer/proxy edits. Existing legacy pages/components remain in source.
+
+Tests: WitnessTrace 56 passed; Revelio 84 passed (76 original + eight gateway checks); adapter seven passed; lint/build PASS. Chromium 30 checks, eight visually inspected screenshots at all four requested widths in both themes; no horizontal overflow or page exceptions. Actual owned backend restart retained saved data. Exactly one real UI-triggered Codex generation succeeded, displayed the persisted validated image and verified source/export download checksums. No generated face image or private record/credential was staged. All integration services stopped; 8000/8001 untouched.
+
+Documents: I3_API_ADAPTER.md, I3_VERTICAL_SLICE.md, API_MAPPING.md and evidence/i3/. Local checkpoint title: `feat: connect Revelio cases and Codex generation through authenticated gateway` (resolve exact SHA with git log). Full changed paths are in evidence/i3/files-changed.txt.
+
+Deferred: all full Lab/refinement/comparison/Library/Settings/editor/multi-view/report integration to I4. Localhost-only direct upstream remains unauthenticated; no public-deployment/tenancy claim. OWNER-SEC-01 remains OPEN before final shared merge; DEP-01 remains OPEN before deployment. No merge/push. I4 NOT STARTED; awaiting explicit NEXT.

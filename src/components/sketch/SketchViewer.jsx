@@ -11,6 +11,7 @@ const ZOOMS = [0.5, 0.75, 1, 1.25, 1.5, 2, 3]
  */
 const SketchViewer = ({ src, kind, label, sublabel, loading, error, before, onDownload, downloadBusy, meta = [], empty }) => {
   const { prefs } = useApp()
+  const [failedImage, setFailedImage] = useState(null)
   const [zoom, setZoom] = useState(1)
   const [comparing, setComparing] = useState(false)
   const canCompare = Boolean(before?.src && src)
@@ -48,7 +49,7 @@ const SketchViewer = ({ src, kind, label, sublabel, loading, error, before, onDo
           <div className="viewer__compare"><CompareSlider before={before.src} after={src} beforeLabel={before.label} afterLabel="Current" /></div>
         ) : src ? (
           <div className="viewer__frame" style={{ width: `${zoom * 100}%` }}>
-            <img key={src} className="viewer__img" src={src} alt={`${label}. ${kind === 'ai' ? 'AI-generated image' : 'Procedural composite, not AI-generated'}`} draggable={false} />
+            <img key={src} className="viewer__img" src={src} alt={`${label}. ${kind === 'ai' ? 'AI-generated image' : 'Procedural composite, not AI-generated'}`} draggable={false} onError={() => setFailedImage(src)} />
             {prefs.scanEffect && loading && <span className="viewer__scan" aria-hidden="true" />}
           </div>
         ) : (
@@ -57,8 +58,8 @@ const SketchViewer = ({ src, kind, label, sublabel, loading, error, before, onDo
         {loading && src && !showCompare && (
           <div className="viewer__busy mono" role="status"><span className="spinner" /> Rendering…</div>
         )}
-        {error && (
-          <div className="viewer__error alert alert--error" role="alert"><Icon name="error" /><span>{error}</span></div>
+        {(error || (src && failedImage === src)) && (
+          <div className="viewer__error alert alert--error" role="alert"><Icon name="error" /><span>{error || 'Saved image could not be loaded. Reconnect to verify the revision.'}</span></div>
         )}
         <span className="viewer__corner viewer__corner--tl mono" aria-hidden="true">VIEW · {kind === 'ai' ? 'RASTER' : 'VECTOR'}</span>
       </div>

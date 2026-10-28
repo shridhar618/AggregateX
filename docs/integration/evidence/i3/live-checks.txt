@@ -1,0 +1,9 @@
+PASS real CLI authentication reported available
+PASS unauthenticated gateway rejects cases and images
+PASS workspace preserves login redirect
+PASS real account session created
+PASS real case created and original frozen
+PASS exactly one generation POST despite refresh/navigation
+PASS saved image displayed
+PASS saved source checksum matches HTTP image
+PASS download checksum matches saved image export
