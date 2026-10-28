@@ -1,0 +1,416 @@
+[
+  {
+    "file": "eslint.config.js",
+    "sha256": "45495320919f8fce7513aa624b3058f4619e16bbcd2ebc07f57dac50270a3a79",
+    "matches_main_base": true,
+    "bytes": 877
+  },
+  {
+    "file": "index.html",
+    "sha256": "936f73f837d29256ba33c0d06536035e64a79eff531e7630060e125a3156f579",
+    "matches_main_base": true,
+    "bytes": 1070
+  },
+  {
+    "file": "package-lock.json",
+    "sha256": "916fb184dab55a6a97fd1b48185ddbe00dc7583ff82b1dae30da2f767ef66cbf",
+    "matches_main_base": true,
+    "bytes": 90567
+  },
+  {
+    "file": "package.json",
+    "sha256": "f2f9d16ba52e68e6e4fddc339f51e9afa65980e61c2e075aa81c3cf14d9fcfdd",
+    "matches_main_base": true,
+    "bytes": 863
+  },
+  {
+    "file": "public/apple-touch-icon.png",
+    "sha256": "1e2c31ad3d8c1524d1a42df84db6a32af2431bf0d0dfa0f0b31736b78c9c5650",
+    "matches_main_base": true,
+    "bytes": 19950
+  },
+  {
+    "file": "public/favicon.png",
+    "sha256": "b0f081eed93bf584db7fbed7fcffa0e620afefb92ad972267fa7679e40d13990",
+    "matches_main_base": true,
+    "bytes": 4724
+  },
+  {
+    "file": "public/landing/demo-r1.webp",
+    "sha256": "43bc0946db8c3d732da7277c7225a67926ba4ab5d8f789b880c99ca887172f30",
+    "matches_main_base": true,
+    "bytes": 27182
+  },
+  {
+    "file": "public/landing/demo-r2.webp",
+    "sha256": "0c6b0ccd331fac343ae43a79fcea6e12016dfb9931a4817d90029b88787b45cd",
+    "matches_main_base": true,
+    "bytes": 30210
+  },
+  {
+    "file": "src/App.jsx",
+    "sha256": "18dbc3d1924adcc1cf84ca4a27ac51cce9605e4dc452bac651c6129599a7be4f",
+    "matches_main_base": true,
+    "bytes": 5916
+  },
+  {
+    "file": "src/api/client.js",
+    "sha256": "c6706bb31b5e114255898301841ffc5b4246f5825f2857b26475305b0c6fd9b0",
+    "matches_main_base": true,
+    "bytes": 4219
+  },
+  {
+    "file": "src/assets/brand/logo-mark.png",
+    "sha256": "d7a248f0dac6be9905714a444e687346b87e465e3be9a56bcacbad22011ef120",
+    "matches_main_base": true,
+    "bytes": 48757
+  },
+  {
+    "file": "src/assets/brand/logo-wordmark.png",
+    "sha256": "2a90b7c7cb2672b18139e0532c92deb93986d96dca94d26f4c52429415e62300",
+    "matches_main_base": true,
+    "bytes": 65030
+  },
+  {
+    "file": "src/auth/AuthPage.jsx",
+    "sha256": "435cde7e19d010ce2f28b93cfcdd6a9aeb061dd53ac98fdfe4f7d711b8162877",
+    "matches_main_base": true,
+    "bytes": 8090
+  },
+  {
+    "file": "src/auth/auth.css",
+    "sha256": "ae3f6d244cd5e3f4fad45ffdb57337a756bb7044e3fb88f5b615b3c0b9ffd13e",
+    "matches_main_base": true,
+    "bytes": 4071
+  },
+  {
+    "file": "src/components/brand/Logo.jsx",
+    "sha256": "2e50600ac8008929acc1624be5359e04496742a901be601c0d97d32eba39cc11",
+    "matches_main_base": true,
+    "bytes": 1222
+  },
+  {
+    "file": "src/components/shell/BootScreen.jsx",
+    "sha256": "129b8ef56ee577d474905d73dc17a736082a5bcd6bf81398ddb69d65c60e368a",
+    "matches_main_base": true,
+    "bytes": 1855
+  },
+  {
+    "file": "src/components/shell/Sidebar.jsx",
+    "sha256": "0bb5805b32d2abb97faaaa22d118dcefdfb4916c974a8fcaf3360f9382eefd29",
+    "matches_main_base": true,
+    "bytes": 2853
+  },
+  {
+    "file": "src/components/shell/Toasts.jsx",
+    "sha256": "f6f84741e1e83d3d98206154bee04da6cd1f7e451c4c8cf60dd3ba53adaf115a",
+    "matches_main_base": true,
+    "bytes": 879
+  },
+  {
+    "file": "src/components/shell/Topbar.jsx",
+    "sha256": "2a489b618ef773a9d0813691aeaf84c450434c054668d9f37f222dd4938ae5b5",
+    "matches_main_base": true,
+    "bytes": 5916
+  },
+  {
+    "file": "src/components/sketch/AdjustPanel.jsx",
+    "sha256": "10b482a90d73addf7455ed9f4e6a5acca5cdbfd2e9d49ee79ba0a06b98586abd",
+    "matches_main_base": true,
+    "bytes": 3761
+  },
+  {
+    "file": "src/components/sketch/CompareSlider.css",
+    "sha256": "f46fde29d67444a4943b8aad8f5961e912772a1edfb63d306ad6303810295f7d",
+    "matches_main_base": true,
+    "bytes": 1569
+  },
+  {
+    "file": "src/components/sketch/CompareSlider.jsx",
+    "sha256": "fc3e625e4f723839a007c7ea2555a2906c18ea429e0f53b627fc7aff9989e236",
+    "matches_main_base": true,
+    "bytes": 1807
+  },
+  {
+    "file": "src/components/sketch/DescriptionPanel.jsx",
+    "sha256": "7f3124fc51b40d64c8da183742dc93edd36e171fac4af0f09c22c351033905a6",
+    "matches_main_base": true,
+    "bytes": 11333
+  },
+  {
+    "file": "src/components/sketch/ModeSelector.jsx",
+    "sha256": "c425261d60fb2e7f9b528fb751ffca237ddefefce17dc7914fbc2a9efffd6eba",
+    "matches_main_base": true,
+    "bytes": 1766
+  },
+  {
+    "file": "src/components/sketch/Pipeline.jsx",
+    "sha256": "b1aff1642b79c9e881d0fbe66fcaf129efbd34781c16e6697dce48e8d1fed6d4",
+    "matches_main_base": true,
+    "bytes": 814
+  },
+  {
+    "file": "src/components/sketch/ReferenceUpload.jsx",
+    "sha256": "4d18e0a3a52f588cd35f7a9dfdc3f832b5903cc0a14a304e1b51eddba1fd37ca",
+    "matches_main_base": true,
+    "bytes": 3217
+  },
+  {
+    "file": "src/components/sketch/RefinePanel.jsx",
+    "sha256": "042774e923b1b6fed4c57836f4728afd4eb18eb3e375937519bc7eefadbaffa5",
+    "matches_main_base": true,
+    "bytes": 5854
+  },
+  {
+    "file": "src/components/sketch/RenderNotes.jsx",
+    "sha256": "54439782be4444cf195b2602645951123283ec1eba6e10a682cfad87cb80921f",
+    "matches_main_base": true,
+    "bytes": 1626
+  },
+  {
+    "file": "src/components/sketch/SketchViewer.jsx",
+    "sha256": "89f11c44a0ea60c101c897d524fa69725a98f176ee2edf3a443696e9c2791374",
+    "matches_main_base": true,
+    "bytes": 4254
+  },
+  {
+    "file": "src/components/sketch/TraitPanel.jsx",
+    "sha256": "b3a450bfc875a0750b85eb455258b396bb2887b3ec34146c18d73fcbf6ca1f54",
+    "matches_main_base": true,
+    "bytes": 8218
+  },
+  {
+    "file": "src/components/sketch/WitnessMerge.jsx",
+    "sha256": "9fcc4495011c026485fa9249a28302cb53b2693d3d32859fa881eca1ca890a3f",
+    "matches_main_base": true,
+    "bytes": 7178
+  },
+  {
+    "file": "src/components/ui/CaseClock.jsx",
+    "sha256": "fe2a313a2d2d629f33c4eca2e74dff1b599c203068b3a51b40ee03b1f356ed10",
+    "matches_main_base": true,
+    "bytes": 695
+  },
+  {
+    "file": "src/components/ui/DictateButton.jsx",
+    "sha256": "fce12d51a579ff3fb85d36037b594c837c91fcf04760981cfbaafe62dd2ec3bf",
+    "matches_main_base": true,
+    "bytes": 4846
+  },
+  {
+    "file": "src/components/ui/EmptyState.jsx",
+    "sha256": "d3b73840d0729d744491fc114512fa2a7eb3841820d1b7590fa70bccfb719fdc",
+    "matches_main_base": true,
+    "bytes": 516
+  },
+  {
+    "file": "src/components/ui/Icon.jsx",
+    "sha256": "32f8af7821a194bdab69f066683f15db3eb0692322ca58425cb46325da2b32a1",
+    "matches_main_base": true,
+    "bytes": 7544
+  },
+  {
+    "file": "src/components/ui/Modal.jsx",
+    "sha256": "39ddf105c0fde7dfa97d27da91325b7a02599e010c8ea3e3d3def2ebae616198",
+    "matches_main_base": true,
+    "bytes": 2957
+  },
+  {
+    "file": "src/components/ui/ThemeToggle.jsx",
+    "sha256": "3ab87c92c94ea957dcb1490ec0d6c97563f6541df09b8e08e44ff61e57073df2",
+    "matches_main_base": true,
+    "bytes": 645
+  },
+  {
+    "file": "src/images/coTHe-removebg-preview.png",
+    "sha256": "9e6d0276eaf9131035287ffaedb2552ebfef9f7b1c7050dcdb61da2c669288a6",
+    "matches_main_base": true,
+    "bytes": 88242
+  },
+  {
+    "file": "src/images/image-removebg-preview copy.png",
+    "sha256": "dbb8b7b47ac768ba4d9653eff22d5b9be07af0111db7f76a108f219b76ebdb98",
+    "matches_main_base": true,
+    "bytes": 91757
+  },
+  {
+    "file": "src/images/image-removebg-preview.png",
+    "sha256": "dbb8b7b47ac768ba4d9653eff22d5b9be07af0111db7f76a108f219b76ebdb98",
+    "matches_main_base": true,
+    "bytes": 91757
+  },
+  {
+    "file": "src/index.css",
+    "sha256": "6bbdc6476bcea2a9832f0dfa18c6a362af0d0ccdc239916d920d0446a4d0465f",
+    "matches_main_base": true,
+    "bytes": 24657
+  },
+  {
+    "file": "src/landing/Closing.jsx",
+    "sha256": "dcb21561868d8f18bbee8ed39b7551de5c5fc75050aa6ee3bf61643f5c09ef77",
+    "matches_main_base": true,
+    "bytes": 6577
+  },
+  {
+    "file": "src/landing/EditorShowcase.jsx",
+    "sha256": "4c2d24980c958016a848e0c407f7007bed56f8fe7115182f595789c234b4e148",
+    "matches_main_base": true,
+    "bytes": 9532
+  },
+  {
+    "file": "src/landing/Hero.jsx",
+    "sha256": "278b8a82b2a1d84f2df9da6d11747e5b37b6d7ef7c7a36009c5dc5f9d5308178",
+    "matches_main_base": true,
+    "bytes": 11623
+  },
+  {
+    "file": "src/landing/IntroLoader.jsx",
+    "sha256": "8fcf17c4792168d91e507de981814cbd8990abb9614ac92f5b025de718486fc3",
+    "matches_main_base": true,
+    "bytes": 2562
+  },
+  {
+    "file": "src/landing/LandingNav.jsx",
+    "sha256": "a38d3685bd0a0c298bdd8104d93443c093b718759057d788276bef1225fb1dca",
+    "matches_main_base": true,
+    "bytes": 6370
+  },
+  {
+    "file": "src/landing/LandingPage.jsx",
+    "sha256": "a888385a08b291f0a6811fdaa6c472af93546dff4028fe8d59fc739ce3ac2560",
+    "matches_main_base": true,
+    "bytes": 1109
+  },
+  {
+    "file": "src/landing/LiveDemo.jsx",
+    "sha256": "5d8661b266ecd18170346a4e03facc3eeddfaf944e8c51c96fc2aaadce5c45d1",
+    "matches_main_base": true,
+    "bytes": 11398
+  },
+  {
+    "file": "src/landing/Pricing.jsx",
+    "sha256": "32e2a366c035becb027ab48ecfa1c1db77e1bed800e5ab863674af12cca9e415",
+    "matches_main_base": true,
+    "bytes": 8280
+  },
+  {
+    "file": "src/landing/Sections.jsx",
+    "sha256": "bbbbf40fa3187049f414f280d8cc36d42be3702e05053b8c666bc3f8d0642e21",
+    "matches_main_base": true,
+    "bytes": 7967
+  },
+  {
+    "file": "src/landing/Trust.jsx",
+    "sha256": "e8baa0e508e313e55465520e91ba43cc97f543023225d9b21eb634ff857484c2",
+    "matches_main_base": true,
+    "bytes": 5289
+  },
+  {
+    "file": "src/landing/constants.js",
+    "sha256": "85571967484942ac89adaf642a7c1fe75cc4c1cc8e6d91d9e1e78d3d22fd7e76",
+    "matches_main_base": true,
+    "bytes": 140
+  },
+  {
+    "file": "src/landing/engine.jsx",
+    "sha256": "c77e83173cdb06aa5b728befac2d883adc4873e29bbb5139085d828e4c230856",
+    "matches_main_base": true,
+    "bytes": 1386
+  },
+  {
+    "file": "src/landing/landing.css",
+    "sha256": "32d418a7cd2f84b13d6595a8e26b1e153168281b9f45a11cbb91900d2a0e066c",
+    "matches_main_base": true,
+    "bytes": 87634
+  },
+  {
+    "file": "src/landing/motion.jsx",
+    "sha256": "08578ecab95a3a44056e1ca3734598bd5b0c9d5bd8148a19fa0b878ec4bca58f",
+    "matches_main_base": true,
+    "bytes": 6189
+  },
+  {
+    "file": "src/lib/auth.js",
+    "sha256": "2915103de94216580be658f18122d3ea7581f8bc9aefd9ad8db88653bc22e47e",
+    "matches_main_base": true,
+    "bytes": 427
+  },
+  {
+    "file": "src/lib/format.js",
+    "sha256": "abbfd626aa79e25ee08758a6f10c9c23f1f44bcdf952b382fd4df3c7f3ca50a9",
+    "matches_main_base": true,
+    "bytes": 2519
+  },
+  {
+    "file": "src/lib/nav.js",
+    "sha256": "894932f914e8aeb8966e81d9937fdc11c3981c9239545672ee61fe0547a0140b",
+    "matches_main_base": true,
+    "bytes": 490
+  },
+  {
+    "file": "src/lib/router.js",
+    "sha256": "3243528f2501f91e7d01debbe9ec478ccf79c416e81ebae56f81b32bb6b68f25",
+    "matches_main_base": true,
+    "bytes": 896
+  },
+  {
+    "file": "src/lib/theme.js",
+    "sha256": "2888d4a9bf31f819fd63af4ad14b9a767d9c6d90559805432a5d839e7e7d7807",
+    "matches_main_base": true,
+    "bytes": 701
+  },
+  {
+    "file": "src/main.jsx",
+    "sha256": "7fa21b6645d5b1d8a077eab63c540a32a4e02f0060d17924d093ebf4c835489c",
+    "matches_main_base": true,
+    "bytes": 1835
+  },
+  {
+    "file": "src/pages/Compare.jsx",
+    "sha256": "6ca9db8ca035220f064677c32487fa59dfbc8c38de5640f1799ff330fa725359",
+    "matches_main_base": true,
+    "bytes": 8450
+  },
+  {
+    "file": "src/pages/Library.jsx",
+    "sha256": "376dc773449dc017c01210c4d4eafa3d4ff2bcf05331c3008ce128a03e4a7375",
+    "matches_main_base": true,
+    "bytes": 9251
+  },
+  {
+    "file": "src/pages/NewSketch.jsx",
+    "sha256": "75e3a6986bfae7650c9f58c24218236f8478f2d59f7a6fc165d4a5f9994c1c3c",
+    "matches_main_base": true,
+    "bytes": 25198
+  },
+  {
+    "file": "src/pages/Settings.jsx",
+    "sha256": "e6d3686cfb5c46336399c5df4e9ea586ae9560bb0aee407134a27e01680eee2b",
+    "matches_main_base": true,
+    "bytes": 7960
+  },
+  {
+    "file": "src/pages/Workspace.jsx",
+    "sha256": "95487ffe9bd46658a1134f4dee63a8fa65d55d1644abf841be0010d16e7b4848",
+    "matches_main_base": true,
+    "bytes": 10181
+  },
+  {
+    "file": "src/state/AppContext.jsx",
+    "sha256": "f5fb3f3703c066d9e76e0dc07be144b65a604f2257bd0af9c4a2601ad2e2e69f",
+    "matches_main_base": true,
+    "bytes": 3460
+  },
+  {
+    "file": "src/styles/app.css",
+    "sha256": "3ad08962c8a814b7a7888088f7a7a2a0784d95303b739825ea73a3815472db4b",
+    "matches_main_base": true,
+    "bytes": 63165
+  },
+  {
+    "file": "vite.config.js",
+    "sha256": "1c25661666401c02095b0b4b70b62ca42eeb518c5f864224460a9fdcc712f4cd",
+    "matches_main_base": true,
+    "bytes": 535
+  }
+]

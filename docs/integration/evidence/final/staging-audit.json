@@ -1,0 +1,9 @@
+{
+  "staged_files_reviewed": 52,
+  "runtime_or_credential_signatures": [],
+  "synthetic_screenshot_hashes_verified": 28,
+  "main_is_ancestor": true,
+  "b_is_ancestor": false,
+  "unintended_file_deletions": 0,
+  "scope": "new final files plus ancestry/path audit; historical owner remediation remains open"
+}

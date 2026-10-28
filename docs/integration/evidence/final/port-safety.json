@@ -1,0 +1,14 @@
+{
+  "protected_ports": [
+    8000,
+    8001
+  ],
+  "requests_or_signals_to_protected_ports": 0,
+  "listener_snapshots_identical": true,
+  "test_ports": [
+    5182,
+    8021,
+    8022
+  ],
+  "only_owned_services_stopped": true
+}

@@ -1,0 +1,22 @@
+/* Bounded processing surface inside Revelio; original engine DOM contracts retained. */
+:root{--accent:#ef5539;--blue:#ef5539;--bg:#101010;--panel:#191919;--text:#eee;--muted:#aaa;color-scheme:dark}
+html,body{margin:0;min-width:0;background:#101010;color:#eee;font-family:Inter,sans-serif}
+.header,.case-status-row,.workspace-tabs,.preview-column,.output-column,footer,.sidebar,.session-note{display:none!important}
+main,.workbench,.workspace,.input-column,.controls-column{display:block!important;width:100%!important;max-width:none!important;margin:0!important;padding:12px!important;grid-template-columns:1fr!important}
+#generator{display:block!important}#panel-text,#panel-lab,#generate-footer,#refinement-panel{display:none!important}
+html[data-tool=sketch] #panel-enhance,html[data-tool=enhance] #panel-sketch{display:none!important}
+html[data-tool=sketch] #panel-sketch,html[data-tool=enhance] #panel-enhance{display:block!important}
+button,input,select,textarea{font:inherit;max-width:100%}button{border-radius:7px!important}button:not(.secondary){background:#ef5539!important}
+html[data-theme=light],html[data-theme=light] body{background:#f6f3ea;color:#252c26;color-scheme:light}
+html[data-tool=multiview] .output-column{display:block!important}
+html[data-tool=multiview] .controls-column,html[data-tool=multiview] #generator,html[data-tool=multiview] .output-card,html[data-tool=multiview] #exports-section,html[data-tool=multiview] .case-files,html[data-tool=multiview] .caution{display:none!important}
+.workspace>nav{display:none!important}.workbench>.workspace{width:100%!important;min-width:0!important;height:auto!important}.control-card{height:auto!important;max-height:none!important}#panel-sketch,#panel-enhance{padding:12px!important;height:auto!important;max-height:none!important}.sketch-scroll,.enhance-scroll{overflow:visible!important;max-height:none!important}.workbench{height:auto!important}.workbench>.output-column{width:100%!important}
+:root{--surface:#191919;--surface-raised:#222;--surface-inset:#111;--border:#373737;--text-secondary:#ccc;--accent-soft:#ffb6a8;--surface-selected:#42271f}
+html[data-theme=light]{--surface:#f6f3ea;--surface-raised:#fffdf6;--surface-inset:#ece9de;--bg:#f6f3ea;--text:#252c26;--text-secondary:#38443b;--muted:#526456;--border:#bcc4b8;--accent:#557660;color:#252c26}
+html[data-theme=light] :is(.sketch-layer,.enhance-controls,.multiview-section,.multi-source,.layout-panel){background:var(--surface);color:var(--text)}
+:is(.layout-dialog,.report-dialog,.comparison-dialog,.full-dialog){max-height:650px!important;overflow:auto!important;top:12px!important;bottom:auto!important;margin:0 auto!important}
+:is(.sketch-tools,.sketch-layer,.sketch-settings,.enhance-preview,.multi-source,.layout-panel,.multiview-section,.enhance-history p){background:var(--surface)!important;color:var(--text)!important;border-color:var(--border)!important}
+html[data-theme=light] :is(p,small,label,output,h1,h2,h3,summary,span,pre){color:var(--text)!important}
+html[data-theme=light] :is(button,select,input:not([type=range]),textarea){color:#2c4231!important;background:#fffdf6!important;border-color:#a5b59c!important}
+html[data-theme=light] button:disabled{opacity:.6!important}html[data-theme=light] input[type=range]{accent-color:#557660}
+#sketch-lab{display:none!important}.enhance-preview-detail{margin:12px 0!important}
