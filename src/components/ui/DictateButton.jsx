@@ -1,8 +1,10 @@
 import { useEffect, useRef, useState } from 'react'
+import { api } from '../../api/client'
 import { useApp } from '../../state/AppContext'
 import Icon from './Icon'
 
 const Recognition = typeof window !== 'undefined' ? window.SpeechRecognition || window.webkitSpeechRecognition : null
+const CAN_RECORD = typeof window !== 'undefined' && Boolean(window.MediaRecorder && navigator.mediaDevices?.getUserMedia)
 
 // Embedded Electron views (VS Code's browser, desktop shells) and Brave expose the
 // API but have no access to the speech service, so every attempt fails with "network".
@@ -18,8 +20,18 @@ const ERRORS = {
   'language-not-supported': 'Speech recognition does not support this language.',
 }
 
+// Longest single local recording; the server caps uploads as well.
+const MAX_RECORD_MS = 3 * 60 * 1000
+
 // Only one field dictates at a time; starting another stops the current one.
 let active = null
+
+// Whether the server transcribes locally (faster-whisper). Checked once per page load.
+let localCheck = null
+const checkLocal = () => {
+  localCheck ||= CAN_RECORD ? api.speech().then((s) => Boolean(s.available), () => false) : Promise.resolve(false)
+  return localCheck
+}
 
 // Appends a dictated phrase to existing text, starting a new sentence with a capital.
 function append(base, phrase) {
@@ -31,32 +43,98 @@ function append(base, phrase) {
   return head ? `${head} ${chunk}` : chunk
 }
 
-// Speech-to-text for witness input, via the browser's Web Speech API.
-// Final phrases are appended to `value`; the in-progress phrase is shown live.
-// Renders nothing where the API is unavailable (e.g. Firefox).
+const clock = (s) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`
+
+// Speech-to-text for witness input. Prefers the server's local transcription, where the
+// recording never leaves this machine; otherwise uses the browser's Web Speech API with
+// live interim text. Renders nothing where neither is available.
 const DictateButton = ({ value, onChange, maxLength, label = 'Dictate', lang }) => {
   const { notify } = useApp()
+  const [local, setLocal] = useState(null) // null while checking
   const [listening, setListening] = useState(false)
+  const [transcribing, setTranscribing] = useState(false)
   const [interim, setInterim] = useState('')
+  const [elapsed, setElapsed] = useState(0)
   const rec = useRef(null)
   const want = useRef(false)
   const latest = useRef({ value, onChange, maxLength })
   useEffect(() => { latest.current = { value, onChange, maxLength } })
 
-  useEffect(() => () => {
-    want.current = false
-    rec.current?.abort()
-    if (active === rec.current) active = null
+  useEffect(() => {
+    let alive = true
+    checkLocal().then((ok) => alive && setLocal(ok))
+    return () => { alive = false }
   }, [])
 
-  if (!Recognition) return null
+  useEffect(() => () => {
+    want.current = false
+    const r = rec.current
+    rec.current = null // a recording still in progress is discarded, not transcribed
+    if (r?.abort) r.abort()
+    else if (r?.state === 'recording') r.stop()
+    if (active === r) active = null
+  }, [])
+
+  if (!local && !Recognition) return null
+
+  const language = () => lang || document.documentElement.lang || navigator.language || 'en-US'
+
+  const insert = (phrase) => {
+    const { value: v, onChange: set, maxLength: max } = latest.current
+    const next = append(v, phrase)
+    latest.current.value = max ? next.slice(0, max) : next
+    set(latest.current.value)
+  }
 
   const stop = () => {
     want.current = false
     rec.current?.stop()
   }
 
-  const start = () => {
+  const startLocal = async () => {
+    let stream
+    try {
+      stream = await navigator.mediaDevices.getUserMedia({ audio: true })
+    } catch (err) {
+      const key = err?.name === 'NotAllowedError' ? 'not-allowed' : 'audio-capture'
+      notify({ kind: 'error', title: 'Dictation unavailable', message: ERRORS[key] })
+      return
+    }
+    if (active && active !== rec.current) active.stop()
+    const r = new MediaRecorder(stream)
+    const chunks = []
+    const started = Date.now()
+    const tick = setInterval(() => setElapsed(Math.floor((Date.now() - started) / 1000)), 500)
+    const limit = setTimeout(() => r.state === 'recording' && r.stop(), MAX_RECORD_MS)
+    r.ondataavailable = (e) => e.data.size && chunks.push(e.data)
+    r.onstop = async () => {
+      clearInterval(tick)
+      clearTimeout(limit)
+      stream.getTracks().forEach((t) => t.stop())
+      setListening(false)
+      if (active === r) active = null
+      want.current = false
+      if (rec.current !== r || !chunks.length) return // unmounted mid-recording
+      setTranscribing(true)
+      try {
+        const { text } = await api.transcribe(new Blob(chunks, { type: r.mimeType }), language())
+        if (text) insert(text)
+        else notify({ kind: 'warn', title: 'No speech detected', message: 'Nothing was transcribed. Try again a little closer to the microphone.' })
+      } catch (err) {
+        notify({ kind: 'error', title: 'Transcription failed', message: err.message })
+      } finally {
+        setTranscribing(false)
+      }
+    }
+    rec.current = r
+    active = r
+    want.current = true
+    setElapsed(0)
+    r.start()
+    setListening(true)
+  }
+
+  const startBrowser = () => {
     if (NO_SERVICE) {
       notify({ kind: 'warn', title: 'Dictation unavailable here', message: `This browser has no speech recognition service. ${OPEN_ELSEWHERE}` })
       return
@@ -65,19 +143,13 @@ const DictateButton = ({ value, onChange, maxLength, label = 'Dictate', lang }) 
     const r = new Recognition()
     r.continuous = true
     r.interimResults = true
-    r.lang = lang || document.documentElement.lang || navigator.language || 'en-US'
+    r.lang = language()
     r.onresult = (e) => {
       let pending = ''
       for (let i = e.resultIndex; i < e.results.length; i++) {
         const res = e.results[i]
-        if (res.isFinal) {
-          const { value: v, onChange: set, maxLength: max } = latest.current
-          const next = append(v, res[0].transcript)
-          latest.current.value = max ? next.slice(0, max) : next
-          set(latest.current.value)
-        } else {
-          pending += res[0].transcript
-        }
+        if (res.isFinal) insert(res[0].transcript)
+        else pending += res[0].transcript
       }
       setInterim(pending)
     }
@@ -106,20 +178,25 @@ const DictateButton = ({ value, onChange, maxLength, label = 'Dictate', lang }) 
     }
   }
 
+  const status = transcribing ? 'Transcribing…' : local ? `Recording ${clock(elapsed)} · press Stop when done` : interim || 'Listening…'
+
   return (
     <span className="dictate">
-      {listening && (
+      {(listening || transcribing) && (
         <span className="dictate__live" aria-live="polite">
-          <span className="dictate__pulse" aria-hidden="true" />
-          <span className="dictate__interim">{interim || 'Listening…'}</span>
+          {transcribing ? <span className="spinner" aria-hidden="true" /> : <span className="dictate__pulse" aria-hidden="true" />}
+          <span className="dictate__interim">{status}</span>
         </span>
       )}
       <button
         type="button"
         className={`btn btn--sm ${listening ? 'btn--danger' : 'btn--ghost'}`}
         aria-pressed={listening}
-        onClick={listening ? stop : start}
-        title={listening ? 'Stop dictation' : 'Dictate with the microphone. Uses the browser’s speech recognition service.'}
+        disabled={transcribing || local === null}
+        onClick={listening ? stop : local ? startLocal : startBrowser}
+        title={listening ? 'Stop dictation'
+          : local ? 'Dictate with the microphone. Transcribed on this machine; the recording is not sent anywhere else.'
+            : 'Dictate with the microphone. Uses the browser’s speech recognition service.'}
       >
         <Icon name={listening ? 'micOff' : 'mic'} /> {listening ? 'Stop' : label}
       </button>

@@ -27,3 +27,4 @@
 .wt-sheet-thumb{width:100%;max-height:300px;object-fit:contain}[data-theme=light] .app--witness .viewer__stage{background:#e7e4d9}[data-theme=light] .app--witness .viewer__tag{color:#384936;background:#f6f3ea}
 .app--witness .lib-card__img{width:100%;border:0;cursor:pointer;background:var(--surface);color:var(--text)}.app--witness .lib-card__img img{object-fit:contain}.wt-tools-grid{grid-template-columns:minmax(0,1fr)}
 [data-theme=light] .app--witness{--amber:#8a5b15;--red:#a32b28;--green:#3c693e}
+.wt-theme{align-self:flex-start}.wt-theme button{min-width:84px}
