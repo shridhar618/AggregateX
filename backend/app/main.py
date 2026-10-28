@@ -15,7 +15,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 from . import __version__
-from .api import auth, sketches, system, traits
+from .api import auth, sketches, system, traits, witness_gateway
 from .config import get_settings
 from .database import init_db
 from .providers.base import ProviderError, ProviderUnavailable
@@ -76,6 +76,7 @@ def create_app() -> FastAPI:
 
     for r in (auth.router, system.router, traits.router, sketches.router):
         app.include_router(r, prefix="/api")
+    app.include_router(witness_gateway.router)
     return app
 
 

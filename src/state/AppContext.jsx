@@ -1,5 +1,7 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { api } from '../api/client'
+import { witnessMode } from '../api/witnesstrace'
+import useWitnessCases from './useWitnessCases'
 import { safeStorage } from '../lib/format'
 
 const AppContext = createContext(null)
@@ -7,6 +9,7 @@ const AppContext = createContext(null)
 const PREFS_KEY = 'revelio.prefs'
 
 export function AppProvider({ user = null, children }) {
+  const wt = useWitnessCases()
   const [catalog, setCatalog] = useState(null)
   const [health, setHealth] = useState(null) // null = unknown yet
   const [engineError, setEngineError] = useState(null)
@@ -87,11 +90,11 @@ export function AppProvider({ user = null, children }) {
 
   const value = useMemo(
     () => ({
-      catalog, loadCatalog, health, providers, engineError, refreshHealth,
+      wt, catalog, loadCatalog, health, providers, engineError, refreshHealth,
       toasts, notify, dismissToast, notifications, clearNotifications: () => setNotifications([]),
-      activeCase, setActiveCase, prefs, updatePrefs, user, logout,
+      activeCase: witnessMode ? wt.record : activeCase, setActiveCase, prefs, updatePrefs, user, logout,
     }),
-    [user, logout, catalog, loadCatalog, health, providers, engineError, refreshHealth, toasts, notify, dismissToast,
+    [wt, user, logout, catalog, loadCatalog, health, providers, engineError, refreshHealth, toasts, notify, dismissToast,
       notifications, activeCase, prefs, updatePrefs],
   )
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>

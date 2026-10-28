@@ -1,4 +1,6 @@
 import { lazy, Suspense, useEffect, useState } from 'react'
+import { witnessMode } from './api/witnesstrace'
+import WitnessStudio, { WitnessWorkspace } from './pages/WitnessStudio'
 import { api } from './api/client'
 import BootScreen from './components/shell/BootScreen'
 import Sidebar from './components/shell/Sidebar'
@@ -57,7 +59,7 @@ function EngineOffline({ onRetry, retrying }) {
 
 function Shell() {
   const route = useRoute()
-  const { refreshHealth, loadCatalog, health, catalog } = useApp()
+  const { refreshHealth, loadCatalog, health, catalog, wt } = useApp()
   const [steps, setSteps] = useState({ ui: 'ok', engine: 'pending', catalog: 'pending', providers: 'pending' })
   const [bootState, setBootState] = useState('running') // running | leaving | done
   const [navOpen, setNavOpen] = useState(false)
@@ -112,20 +114,22 @@ function Shell() {
   let content
   if (!ready && bootState === 'done') content = <EngineOffline onRetry={retry} retrying={retrying} />
   else if (!ready) content = <PageFallback />
-  else if (page === 'workspace') content = <Workspace />
+  else if (page === 'workspace') content = witnessMode ? <WitnessWorkspace /> : <Workspace />
+  else if (page === 'new' && witnessMode) content = <WitnessStudio key={wt.record?.id || 'new'} />
   else if (page === 'new') content = <NewSketch key={`${route.params.sketch || 'new'}-${route.params.rev || ''}-${route.params.fresh || ''}`} params={route.params} />
   else if (page === 'library') content = <Library />
   else if (page === 'compare') content = <Compare params={route.params} />
   else content = <Settings />
 
   return (
-    <div className="app">
+    <div className={`app ${witnessMode ? 'app--witness' : ''}`}>
       {bootState !== 'done' && <BootScreen steps={steps} leaving={bootState === 'leaving'} />}
       <a href="#main" className="skip-link">Skip to content</a>
       <Sidebar current={page} open={navOpen} onNavigate={() => setNavOpen(false)} onClose={() => setNavOpen(false)} />
       <div className="app__main">
         <Topbar title={title} eyebrow={eyebrow} onMenu={() => setNavOpen(true)} />
         <main id="main" className="content" key={page}>
+          {witnessMode && <p className="alert">Local integration · synthetic cases only · Codex generation uses the authenticated CLI. {['library', 'compare', 'settings'].includes(page) && 'This legacy Revelio screen is not connected to WitnessTrace; full integration is deferred to I4.'}</p>}
           <Suspense fallback={<PageFallback />}>{content}</Suspense>
         </main>
         <footer className="app__foot">
@@ -147,11 +151,12 @@ export default function App() {
       .catch((err) => {
         if (err.status === 401) window.location.replace(loginUrl())
         // Engine unreachable: render the shell, which explains how to start it.
-        else setAuth({ checked: true, user: null })
+        else setAuth({ checked: true, user: null, error: err.message })
       })
   }, [])
 
   if (!auth.checked) return null
+  if (!auth.user) return <div className="engine-offline panel" role="alert"><h2>Sign-in service unavailable</h2><p>{auth.error}</p><button className="btn" onClick={() => window.location.reload()}>Retry sign-in check</button></div>
   return (
     <AppProvider user={auth.user}>
       <Shell />
