@@ -59,13 +59,13 @@ export default function BlockchainIntegrity({ caseId, versionId }) {
   }
   const txHash = submitted || result?.tx_hash
   return <section className="panel"><div className="panel__head"><h2 className="panel__title">Blockchain Integrity</h2></div><div className="panel__body wt-fields">
-    <p>Base Sepolia testnet · 84532. Registration sends a zero-value transaction to the fixed public sink {INTEGRITY_SINK} and uses test ETH for gas. Only a versioned hash commitment is public; image bytes and testimony stay local.</p>
+    <p className="wt-id">Base Sepolia testnet · 84532. Registration sends a zero-value transaction to the fixed public sink {INTEGRITY_SINK} and uses test ETH for gas. Only a versioned hash commitment is public; image bytes and testimony stay local.</p>
     <p role="status" aria-live="polite"><strong>{error ? 'ERROR' : result?.status || 'PENDING'}</strong> · {error || result?.message || 'Loading integrity record…'}</p>
     <button className="btn" disabled={busy} onClick={() => run(async () => { const wallet = await connectWallet(); setAddress(wallet.address) })}>Connect MetaMask</button>
     {address && <p className="mono wt-id">Wallet: {address}</p>}
     <button className="btn btn--primary" disabled={busy || !result || result.status !== 'NOT REGISTERED' || !!submitted} onClick={() => run(register)}>Register on Blockchain</button>
     <button className="btn" disabled={busy} onClick={() => run(verify)}>Verify Integrity</button>
-    {result?.code && <p className="mono">Diagnostic: {result.code}{result.retryable ? ' · Safe to retry Verify Integrity; do not register again.' : ''}</p>}
+    {result?.code && <p className="mono wt-id">Diagnostic: {result.code}{result.retryable ? ' · Safe to retry Verify Integrity; do not register again.' : ''}</p>}
     {result?.verification_mode === 'wallet_delegation_trace' && <p>Verified through the wallet’s delegated execution trace, including the zero-value call to the fixed sink.</p>}
     {busy && <p>Waiting for MetaMask or transaction verification…</p>}
     {txHash && <a className="wt-id" href={`https://sepolia.basescan.org/tx/${txHash}`} target="_blank" rel="noreferrer">View transaction on BaseScan: {txHash}</a>}
