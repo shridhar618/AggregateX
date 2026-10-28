@@ -1,5 +1,5 @@
 // Same-origin, authenticated gateway. No arbitrary upstream URLs or browser credentials.
-export const witnessMode = import.meta.env?.VITE_WITNESSTRACE_LOCAL === '1'
+export const witnessMode = import.meta.env?.VITE_WITNESSTRACE_LOCAL !== '0'
 const BASE = '/wt-api'
 const ID = /^[a-f0-9]{32}$/
 const identifier = (id) => { if (!ID.test(id)) throw new WitnessError(400, 'Invalid record identifier.'); return id }

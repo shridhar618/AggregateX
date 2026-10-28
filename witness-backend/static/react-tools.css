@@ -15,3 +15,8 @@ html[data-tool=multiview] .controls-column,html[data-tool=multiview] #generator,
 html[data-theme=light]{--surface:#f6f3ea;--surface-raised:#fffdf6;--surface-inset:#ece9de;--bg:#f6f3ea;--text:#252c26;--text-secondary:#38443b;--muted:#526456;--border:#bcc4b8;--accent:#557660;color:#252c26}
 html[data-theme=light] :is(.sketch-layer,.enhance-controls,.multiview-section,.multi-source,.layout-panel){background:var(--surface);color:var(--text)}
 :is(.layout-dialog,.report-dialog,.comparison-dialog,.full-dialog){max-height:650px!important;overflow:auto!important;top:12px!important;bottom:auto!important;margin:0 auto!important}
+:is(.sketch-tools,.sketch-layer,.sketch-settings,.enhance-preview,.multi-source,.layout-panel,.multiview-section,.enhance-history p){background:var(--surface)!important;color:var(--text)!important;border-color:var(--border)!important}
+html[data-theme=light] :is(p,small,label,output,h1,h2,h3,summary,span,pre){color:var(--text)!important}
+html[data-theme=light] :is(button,select,input:not([type=range]),textarea){color:#2c4231!important;background:#fffdf6!important;border-color:#a5b59c!important}
+html[data-theme=light] button:disabled{opacity:.6!important}html[data-theme=light] input[type=range]{accent-color:#557660}
+#sketch-lab{display:none!important}.enhance-preview-detail{margin:12px 0!important}

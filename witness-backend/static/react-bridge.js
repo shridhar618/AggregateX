@@ -22,7 +22,17 @@
   };
   addEventListener('DOMContentLoaded', () => {
     document.documentElement.dataset.tool = params.get('tool') || 'sketch';
-    document.documentElement.dataset.theme = params.get('theme') || 'dark';
+    const syncTheme = () => { document.documentElement.dataset.theme = parent.document.documentElement.dataset.theme || params.get('theme') || 'dark'; };
+    syncTheme();
+    const themeObserver = new MutationObserver(syncTheme);
+    themeObserver.observe(parent.document.documentElement, {attributes:true, attributeFilter:['data-theme']});
+    addEventListener('pagehide', () => themeObserver.disconnect(), {once:true});
+    const originalSelectTab = window.selectTab;
+    window.selectTab = (name, focus) => {
+      if (document.documentElement.dataset.tool !== 'multiview' && ['sketch', 'enhance'].includes(name)) document.documentElement.dataset.tool = name;
+      originalSelectTab(name, focus);
+      if (name === 'enhance') document.querySelector('.enhance-preview-detail').open = true;
+    };
     const observer = new MutationObserver(() => {
       const target = document.getElementById('case-select');
       if (target?.value === id && !document.getElementById('save-case').disabled) {

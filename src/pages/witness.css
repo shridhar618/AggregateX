@@ -24,3 +24,6 @@
 @media(max-width:1100px){.wt-tools-grid{grid-template-columns:minmax(0,1fr)}}
 @media(max-width:600px){.wt-revision{flex-direction:column}.wt-studio .studio__head{flex-wrap:wrap}.wt-tool-frame{height:1100px}.wt-side-by-side{grid-template-columns:1fr}}
 .app--witness .nav-item>span:not(.nav-item__key){white-space:normal;line-height:1.35}.app--witness .sidebar__tag{white-space:normal;line-height:1.4}.app--witness .sidebar__note{overflow-wrap:anywhere}.app--witness .content{min-width:0}
+.wt-sheet-thumb{width:100%;max-height:300px;object-fit:contain}[data-theme=light] .app--witness .viewer__stage{background:#e7e4d9}[data-theme=light] .app--witness .viewer__tag{color:#384936;background:#f6f3ea}
+.app--witness .lib-card__img{width:100%;border:0;cursor:pointer;background:var(--surface);color:var(--text)}.app--witness .lib-card__img img{object-fit:contain}.wt-tools-grid{grid-template-columns:minmax(0,1fr)}
+[data-theme=light] .app--witness{--amber:#8a5b15;--red:#a32b28;--green:#3c693e}
