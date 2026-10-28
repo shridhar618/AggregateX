@@ -8,7 +8,7 @@ Revelio is an offline-first workstation for AI-assisted facial composite generat
 
 > **Investigative assistance only.** A generated composite is not proof of identity, does not identify anyone automatically, and must never be presented as evidence that a particular person committed a crime. Revelio performs no face recognition and no identity matching.
 
-![Revelio — New Sketch workspace](docs/screenshots/new-sketch.png)
+![Revelio landing page](docs/screenshots/landing.png)
 
 ---
 
@@ -23,22 +23,30 @@ Building a facial composite from a verbal description is slow. Witnesses remembe
 | **Description → structured profile** | Deterministic, local extraction of about 20 facial traits plus distinctive marks. Unmentioned traits stay **unknown**. Contradictions are flagged and left **unresolved**. Hedged statements (“maybe”, “I think”) are marked **uncertain**. “I don’t remember his eyes” is recorded as an explicit unknown. |
 | **Real offline composite renderer** | A procedural vector renderer draws the face from the profile: face shape, jaw, chin, hairline, hair, brows, eyes, nose, mouth, ears, facial hair, eyewear, age lines and marks. It uses no network, no GPU and no model download. It outputs SVG for live preview and PNG for export, both from the same geometry. |
 | **Honest renderer report** | Every result lists which traits were drawn with a neutral default, which are recorded but not drawable (eye colour and skin tone in a monochrome sketch), and which conflicts are pending. Undescribed hair is drawn as a dashed “unspecified” outline, not an invented hairstyle. |
-| **Interactive editor** | Trait editor with provenance badges (*Described / Extracted / Manual / Unknown / Conflict / Uncertain*). Sixteen proportion sliders, mark placement, live re-rendering, undo/redo and reset. |
+| **Three ways to describe** | A free-text **Description** tab, a **Guided** tab that asks about every trait in turn, and a **Witnesses** tab for separate accounts. Extract with the button or <kbd>⌘/Ctrl</kbd> + <kbd>Enter</kbd>. |
+| **Voice dictation** | A *Dictate* button on the description, observations, witness and refinement fields uses the browser's built-in speech recognition. It appends to the text you already have and never submits anything on its own. Works in Chrome, Edge and Safari. Browsers without speech recognition, such as Firefox, don't show the button. Brave and embedded browser views do show it, but there it explains why dictation can't run there, without trying and failing silently. |
+| **Interactive editor** | Trait editor with provenance badges (*Described / Extracted / Manual / Unknown / Conflict / Uncertain*). Sixteen proportion sliders, mark placement, live re-rendering, undo/redo (<kbd>⌘/Ctrl</kbd> + <kbd>Z</kbd>) and reset. A pipeline bar across the top shows the real state of each step: description, trait profile, operator review, composite and revision. |
 | **Natural-language refinement** | Commands like “Make the eyebrows thicker”, “Add a small scar on the left cheek” or “Make the jaw narrower” are parsed locally. You review and edit the proposed changes before anything is applied. Requests that are no-ops are reported as such, never faked. |
+| **Investigation workspace** | The overview shows saved sketches, drafts in progress, revisions recorded and the last-used generation mode, plus recent sketches, unfinished work, recent activity and provider status. The library supports search by title, sketch ID or description, and you can switch a sketch between draft and final. |
 | **Revisions & comparison** | Every save is an immutable revision in SQLite. Compare any two revisions with a drag-to-reveal slider or side by side, alongside a trait-by-trait diff. There are no similarity scores or identity probabilities. |
 | **Multi-witness merge** | Compare 2–4 independent accounts. Traits are classified as shared, conflicting, single-source or unmentioned. The operator must resolve every conflict before the combined profile can be applied. |
 | **Exports** | PNG, JSON (confirmed traits, unknown traits, conflicts, revision history) and a printable HTML report (print to PDF) with the required disclaimer. |
+| **Light and dark themes** | A theme toggle in the workspace top bar and the landing-page nav. Dark uses charcoal with coral accents, and light uses cream with green accents. The choice is remembered in this browser. |
 | **Optional AI providers** | A replaceable provider interface. Hosted Gemini is **off by default** and configured on the backend only. A local diffusion model is detected and documented, but not shipped (see below). AI output is always labelled AI-generated, and failures never fall back silently. |
 
 ### Screenshots
 
-| Landing page (`/`) | Workspace (`/app`) |
+| Workspace overview (`/app`) | New sketch editor (`/app#/new`) |
 |---|---|
-| ![Landing page](docs/screenshots/landing.png) | ![Workspace](docs/screenshots/workspace.png) |
-| **Before / after** | **Compare revisions** |
-| ![Before and after](docs/screenshots/before-after.png) | ![Compare](docs/screenshots/compare.png) |
-| **Library** | **Settings & providers** |
-| ![Library](docs/screenshots/library.png) | ![Settings](docs/screenshots/settings.png) |
+| ![Workspace](docs/screenshots/workspace.png) | ![New sketch](docs/screenshots/new-sketch.png) |
+| **Light theme · workspace** | **Light theme · editor** |
+| ![Workspace, light theme](docs/screenshots/workspace-light.png) | ![Editor, light theme](docs/screenshots/new-sketch-light.png) |
+| **Landing · live demo** | **Landing · editor showcase** |
+| ![Landing live demo](docs/screenshots/landing-demo.png) | ![Landing editor showcase](docs/screenshots/landing-editor.png) |
+| **Compare revisions** | **Library** |
+| ![Compare](docs/screenshots/compare.png) | ![Library](docs/screenshots/library.png) |
+| **Settings & providers** | **Landing · light theme** |
+| ![Settings](docs/screenshots/settings.png) | ![Landing, light theme](docs/screenshots/landing-light.png) |
 
 Procedural composites generated from eight different descriptions. The bottom-left one has no hair description, so its hair is drawn as “unspecified”:
 
@@ -83,18 +91,21 @@ backend/
     services/            trait_extractor · procedural_renderer · refinement_service
                          merge_service · sketch_service · report · uploads
     providers/           base · offline_provider · local_provider · hosted_provider · registry
-  tests/                 56 pytest tests
+  tests/                 59 pytest tests
 src/
   main.jsx             Route switch: / → landing page, /app → workspace (separate lazy bundles)
   landing/             Landing page (Lumora-inspired); reuses the API client, renderer and CompareSlider
   api/client.js          API client (no credentials ever pass through the browser)
   state/AppContext.jsx   Catalog, engine status, toasts, preferences, active case
-  components/            brand · shell · ui · sketch (viewer, editor, refine, merge…)
+  components/            brand · shell (sidebar, top bar, boot screen) · sketch (viewer, editor,
+                         refine, merge, pipeline…) · ui (dictation, theme toggle, modals…)
+  lib/                   router · nav · format · theme
   pages/                 Workspace · NewSketch · Library · Compare · Settings
+public/landing/          Pre-rendered hero composites (from scripts/render-landing-assets.py)
 scripts/                 run-api.mjs · dev-all.mjs · render-landing-assets.py
 ```
 
-**Technology:** React 19, Vite 8, plain CSS design system (Inter + IBM Plex Mono), FastAPI, Pydantic 2, SQLite, Pillow and pytest. The frontend adds no new dependencies. Animations are CSS keyframes, with `requestAnimationFrame` only where needed, and they respect `prefers-reduced-motion`.
+**Technology:** React 19, Vite 8, plain CSS design system with dark and light themes (Syne for display type, Inter for text, IBM Plex Mono for data), FastAPI, Pydantic 2, SQLite, Pillow and pytest. The frontend adds no new dependencies. Animations are CSS keyframes, with `requestAnimationFrame` only where needed, and they respect `prefers-reduced-motion`.
 
 ---
 
@@ -135,18 +146,20 @@ npm run dev:web     # Vite only, on http://127.0.0.1:5173 (proxies /api to the e
 ```bash
 npm run lint        # ESLint
 npm run build       # production build
-npm run test:api    # backend pytest suite (56 tests)
+npm run test:api    # backend pytest suite (59 tests)
 ```
 
 ### Offline use
 
 After installation, the whole core workflow runs with **no network access**: extraction, refinement, merge, rendering, saving, comparison and export. A test (`test_offline_workflow_without_network`) blocks all sockets and runs the workflow. Without internet, the interface falls back from the Google-hosted fonts to system fonts.
 
+Voice dictation is the exception. It relies on the browser's speech service, and depending on the browser, that service may process audio on a remote server. Typing always works offline.
+
 ---
 
 ### Landing page
 
-The landing page at `/` presents the product with a short, skippable intro, and its demos are real:
+The landing page at `/` opens with a short intro (skip it with <kbd>Esc</kbd> or <kbd>Enter</kbd>; it plays once per browser session and never with reduced motion). It then runs through the hero, a live demo, the editor showcase, features, how it works, privacy and capabilities, pricing and an FAQ. The nav has the same light/dark toggle as the workspace. Its demos are real:
 
 - **Live demo:** a visitor types a fictional description, and the page calls the local engine to extract traits and render a procedural composite. Visitors can change traits and sliders, regenerate, and download the PNG.
 - **Editor showcase:** a second live renderer instance with real sliders, in-page demo revisions and a before/after slider.
@@ -194,8 +207,19 @@ A local diffusion model (for example Stable Diffusion 1.5) needs roughly **8 GB 
 - **No biometric processing.** There is no face detection, recognition, identity matching or sensitive-attribute inference.
 - **Deletion.** Delete a single sketch with all its revisions and image files from the Library, or wipe all local data from Settings (type `DELETE` to confirm).
 - **Data location.** `backend/data/` holds `revelio.db` and `images/` (override with `REVELIO_DATA_DIR`).
+- **Browser storage.** The browser keeps only interface preferences, the theme choice and one unsaved draft (`revelio.*` keys in local storage).
+- **Dictation.** Speech recognition is provided by the browser, not by Revelio. Revelio never records or stores audio, but the browser's speech service may send audio off the device.
 
 These are engineering safeguards for a local demo. They are not a claim of legal compliance or enterprise-grade security.
+
+### Upgrading from VeriSketch AI
+
+The project was previously called VeriSketch AI. Existing installs keep working:
+
+- `VERISKETCH_*` environment variables are still read when the matching `REVELIO_*` variable isn't set.
+- An existing `backend/data/verisketch.db` is renamed to `revelio.db` the first time the engine starts.
+- Old `VS-…` sketch IDs stay valid. New sketches get `RV-…` IDs.
+- Saved browser drafts and preferences are carried over automatically.
 
 ## Known limitations
 
@@ -203,6 +227,7 @@ These are engineering safeguards for a local demo. They are not a claim of legal
 - Trait extraction is rule-based English. Unusual phrasing may be missed, but missed traits stay **unknown** rather than becoming wrong. The guided questions cover every trait.
 - Real hosted generation has not been verified with a working API key.
 - Single-user, local-only: no accounts, sync or audit-grade chain of custody.
+- Voice dictation depends on browser support. It is unavailable in Firefox, Brave and embedded browser views.
 
 ## Future improvements
 
