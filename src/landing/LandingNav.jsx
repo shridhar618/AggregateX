@@ -143,6 +143,9 @@ export default function LandingNav() {
                   </a>
                 </li>
               ))}
+              <li className="lp-nav__links-login">
+                <a href="/login">Log in</a>
+              </li>
             </ul>
           </nav>
           <div className="lp-nav__right">
