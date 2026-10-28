@@ -58,49 +58,6 @@
   min-height: 100vh;
 }
 
-/* Evidence-board backdrop: a faint, slowly drifting photo behind the whole shell,
-   with a breathing lamp glow and vignette on top. Sits below all content (z-index -1). */
-.app::before,
-.app::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-}
-
-.app::before {
-  inset: -6%;
-  background: url('../images/forensic.jpg') center 30% / cover no-repeat;
-  opacity: var(--backdrop-opacity, 0.12);
-  filter: grayscale(0.35) sepia(0.2) blur(1.5px) contrast(1.05);
-  transform-origin: 50% 35%;
-  animation: backdropDrift 60s ease-in-out infinite alternate;
-  will-change: transform;
-}
-
-.app::after {
-  background:
-    radial-gradient(60% 45% at 50% 8%, rgba(255, 196, 120, 0.09), transparent 70%),
-    radial-gradient(ellipse at center, transparent 45%, var(--bg) 100%);
-  animation: backdropGlow 9s ease-in-out infinite alternate;
-}
-
-:root[data-theme='light'] .app {
-  --backdrop-opacity: 0.07;
-}
-
-@keyframes backdropDrift {
-  0% { transform: scale(1.04) translate3d(0, 0, 0); }
-  50% { transform: scale(1.09) translate3d(-1.5%, 1%, 0); }
-  100% { transform: scale(1.06) translate3d(1.5%, -1.2%, 0); }
-}
-
-@keyframes backdropGlow {
-  from { opacity: 0.65; }
-  to { opacity: 1; }
-}
-
 .app__main {
   flex: 1;
   min-width: 0;

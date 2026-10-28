@@ -40,7 +40,17 @@ RUN sed -i 's|http://deb.debian.org|https://deb.debian.org|g' /etc/apt/sources.l
 WORKDIR /app
 # One environment serves both APIs (see docs/integration/STARTUP_GUIDE.md).
 COPY witness-backend/requirements-runtime-lock.txt /tmp/requirements.txt
-RUN pip install -r /tmp/requirements.txt httpx==0.28.1 && rm /tmp/requirements.txt
+COPY backend/requirements-speech.txt /tmp/requirements-speech.txt
+RUN pip install -r /tmp/requirements.txt -r /tmp/requirements-speech.txt httpx==0.28.1 \
+ && rm /tmp/requirements*.txt
+
+# Local speech-to-text model for dictation, baked in so it works offline.
+ARG WHISPER_MODEL=base.en
+ENV REVELIO_WHISPER_MODEL=${WHISPER_MODEL} \
+    REVELIO_WHISPER_DIR=/opt/whisper \
+    REVELIO_WHISPER_OFFLINE=1
+RUN python -c "from faster_whisper import WhisperModel; WhisperModel('${WHISPER_MODEL}', device='cpu', compute_type='int8', download_root='/opt/whisper')" \
+ && chmod -R a+rX /opt/whisper
 
 # Node + Codex CLI. Empty when built with INSTALL_CODEX=0.
 COPY --from=codex /usr/local/bin/node /usr/local/bin/node
