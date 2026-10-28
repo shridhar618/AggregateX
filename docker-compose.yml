@@ -1,0 +1,15 @@
+services:
+  revelio:
+    build: .
+    image: revelio:latest
+    ports:
+      - "127.0.0.1:8080:8080"
+    volumes:
+      - revelio-data:/data
+      # Signed-in Codex CLI home for AI generation (run `codex login` on the host first).
+      # Remove this line to run without AI generation.
+      - ${CODEX_HOME:-~/.codex}:/home/app/.codex
+    restart: unless-stopped
+
+volumes:
+  revelio-data:
