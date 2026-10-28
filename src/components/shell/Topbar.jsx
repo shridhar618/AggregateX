@@ -4,6 +4,7 @@ import { useApp } from '../../state/AppContext'
 import { LogoMark } from '../brand/Logo'
 import CaseClock from '../ui/CaseClock'
 import Icon from '../ui/Icon'
+import ThemeToggle from '../ui/ThemeToggle'
 
 const KIND_ICON = { ok: 'ok', info: 'info', warn: 'alert', error: 'error' }
 
@@ -53,6 +54,8 @@ const Topbar = ({ title, eyebrow, onMenu }) => {
         </div>
 
         <CaseClock />
+
+        <ThemeToggle className="btn btn--ghost btn--icon theme-toggle" />
 
         <div className="notif" ref={ref}>
           <button

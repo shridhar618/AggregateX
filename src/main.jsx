@@ -1,6 +1,7 @@
 import { lazy, StrictMode, Suspense } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
+import { initializeTheme } from './lib/theme'
 
 /* eslint-disable react-refresh/only-export-components -- entry file, not a component module */
 
@@ -19,6 +20,8 @@ try {
 } catch {
   /* storage unavailable */
 }
+
+initializeTheme()
 
 const { pathname, hash, search } = window.location
 

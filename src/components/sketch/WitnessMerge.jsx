@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { api } from '../../api/client'
 import { optionLabel } from '../../lib/format'
 import { useApp } from '../../state/AppContext'
+import DictateButton from '../ui/DictateButton'
 import Icon from '../ui/Icon'
 
 const STATUS = {
@@ -59,12 +60,16 @@ const WitnessMerge = ({ onApply }) => {
         <label key={i} className="field">
           <span className="label merge__wlabel">
             Witness {i + 1}
-            {texts.length > 2 && (
-              <button type="button" className="btn btn--ghost btn--sm btn--icon" aria-label={`Remove witness ${i + 1}`}
-                onClick={() => setTexts((ts) => ts.filter((_, j) => j !== i))}>
-                <Icon name="close" />
-              </button>
-            )}
+            <span className="describe__actions">
+              <DictateButton value={t} maxLength={2000}
+                onChange={(v) => setTexts((ts) => ts.map((x, j) => (j === i ? v : x)))} />
+              {texts.length > 2 && (
+                <button type="button" className="btn btn--ghost btn--sm btn--icon" aria-label={`Remove witness ${i + 1}`}
+                  onClick={() => setTexts((ts) => ts.filter((_, j) => j !== i))}>
+                  <Icon name="close" />
+                </button>
+              )}
+            </span>
           </span>
           <textarea className="textarea" rows={3} maxLength={2000} value={t}
             onChange={(e) => setTexts((ts) => ts.map((x, j) => (j === i ? e.target.value : x)))}

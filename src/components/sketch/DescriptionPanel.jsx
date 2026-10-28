@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react'
 import { api } from '../../api/client'
 import { optionLabel } from '../../lib/format'
 import { useApp } from '../../state/AppContext'
+import DictateButton from '../ui/DictateButton'
 import Icon from '../ui/Icon'
 import WitnessMerge from './WitnessMerge'
 
@@ -115,7 +116,10 @@ function GuidedForm({ catalog, onApply }) {
       </fieldset>
 
       <label className="field">
-        <span className="guided__label">Additional observations</span>
+        <span className="guided__label merge__wlabel">
+          Additional observations
+          <DictateButton value={observations} onChange={setObservations} maxLength={1000} />
+        </span>
         <textarea className="textarea" rows={3} maxLength={1000} value={observations} onChange={(e) => setObservations(e.target.value)}
           placeholder="Clothing, posture, anything not covered above. Recorded in the report, not drawn." />
       </label>
@@ -184,9 +188,12 @@ const DescriptionPanel = ({ description, onDescriptionChange, onExtracted, onGui
             </label>
             <div id="describe-meta" className="describe__meta">
               <span className={`mono ${tooLong ? 'text-red' : len && len < min ? 'text-amber' : 'faint'}`}>{description.length} / {max}</span>
-              <button type="button" className="btn btn--ghost btn--sm" onClick={() => { onDescriptionChange(''); setError(null) }} disabled={!description}>
-                <Icon name="close" /> Clear
-              </button>
+              <span className="describe__actions">
+                <DictateButton value={description} onChange={(v) => { onDescriptionChange(v); if (error) setError(null) }} maxLength={max} />
+                <button type="button" className="btn btn--ghost btn--sm" onClick={() => { onDescriptionChange(''); setError(null) }} disabled={!description}>
+                  <Icon name="close" /> Clear
+                </button>
+              </span>
             </div>
             {error && <p className="field__error" role="alert">{error}</p>}
 
