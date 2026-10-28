@@ -58,7 +58,11 @@ def data_dir() -> Path:
 
 
 def db_path() -> Path:
-    return data_dir() / "verisketch.db"
+    path = data_dir() / "revelio.db"
+    legacy = data_dir() / "verisketch.db"  # name before the project was renamed
+    if not path.exists() and legacy.exists():
+        legacy.rename(path)
+    return path
 
 
 @contextmanager

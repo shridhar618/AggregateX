@@ -54,7 +54,7 @@ const WitnessMerge = ({ onApply }) => {
 
   return (
     <div className="merge">
-      <p className="muted">Enter each witness’s account separately. VeriSketch compares them trait by trait and never resolves disagreements for you.</p>
+      <p className="muted">Enter each witness’s account separately. Revelio compares them trait by trait and never resolves disagreements for you.</p>
       {texts.map((t, i) => (
         <label key={i} className="field">
           <span className="label merge__wlabel">

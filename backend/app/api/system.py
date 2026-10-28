@@ -14,7 +14,7 @@ router = APIRouter(tags=["system"])
 
 @router.get("/health")
 def health():
-    return {"status": "ok", "app": "VeriSketch AI", "version": __version__,
+    return {"status": "ok", "app": "Revelio", "version": __version__,
             "renderer": "procedural-v1", "providers": all_providers()}
 
 

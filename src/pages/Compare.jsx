@@ -134,7 +134,7 @@ export default function Compare({ params }) {
                 </div>
               ))}
             </dl>
-            <p className="faint compare-page__note"><Icon name="info" /> Visual comparison only. VeriSketch does not compute similarity scores or identity probabilities.</p>
+            <p className="faint compare-page__note"><Icon name="info" /> Visual comparison only. Revelio does not compute similarity scores or identity probabilities.</p>
           </section>
 
           <section className="panel" aria-labelledby="diff-title">

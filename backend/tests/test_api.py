@@ -30,7 +30,7 @@ def test_extract_validation(client):
 
 def test_generate_persist_and_reopen(client):
     s = _create(client)
-    assert s["id"].startswith("VS-")
+    assert s["id"].startswith("RV-")
     assert s["revision_count"] == 1
     cur = s["current"]
     assert cur["is_ai"] is False and "not AI-generated" in cur["method_label"]
@@ -68,7 +68,7 @@ def test_rename_status_notes_and_delete(client):
 def test_exports(client):
     s = _create(client)
     data = client.get(f"/api/sketches/{s['id']}/export.json").json()
-    assert data["application"] == "VeriSketch AI"
+    assert data["application"] == "Revelio"
     assert "not proof of identity" in data["disclaimer"]
     assert "Eye colour" in data["unknown_traits"]
     html = client.get(f"/api/sketches/{s['id']}/report").text
@@ -95,7 +95,7 @@ def test_delete_all_requires_confirmation(client):
 
 def test_invalid_ids_and_profiles(client):
     assert client.get("/api/sketches/../../etc/passwd").status_code == 404
-    assert client.get("/api/sketches/VS-bad").status_code == 404
+    assert client.get("/api/sketches/RV-bad").status_code == 404
     bad = {"title": "x", "profile": {"traits": {"face_shape": {"value": "hexagon"}}}}
     assert client.post("/api/sketches/generate", json=bad).status_code == 422
     bad_adj = {"title": "x", "profile": {"adjustments": {"jaw_width": 5}}}

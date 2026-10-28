@@ -5,8 +5,21 @@ from __future__ import annotations
 import base64
 from html import escape
 
+from pathlib import Path
+
 from ..database import connect, log_activity
 from .sketch_service import DISCLAIMER, _split_traits, get_sketch, image_path
+
+
+_LOGO = Path(__file__).resolve().parent.parent / "assets" / "logo-wordmark.png"
+
+
+def _logo_html() -> str:
+    try:
+        data = base64.b64encode(_LOGO.read_bytes()).decode()
+    except OSError:
+        return ""
+    return f"<img class='logo' src='data:image/png;base64,{data}' alt='Revelio' height='44'/>"
 
 
 def _fmt(ts: str | None) -> str:
@@ -41,11 +54,12 @@ def build_report(sketch_id: str) -> str:
 
     return f"""<!doctype html><html lang="en"><head><meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>VeriSketch AI — {escape(s['id'])}</title>
+<title>Revelio — {escape(s['id'])}</title>
 <style>
  *{{box-sizing:border-box}} body{{font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;color:#111827;margin:0;padding:32px;background:#fff}}
  .wrap{{max-width:860px;margin:0 auto}} .mono{{font-family:'IBM Plex Mono',ui-monospace,Menlo,monospace}}
  header{{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:2px solid #111827;padding-bottom:14px;margin-bottom:18px}}
+ .head-left{{display:flex;align-items:center;gap:12px}} .logo{{height:44px;width:auto;border:0;border-radius:0}}
  .brand{{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:#0e7490;font-weight:700}}
  h1{{font-size:26px;margin:6px 0 0;letter-spacing:-.02em}} .meta{{text-align:right;font-size:12px;color:#4b5563;line-height:1.6}}
  .disclaimer{{border:1px solid #f59e0b;background:#fffbeb;color:#78350f;padding:12px 14px;border-radius:8px;font-size:13px;font-weight:600;margin-bottom:18px}}
@@ -58,7 +72,7 @@ def build_report(sketch_id: str) -> str:
  button{{font:inherit;border:1px solid #111827;background:#fff;border-radius:6px;padding:8px 14px;cursor:pointer}}
  @media print{{body{{padding:0}} .toolbar{{display:none}}}}
 </style></head><body><div class="wrap">
-<header><div><div class="brand">VeriSketch AI · Forensic composite report</div><h1>{escape(s['title'])}</h1></div>
+<header><div class="head-left">{_logo_html()}<div><div class="brand">Forensic composite report</div><h1>{escape(s['title'])}</h1></div></div>
 <div class="meta mono">{escape(s['id'])}<br/>Created {_fmt(s['created_at'])}<br/>Modified {_fmt(s['updated_at'])}<br/>Status: {escape(s['status'])}</div></header>
 <div class="disclaimer">{escape(DISCLAIMER)}</div>
 <div class="grid"><div>{img_html}<div class="method"><b>Generation method:</b> {escape(cur['method_label'] if cur else '—')}<br/>

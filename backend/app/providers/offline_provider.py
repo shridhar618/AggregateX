@@ -26,5 +26,5 @@ class OfflineCompositeProvider(GenerationProvider):
         return GenerationOutput(
             png=result.png, svg=result.svg, method="offline_procedural",
             method_label="Procedural composite (offline, not AI-generated)", is_ai=False,
-            model="verisketch-procedural-v1", notes=result.notes,
+            model="revelio-procedural-v1", notes=result.notes,
         )

@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react'
+import './CompareSlider.css'
 
 // Drag-to-reveal comparison. Keyboard: arrow keys move the divider.
 const CompareSlider = ({ before, after, beforeLabel, afterLabel }) => {

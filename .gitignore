@@ -28,7 +28,7 @@ dist-ssr
 .env.*
 !.env.example
 
-# VeriSketch backend
+# Revelio backend
 backend/.venv/
 backend/data/
 backend/.env

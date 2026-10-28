@@ -22,7 +22,7 @@ export default function Settings() {
     setBusy(true)
     try {
       const r = await api.deleteAll()
-      safeStorage.remove('verisketch.draft')
+      safeStorage.remove('revelio.draft')
       notify({ kind: 'ok', title: 'Local data deleted', message: `${r.deleted_sketches} sketch(es), all revisions, images and activity were removed.` })
       setWipe(false)
     } catch (err) {
@@ -74,7 +74,7 @@ export default function Settings() {
                     : 'No data leaves this device.'}
                 </p>
                 {id === 'hosted' && (
-                  <pre className="code mono">{`# backend/.env  (git-ignored; never put keys in the frontend)\nVERISKETCH_HOSTED_PROVIDER=gemini\nGEMINI_API_KEY=…\nGEMINI_IMAGE_MODEL=${p.model || 'gemini-3-pro-image-preview'}`}</pre>
+                  <pre className="code mono">{`# backend/.env  (git-ignored; never put keys in the frontend)\nREVELIO_HOSTED_PROVIDER=gemini\nGEMINI_API_KEY=…\nGEMINI_IMAGE_MODEL=${p.model || 'gemini-3-pro-image-preview'}`}</pre>
                 )}
                 {id === 'local' && p.detected && (
                   <ul className="provider__detect mono">
@@ -96,7 +96,7 @@ export default function Settings() {
               <li><Icon name="database" /> Sketches are stored in a local SQLite database, with PNG and SVG files beside it. No account is required.</li>
               <li><Icon name="lock" /> The local engine listens on 127.0.0.1 only. It is not exposed to your network.</li>
               <li><Icon name="image" /> Reference images are validated, stripped of metadata and used for a single hosted request. They are never stored.</li>
-              <li><Icon name="eyeOff" /> VeriSketch performs no face recognition, identity matching or attribute inference.</li>
+              <li><Icon name="eyeOff" /> Revelio performs no face recognition, identity matching or attribute inference.</li>
               <li><Icon name="info" /> Your interface preferences and one unsaved draft are kept in this browser’s local storage.</li>
             </ul>
             {storage && (
@@ -140,7 +140,7 @@ export default function Settings() {
           busy={busy}
           requireText="DELETE"
           confirmLabel="Delete everything"
-          message="This permanently deletes all sketches, revisions, images and activity stored by VeriSketch on this machine. It cannot be undone."
+          message="This permanently deletes all sketches, revisions, images and activity stored by Revelio on this machine. It cannot be undone."
           onConfirm={deleteAll}
           onClose={() => setWipe(false)}
         />

@@ -12,7 +12,7 @@ Certainty = Literal["stated", "uncertain"]
 
 DESCRIPTION_MIN = 10
 DESCRIPTION_MAX = 2000
-SKETCH_ID_RE = re.compile(r"^VS-\d{8}-[0-9A-F]{4}$")
+SKETCH_ID_RE = re.compile(r"^(?:RV|VS)-\d{8}-[0-9A-F]{4}$")  # RV- new, VS- legacy
 
 
 class TraitValue(BaseModel):

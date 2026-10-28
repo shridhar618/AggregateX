@@ -817,7 +817,7 @@ def render_profile(profile: Profile, caption: Optional[str] = None) -> RenderRes
     if caption:
         s.text(W - 16, H - 11, caption[:40].upper(), size=11, fill="#5f5c56", anchor="end")
 
-    svg = to_svg(s, "VeriSketch procedural composite")
+    svg = to_svg(s, "Revelio procedural composite")
     return RenderResult(svg=svg, scene=s, notes=_dedupe(P.notes), seed=seed)
 
 
