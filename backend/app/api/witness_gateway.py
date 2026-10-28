@@ -10,9 +10,9 @@ from .auth import require_user
 router = APIRouter()
 ID = r'[a-f0-9]{32}'
 ROUTES = {
-    'GET': [r'api/lab-schema', r'api/enhance-schema', rf'api/cases/{ID}/multiview', rf'api/cases/{ID}/reports', rf'api/cases/{ID}/reports/{ID}/(?:preview|pdf|json|png)', rf'api/cases/{ID}/versions/{ID}/(?:sketch|enhance|pixels|export.json)', rf'api/cases/{ID}/views/{ID}/layouts/{ID}/(?:front|left|right|back|three_quarter|three_quarter_left|three_quarter_right|left_profile|right_profile).png', r'api/health', r'api/cases', rf'api/cases/{ID}', rf'api/jobs/{ID}', rf'images/{ID}', rf'api/cases/{ID}/versions/{ID}/export.png'],
+    'GET': [rf'api/cases/{ID}/versions/{ID}/integrity', r'api/lab-schema', r'api/enhance-schema', rf'api/cases/{ID}/multiview', rf'api/cases/{ID}/reports', rf'api/cases/{ID}/reports/{ID}/(?:preview|pdf|json|png)', rf'api/cases/{ID}/versions/{ID}/(?:sketch|enhance|pixels|export.json)', rf'api/cases/{ID}/views/{ID}/layouts/{ID}/(?:front|left|right|back|three_quarter|three_quarter_left|three_quarter_right|left_profile|right_profile).png', r'api/health', r'api/cases', rf'api/cases/{ID}', rf'api/jobs/{ID}', rf'images/{ID}', rf'api/cases/{ID}/versions/{ID}/export.png'],
     'PUT': [rf'api/cases/{ID}'],
-    'POST': [rf'api/cases/{ID}/(?:selection|refinement-preview|refine|local-edits|imports|enhancements|multiview-preview|multiview|reports)', rf'api/cases/{ID}/views/{ID}/layouts', r'api/cases', rf'api/cases/{ID}/freeze', rf'api/cases/{ID}/clarifications', rf'api/cases/{ID}/prompt-preview', r'api/generate'],
+    'POST': [rf'api/cases/{ID}/versions/{ID}/integrity', rf'api/cases/{ID}/(?:selection|refinement-preview|refine|local-edits|imports|enhancements|multiview-preview|multiview|reports)', rf'api/cases/{ID}/views/{ID}/layouts', r'api/cases', rf'api/cases/{ID}/freeze', rf'api/cases/{ID}/clarifications', rf'api/cases/{ID}/prompt-preview', r'api/generate'],
 }
 
 @router.api_route('/wt-api/{path:path}', methods=['GET', 'POST', 'PUT'], dependencies=[Depends(require_user)])
