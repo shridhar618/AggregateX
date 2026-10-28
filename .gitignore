@@ -63,3 +63,6 @@ auth.json
 
 # Local virtual environments, including reusable development symlinks
 .venv
+
+# Local Vite dependency cache
+.vite/
