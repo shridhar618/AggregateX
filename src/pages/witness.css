@@ -28,3 +28,61 @@
 .app--witness .lib-card__img{width:100%;border:0;cursor:pointer;background:var(--surface);color:var(--text)}.app--witness .lib-card__img img{object-fit:contain}.wt-tools-grid{grid-template-columns:minmax(0,1fr)}
 [data-theme=light] .app--witness{--amber:#8a5b15;--red:#a32b28;--green:#3c693e}
 .wt-theme{align-self:flex-start}.wt-theme button{min-width:84px}
+
+/* ---------- Blockchain integrity visuals ---------- */
+.wt-int { container-type: inline-size; display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.wt-int-status { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; padding: 10px 12px; border-radius: 8px; border: 1px solid var(--border); border-left: 4px solid var(--int, var(--text-3)); background: color-mix(in srgb, var(--int, var(--text-3)) 8%, transparent); }
+.wt-int-status strong { color: var(--int, var(--text)); letter-spacing: .08em; font-size: 13px; }
+.wt-int-status span { color: var(--text-2); font-size: 13px; }
+.wt-int-status.is-verified { --int: var(--green); }
+.wt-int-status.is-tampered, .wt-int-status.is-error { --int: var(--red); }
+.wt-int-status.is-pending { --int: var(--amber); }
+
+/* Verification chain: vertical timeline by default, one row when the panel is wide. */
+.wt-int-chain { display: flex; flex-direction: column; margin: 0; padding: 0; list-style: none; }
+.wt-int-step { position: relative; display: grid; grid-template-columns: 30px minmax(0, 1fr); column-gap: 10px; align-items: center; padding-bottom: 12px; min-width: 0; --c: var(--text-3); }
+.wt-int-step:last-child { padding-bottom: 0; }
+.wt-int-step::before { content: ''; position: absolute; left: 14px; top: 30px; bottom: 0; width: 2px; background: var(--border); }
+.wt-int-step:last-child::before { display: none; }
+.wt-int-step.is-ok::before { background: var(--green); }
+.wt-int-step.is-ok { --c: var(--green); }
+.wt-int-step.is-fail { --c: var(--red); }
+.wt-int-step.is-pending, .wt-int-step.is-error { --c: var(--amber); }
+.wt-int-step__node { grid-row: span 2; position: relative; z-index: 1; display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; border: 2px solid var(--c); background: var(--panel); color: var(--c); font: 600 13px/1 'IBM Plex Mono', monospace; transition: background .3s, border-color .3s; }
+.wt-int-step.is-ok .wt-int-step__node { background: color-mix(in srgb, var(--green) 18%, var(--panel)); }
+.wt-int-step.is-fail .wt-int-step__node { background: color-mix(in srgb, var(--red) 18%, var(--panel)); }
+.wt-int-step.is-pending .wt-int-step__node, .wt-int-chain.is-loading .wt-int-step.is-idle .wt-int-step__node { animation: wtIntPulse 1.4s ease-in-out infinite; }
+.wt-int-step__label { font-size: 13px; font-weight: 600; color: var(--text); }
+.wt-int-step__hint { font-size: 11.5px; line-height: 1.3; color: var(--text-3); }
+.wt-int-step.is-idle .wt-int-step__label { color: var(--text-3); }
+.wt-int-step.is-fail .wt-int-step__label { color: var(--red); }
+@keyframes wtIntPulse { 50% { box-shadow: 0 0 0 6px color-mix(in srgb, var(--c) 18%, transparent); } }
+
+@container (min-width: 640px) {
+  .wt-int-chain { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); }
+  .wt-int-step { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 0 4px; text-align: center; }
+  .wt-int-step::before { left: auto; right: 50%; top: 14px; bottom: auto; width: 100%; height: 2px; }
+  .wt-int-step:last-child::before { display: block; }
+  .wt-int-step:first-child::before { display: none; }
+  .wt-int-step.is-ok::before { background: var(--border); }
+  .wt-int-step:not(.is-idle)::before { background: var(--green); }
+}
+
+.wt-int-print { margin: 0; display: flex; flex-direction: column; gap: 8px; padding: 12px; border: 1px solid var(--border); border-radius: 8px; min-width: 0; }
+.wt-int-print figcaption { display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; font-size: 12px; color: var(--text-3); }
+.wt-int-print.is-same figcaption b { color: var(--green); }
+.wt-int-print.is-changed figcaption b { color: var(--red); }
+.wt-int-print__note { margin: 0; font-size: 11.5px; color: var(--text-3); }
+.wt-int-strip { display: grid; grid-template-columns: minmax(0, 1fr); gap: 4px; min-width: 0; }
+.wt-int-strip__label { font-size: 11px; color: var(--text-3); text-transform: uppercase; letter-spacing: .08em; }
+.wt-int-strip__cells { display: grid; grid-template-columns: repeat(32, minmax(0, 1fr)); gap: 2px; }
+.wt-int-strip__cells i { aspect-ratio: 1 / 1.6; border-radius: 2px; background: hsl(var(--h) 45% var(--l)); }
+.wt-int-strip__hex { font: 10.5px/1.5 'IBM Plex Mono', monospace; color: var(--text-3); overflow-wrap: anywhere; }
+.wt-int-strip__hex .is-diff { color: var(--red); }
+
+.wt-int-record { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(150px, 100%), 1fr)); gap: 8px; margin: 0; }
+.wt-int-record > div { padding: 8px 10px; border: 1px solid var(--border); border-radius: 6px; min-width: 0; }
+.wt-int-record dt { font-size: 10.5px; text-transform: uppercase; letter-spacing: .08em; color: var(--text-3); }
+.wt-int-record dd { margin: 2px 0 0; font-size: 13px; overflow-wrap: anywhere; }
+.wt-int-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+

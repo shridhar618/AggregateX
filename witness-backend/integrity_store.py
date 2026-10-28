@@ -216,13 +216,17 @@ def check(value):
                 or not same_hex(tx['blockHash'], receipt['blockHash'])
                 or quantity(tx['blockNumber']) != quantity(receipt['blockNumber'])):
             return outcome('PENDING', 'BLOCK_NOT_CANONICAL', 'Waiting for canonical block confirmation.', True)
+        # Canonical block details for display; already fetched above, so no extra RPC call.
+        block_info = {'block_number': quantity(receipt['blockNumber']), 'block_hash': receipt['blockHash'].lower(),
+                      'block_time': quantity(block['timestamp']) if block.get('timestamp') else None}
         extra = {'verification_mode': 'legacy_direct' if legacy else 'direct'}
         if wrapped:
             execution_sender = executed_commitment(value, tx, receipt)
             if not execution_sender:
                 return outcome('TAMPERED', 'EXECUTED_COMMITMENT_MISMATCH', 'No successful executed zero-value call matches the sink and image revision commitment.')
             extra = {'verification_mode': 'wallet_delegation_trace', 'execution_sender': execution_sender}
-        return outcome('VERIFIED', 'VERIFIED', 'Current image digest and successful canonical transaction match.', expected_sender=sender, **extra)
+        return outcome('VERIFIED', 'VERIFIED', 'Current image digest and successful canonical transaction match.',
+                       expected_sender=sender, **block_info, **extra)
     except RPCFailure as exc:
         messages = {
             'RPC_RATE_LIMITED': 'Public RPC is rate limited. Retry verification later; the transaction has not been declared invalid.',

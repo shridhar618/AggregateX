@@ -53,6 +53,19 @@ def test_registration_confirmation_reopen_and_tampering(saved, monkeypatch):
     assert c.post(path, json={'tx_hash': TX, 'sender': ADDRESS}).status_code == 409
 
 
+def test_verified_result_reports_canonical_block(saved, monkeypatch):
+    c, _, _, path = saved
+    value = c.get(path).json()
+    chain(monkeypatch, value, eth_getTransactionReceipt=None)
+    c.post(path, json={'tx_hash': TX, 'sender': ADDRESS})
+    chain(monkeypatch, value, eth_getBlockByNumber={'hash': BLOCK, 'timestamp': '0x6720f000'})
+    result = c.get(path).json()
+    assert result['status'] == 'VERIFIED'
+    assert (result['block_number'], result['block_hash'], result['block_time']) == (0x123, BLOCK.lower(), 0x6720f000)
+    chain(monkeypatch, value)  # an RPC block without a timestamp still verifies
+    assert c.get(path).json()['block_time'] is None
+
+
 @pytest.mark.parametrize('override,expected', [
     ({'tx': {'input': '0x00'}}, 'TAMPERED'),
     ({'tx': {'value': '0x1'}}, 'TAMPERED'),

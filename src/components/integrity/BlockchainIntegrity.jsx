@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { witness } from '../../api/witnesstrace'
 import { connectWallet, sendCommitment, INTEGRITY_SINK } from './wallet'
+import { ChainRecord, HashFingerprint, IntegrityChain } from './IntegrityVisuals'
 
 export default function BlockchainIntegrity({ caseId, versionId }) {
   const [result, setResult] = useState(null)
@@ -58,17 +59,27 @@ export default function BlockchainIntegrity({ caseId, versionId }) {
     setResult(await witness.operation(path, { tx_hash: tx.hash, sender: tx.from }))
   }
   const txHash = submitted || result?.tx_hash
+  const status = error ? 'ERROR' : result?.status || 'PENDING'
   return <section className="panel"><div className="panel__head"><h2 className="panel__title">Blockchain Integrity</h2></div><div className="panel__body wt-fields">
-    <p className="wt-id">Base Sepolia testnet · 84532. Registration sends a zero-value transaction to the fixed public sink {INTEGRITY_SINK} and uses test ETH for gas. Only a versioned hash commitment is public; image bytes and testimony stay local.</p>
-    <p role="status" aria-live="polite"><strong>{error ? 'ERROR' : result?.status || 'PENDING'}</strong> · {error || result?.message || 'Loading integrity record…'}</p>
-    <button className="btn" disabled={busy} onClick={() => run(async () => { const wallet = await connectWallet(); setAddress(wallet.address) })}>Connect MetaMask</button>
+    <div className={`wt-int-status is-${status.toLowerCase().replace(' ', '-')}`} role="status" aria-live="polite">
+      <strong>{status}</strong>
+      <span>{error || result?.message || 'Loading integrity record…'}</span>
+    </div>
+    <div className="wt-int">
+      <IntegrityChain result={result} loading={!result || busy} />
+      {result && <HashFingerprint original={result.sha256} current={result.current_sha256} />}
+      <ChainRecord result={result} txHash={txHash} sink={INTEGRITY_SINK} />
+    </div>
+    <p className="wt-id faint">Base Sepolia testnet · 84532. Registration sends a zero-value transaction to the fixed public sink {INTEGRITY_SINK} and uses test ETH for gas. Only a versioned hash commitment is public; image bytes and testimony stay local.</p>
+    <div className="wt-int-actions">
+      <button className="btn" disabled={busy} onClick={() => run(async () => { const wallet = await connectWallet(); setAddress(wallet.address) })}>Connect MetaMask</button>
+      <button className="btn btn--primary" disabled={busy || !result || result.status !== 'NOT REGISTERED' || !!submitted} onClick={() => run(register)}>Register on Blockchain</button>
+      <button className="btn" disabled={busy} onClick={() => run(verify)}>Verify Integrity</button>
+    </div>
     {address && <p className="mono wt-id">Wallet: {address}</p>}
-    <button className="btn btn--primary" disabled={busy || !result || result.status !== 'NOT REGISTERED' || !!submitted} onClick={() => run(register)}>Register on Blockchain</button>
-    <button className="btn" disabled={busy} onClick={() => run(verify)}>Verify Integrity</button>
     {result?.code && <p className="mono wt-id">Diagnostic: {result.code}{result.retryable ? ' · Safe to retry Verify Integrity; do not register again.' : ''}</p>}
     {result?.verification_mode === 'wallet_delegation_trace' && <p>Verified through the wallet’s delegated execution trace, including the zero-value call to the fixed sink.</p>}
     {busy && <p>Waiting for MetaMask or transaction verification…</p>}
     {txHash && <a className="wt-id" href={`https://sepolia.basescan.org/tx/${txHash}`} target="_blank" rel="noreferrer">View transaction on BaseScan: {txHash}</a>}
-    {result && <p className="mono wt-id">Original SHA-256: {result.sha256}<br />Current SHA-256: {result.current_sha256}</p>}
   </div></section>
 }
