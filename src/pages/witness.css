@@ -86,3 +86,14 @@
 .wt-int-record dd { margin: 2px 0 0; font-size: 13px; overflow-wrap: anywhere; }
 .wt-int-actions { display: flex; flex-wrap: wrap; gap: 8px; }
 
+/* ---------- Settings ---------- */
+.wt-settings { display: grid; gap: 16px; grid-template-columns: minmax(0, 1fr); max-width: 960px; }
+.wt-settings .panel__head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.wt-status-list { display: flex; flex-direction: column; margin: 0; padding: 0; list-style: none; }
+.wt-status-list li { display: grid; grid-template-columns: 10px minmax(0, 1fr) auto; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border); }
+.wt-status-list li:last-child { border-bottom: 0; }
+.wt-status-list li > div { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.wt-status-list__name { font-weight: 600; }
+.wt-status-list .faint { font-size: 12px; }
+.wt-status-list strong { font-size: 13px; font-weight: 500; text-align: right; }
+@media (max-width: 600px) { .wt-status-list li { grid-template-columns: 10px minmax(0, 1fr); } .wt-status-list strong { grid-column: 2; text-align: left; } }
