@@ -171,7 +171,9 @@ export default function Hero() {
       raf = 0
       el.style.setProperty('--mx', `${(mx * 100).toFixed(2)}%`)
       el.style.setProperty('--my', `${(my * 100).toFixed(2)}%`)
-      el.style.setProperty('--sy', `${Math.min(window.scrollY, 900).toFixed(0)}`)
+      const progress = Math.min(window.scrollY, 900) / 900
+      const easedProgress = progress * progress * (3 - 2 * progress)
+      el.style.setProperty('--sy', `${(easedProgress * 900).toFixed(1)}`)
     }
     const onMove = (e) => {
       const r = el.getBoundingClientRect()
@@ -182,6 +184,7 @@ export default function Hero() {
     const onScroll = () => { if (!raf) raf = requestAnimationFrame(apply) }
     if (canHover()) el.addEventListener('pointermove', onMove)
     window.addEventListener('scroll', onScroll, { passive: true })
+    apply()
     return () => {
       cancelAnimationFrame(raf)
       el.removeEventListener('pointermove', onMove)
