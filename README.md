@@ -1,6 +1,23 @@
 <img src="src/assets/brand/logo-wordmark.png" alt="Revelio" height="64" />
 
-# Revelio
+# Revelio + WitnessTrace AI
+
+The default application combines Revelio's React interface with WitnessTrace's FastAPI/SQLite backend and existing authenticated Codex CLI generation pipeline. It includes the 45-attribute Character Lab, immutable testimony/revisions, refinement, comparison, Digital Sketchpad, enhancement, reviewed 2D multi-view, case library and persisted PDF/JSON/PNG exports.
+
+```bash
+npm ci
+python3 -m venv witness-backend/.venv
+witness-backend/.venv/bin/python -m pip install -r witness-backend/requirements-test.txt
+npm run dev
+```
+
+Open **http://127.0.0.1:5182/register** or `/login`. The launcher uses loopback ports **5182 / 8021 / 8022**, refuses occupied ports and stores runtime data outside Git. AI generation requires the existing authenticated Codex CLI; it never falls back to the procedural renderer or another provider.
+
+See the [startup and rollback guide](docs/integration/STARTUP_GUIDE.md), [final integration report](docs/integration/FINAL_INTEGRATION_REPORT.md), [feature parity](docs/integration/FEATURE_PARITY.md), and [security review](docs/integration/SECURITY_REVIEW.md). Local integration is tested; remote publication remains gated by owner remediation of private artifacts already in b history. This is a local shared collection, not a public multi-tenant deployment.
+
+## Legacy Revelio design reference
+
+The original product description, screenshots, renderer/provider notes and historical commands below are retained as reference for explicit legacy mode (`VITE_WITNESSTRACE_LOCAL=0`). Use the linked startup guide for the default integrated app; the historical port-8000/provider instructions below are not its startup path.
 
 **From Witness Description to Forensic Sketch.**
 

@@ -1,0 +1,141 @@
+PASS real reference API registration
+PASS offline procedural synthetic seed
+PASS real reference API second revision
+PASS second synthetic library card
+PASS matrix dark-1920-landing active theme
+PASS matrix dark-1920-login active theme
+PASS matrix dark-1920-register active theme
+PASS matrix dark-1920-workspace active theme
+PASS matrix dark-1920-new active theme
+PASS matrix dark-1920-library active theme
+PASS matrix dark-1920-compare active theme
+PASS matrix dark-1920-settings active theme
+MATRIX dark 1920 complete
+PASS matrix dark-1440-landing active theme
+PASS matrix dark-1440-login active theme
+PASS matrix dark-1440-register active theme
+PASS matrix dark-1440-workspace active theme
+PASS matrix dark-1440-new active theme
+PASS matrix dark-1440-library active theme
+PASS matrix dark-1440-compare active theme
+PASS matrix dark-1440-settings active theme
+MATRIX dark 1440 complete
+PASS matrix dark-1280-landing active theme
+PASS matrix dark-1280-login active theme
+PASS matrix dark-1280-register active theme
+PASS matrix dark-1280-workspace active theme
+PASS matrix dark-1280-new active theme
+PASS matrix dark-1280-library active theme
+PASS matrix dark-1280-compare active theme
+PASS matrix dark-1280-settings active theme
+MATRIX dark 1280 complete
+PASS matrix dark-768-landing active theme
+PASS matrix dark-768-login active theme
+PASS matrix dark-768-register active theme
+PASS matrix dark-768-workspace active theme
+PASS matrix dark-768-new active theme
+PASS matrix dark-768-library active theme
+PASS matrix dark-768-compare active theme
+PASS matrix dark-768-settings active theme
+MATRIX dark 768 complete
+PASS matrix dark-390-landing active theme
+PASS matrix dark-390-login active theme
+PASS matrix dark-390-register active theme
+PASS matrix dark-390-workspace active theme
+PASS matrix dark-390-new active theme
+PASS matrix dark-390-library active theme
+PASS matrix dark-390-compare active theme
+PASS matrix dark-390-settings active theme
+MATRIX dark 390 complete
+PASS matrix light-1920-landing active theme
+PASS matrix light-1920-login active theme
+PASS matrix light-1920-register active theme
+PASS matrix light-1920-workspace active theme
+PASS matrix light-1920-new active theme
+PASS matrix light-1920-library active theme
+PASS matrix light-1920-compare active theme
+PASS matrix light-1920-settings active theme
+MATRIX light 1920 complete
+PASS matrix light-1440-landing active theme
+PASS matrix light-1440-login active theme
+PASS matrix light-1440-register active theme
+PASS matrix light-1440-workspace active theme
+PASS matrix light-1440-new active theme
+PASS matrix light-1440-library active theme
+PASS matrix light-1440-compare active theme
+PASS matrix light-1440-settings active theme
+MATRIX light 1440 complete
+PASS matrix light-1280-landing active theme
+PASS matrix light-1280-login active theme
+PASS matrix light-1280-register active theme
+PASS matrix light-1280-workspace active theme
+PASS matrix light-1280-new active theme
+PASS matrix light-1280-library active theme
+PASS matrix light-1280-compare active theme
+PASS matrix light-1280-settings active theme
+MATRIX light 1280 complete
+PASS matrix light-768-landing active theme
+PASS matrix light-768-login active theme
+PASS matrix light-768-register active theme
+PASS matrix light-768-workspace active theme
+PASS matrix light-768-new active theme
+PASS matrix light-768-library active theme
+PASS matrix light-768-compare active theme
+PASS matrix light-768-settings active theme
+MATRIX light 768 complete
+PASS matrix light-390-landing active theme
+PASS matrix light-390-login active theme
+PASS matrix light-390-register active theme
+PASS matrix light-390-workspace active theme
+PASS matrix light-390-new active theme
+PASS matrix light-390-library active theme
+PASS matrix light-390-compare active theme
+PASS matrix light-390-settings active theme
+MATRIX light 390 complete
+PASS landing live procedural demo
+PASS registration validation
+PASS login real server rejection
+PASS login form successful redirect
+PASS guided tab
+PASS guided answer applied
+PASS witness tab
+PASS real witness merge comparison
+PASS combined profile applied
+PASS keyboard extraction and real procedural preview
+PASS viewer zoom
+PASS adjustment slider keyboard
+PASS undo adjustment
+PASS redo adjustment
+PASS real refinement proposal
+PASS apply refinement proposal
+PASS save through UI
+PASS modal focus trapped
+PASS modal keyboard focus stays inside
+PASS modal Escape closes
+PASS delete confirmation cancellation
+PASS library search
+PASS reference png export
+PASS reference json export
+PASS reference report export
+PASS compare keyboard
+PASS compare drag
+PASS compare version selection
+PASS side-by-side view
+PASS reduce-motion preference
+PASS health recheck
+PASS destructive action gated
+PASS confirmation text unlocks
+PASS theme toggle
+PASS theme persists reload
+PASS sidebar navigation workspace
+PASS sidebar navigation new
+PASS sidebar navigation library
+PASS sidebar navigation compare
+PASS sidebar navigation settings
+PASS mobile sidebar opens
+PASS mobile navigation closes drawer
+PASS landing mobile menu Escape
+PASS workspace controlled 503 offline state
+PASS notifications opens and Escape closes
+PASS pricing notice is labelled planned
+PASS normal motion source renders
