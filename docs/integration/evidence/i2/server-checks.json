@@ -1,0 +1,453 @@
+{
+  "mode": "synthetic fake-CLI HTTP verification; no live AI generation",
+  "checks": [
+    "launcher starts independently on its default 8022",
+    "health states tool availability caveat",
+    "isolated store starts empty",
+    "standalone preserved workbench HTML served",
+    "all preserved static/icon/worker assets byte-identical over HTTP",
+    "45 Character Lab fields in seven groups",
+    "actual enhancement controls and presets",
+    "exact original testimony frozen with Unknown/source/uncertainty preserved",
+    "frozen testimony rejects replacement",
+    "prompt preview includes exact recorded account",
+    "validated fake-CLI job completed",
+    "persisted initial image SHA-256 and Lab workspace",
+    "refinement retry reuses persisted request key",
+    "validated fake-CLI job completed",
+    "refinement immutable child lineage",
+    "saved editable sketch project retains operations",
+    "identity enhancement saves new immutable revision",
+    "multi-view clearly text-only 2D",
+    "validated fake-CLI job completed",
+    "four reviewed multi-view crops match checksums",
+    "multi-view history persisted",
+    "report request retry is idempotent",
+    "report list includes persisted bundle",
+    "PDF JSON PNG exports match saved SHA-256 and byte counts",
+    "report exact testimony and all 45 attribute rows",
+    "report HTML preview served",
+    "direct JSON PNG exports work",
+    "case-scoped edits pixels and exports reject other-case IDs",
+    "invalid IDs and path traversal do not expose source files",
+    "actual isolated restart retains testimony versions selection preferred",
+    "all revision and report bytes unchanged after restart",
+    "SQLite integrity and foreign keys pass",
+    "all runtime roots outside repository"
+  ],
+  "response_shapes": {
+    "GET /api/health": {
+      "type": "object",
+      "keys": [
+        "codex_installed",
+        "generated_images_directory",
+        "message"
+      ]
+    },
+    "GET /api/cases": {
+      "type": "array",
+      "item": null
+    },
+    "GET /api/lab-schema": {
+      "type": "object",
+      "keys": [
+        "groups"
+      ]
+    },
+    "GET /api/enhance-schema": {
+      "type": "object",
+      "keys": [
+        "controls",
+        "defaults",
+        "engine",
+        "presets"
+      ]
+    },
+    "POST /api/cases": {
+      "type": "object",
+      "keys": [
+        "created_at",
+        "draft",
+        "events",
+        "frozen_at",
+        "id",
+        "jobs",
+        "last_generated_draft",
+        "preferred_version_id",
+        "refinements",
+        "revision",
+        "selected_version_id",
+        "statements",
+        "synthetic",
+        "title",
+        "versions"
+      ]
+    },
+    "PUT /api/cases/c857905409634e64b0854a68d146d8c9": {
+      "type": "object",
+      "keys": [
+        "detail"
+      ]
+    },
+    "POST /api/cases/c857905409634e64b0854a68d146d8c9/freeze": {
+      "type": "object",
+      "keys": [
+        "created_at",
+        "draft",
+        "events",
+        "frozen_at",
+        "id",
+        "jobs",
+        "last_generated_draft",
+        "preferred_version_id",
+        "refinements",
+        "revision",
+        "selected_version_id",
+        "statements",
+        "synthetic",
+        "title",
+        "versions"
+      ]
+    },
+    "POST /api/cases/c857905409634e64b0854a68d146d8c9/clarifications": {
+      "type": "object",
+      "keys": [
+        "created_at",
+        "draft",
+        "events",
+        "frozen_at",
+        "id",
+        "jobs",
+        "last_generated_draft",
+        "preferred_version_id",
+        "refinements",
+        "revision",
+        "selected_version_id",
+        "statements",
+        "synthetic",
+        "title",
+        "versions"
+      ]
+    },
+    "POST /api/cases/c857905409634e64b0854a68d146d8c9/prompt-preview": {
+      "type": "object",
+      "keys": [
+        "description",
+        "length",
+        "limit",
+        "over_limit",
+        "style"
+      ]
+    },
+    "POST /api/generate": {
+      "type": "object",
+      "keys": [
+        "image_url",
+        "job_id",
+        "message",
+        "status"
+      ]
+    },
+    "GET /api/jobs/6da419fd82074fb68a316e0c724d963b": {
+      "type": "object",
+      "keys": [
+        "image_url",
+        "job_id",
+        "message",
+        "status"
+      ]
+    },
+    "GET /api/cases/c857905409634e64b0854a68d146d8c9": {
+      "type": "object",
+      "keys": [
+        "created_at",
+        "draft",
+        "events",
+        "frozen_at",
+        "id",
+        "jobs",
+        "last_generated_draft",
+        "preferred_version_id",
+        "refinements",
+        "revision",
+        "selected_version_id",
+        "statements",
+        "synthetic",
+        "title",
+        "versions"
+      ]
+    },
+    "POST /api/cases/c857905409634e64b0854a68d146d8c9/selection": {
+      "type": "object",
+      "keys": [
+        "created_at",
+        "draft",
+        "events",
+        "frozen_at",
+        "id",
+        "jobs",
+        "last_generated_draft",
+        "preferred_version_id",
+        "refinements",
+        "revision",
+        "selected_version_id",
+        "statements",
+        "synthetic",
+        "title",
+        "versions"
+      ]
+    },
+    "POST /api/cases/c857905409634e64b0854a68d146d8c9/refinement-preview": {
+      "type": "object",
+      "keys": [
+        "description",
+        "length",
+        "limit",
+        "mode",
+        "over_limit",
+        "style"
+      ]
+    },
+    "POST /api/cases/c857905409634e64b0854a68d146d8c9/refine": {
+      "type": "object",
+      "keys": [
+        "image_url",
+        "job_id",
+        "message",
+        "status"
+      ]
+    },
+    "GET /api/jobs/8712cddeed4d4add97cb04b9e55538a0": {
+      "type": "object",
+      "keys": [
+        "image_url",
+        "job_id",
+        "message",
+        "status"
+      ]
+    },
+    "GET /api/cases/c857905409634e64b0854a68d146d8c9/versions/8712cddeed4d4add97cb04b9e55538a0/sketch": {
+      "type": "object",
+      "keys": [
+        "modified_illustration",
+        "project",
+        "source_url",
+        "version_id"
+      ]
+    },
+    "POST /api/cases/c857905409634e64b0854a68d146d8c9/local-edits": {
+      "type": "object",
+      "keys": [
+        "replayed",
+        "sha256",
+        "version_id"
+      ]
+    },
+    "GET /api/cases/c857905409634e64b0854a68d146d8c9/versions/1b202f3cf2904e059a8cf677fc291a44/sketch": {
+      "type": "object",
+      "keys": [
+        "modified_illustration",
+        "project",
+        "source_url",
+        "version_id"
+      ]
+    },
+    "GET /api/cases/c857905409634e64b0854a68d146d8c9/versions/1b202f3cf2904e059a8cf677fc291a44/enhance": {
+      "type": "object",
+      "keys": [
+        "adjustments",
+        "engine",
+        "parent_id",
+        "source_id",
+        "source_url"
+      ]
+    },
+    "POST /api/cases/c857905409634e64b0854a68d146d8c9/enhancements": {
+      "type": "object",
+      "keys": [
+        "replayed",
+        "sha256",
+        "version_id"
+      ]
+    },
+    "POST /api/cases/c857905409634e64b0854a68d146d8c9/imports": {
+      "type": "object",
+      "keys": [
+        "replayed",
+        "sha256",
+        "version_id"
+      ]
+    },
+    "POST /api/cases/c857905409634e64b0854a68d146d8c9/multiview-preview": {
+      "type": "object",
+      "keys": [
+        "description",
+        "image_reference_used",
+        "length",
+        "limit",
+        "over_limit",
+        "route",
+        "style"
+      ]
+    },
+    "POST /api/cases/c857905409634e64b0854a68d146d8c9/multiview": {
+      "type": "object",
+      "keys": [
+        "image_url",
+        "job_id",
+        "message",
+        "status"
+      ]
+    },
+    "GET /api/jobs/053c454958484689ac4663a5f95897a3": {
+      "type": "object",
+      "keys": [
+        "image_url",
+        "job_id",
+        "message",
+        "status"
+      ]
+    },
+    "POST /api/cases/c857905409634e64b0854a68d146d8c9/views/053c454958484689ac4663a5f95897a3/layouts": {
+      "type": "object",
+      "keys": [
+        "created_at",
+        "id",
+        "note",
+        "panels",
+        "source",
+        "source_sha256"
+      ]
+    },
+    "GET /api/cases/c857905409634e64b0854a68d146d8c9/multiview": {
+      "type": "object",
+      "keys": [
+        "image_reference_used",
+        "requests",
+        "route"
+      ]
+    },
+    "POST /api/cases/c857905409634e64b0854a68d146d8c9/reports": {
+      "type": "object",
+      "keys": [
+        "case_id",
+        "created_at",
+        "files",
+        "id",
+        "preview_url",
+        "version_id"
+      ]
+    },
+    "GET /api/cases/c857905409634e64b0854a68d146d8c9/reports": {
+      "type": "array",
+      "item": {
+        "type": "object",
+        "keys": [
+          "case_id",
+          "created_at",
+          "files",
+          "id",
+          "preview_url",
+          "version_id"
+        ]
+      }
+    },
+    "GET /api/cases/c857905409634e64b0854a68d146d8c9/reports/8fa02351242f4a658042bb3e7d47208d/json": {
+      "type": "object",
+      "keys": [
+        "attribute_summary",
+        "case",
+        "case_events",
+        "disclaimer",
+        "generation_jobs",
+        "heading",
+        "multi_view_requests",
+        "notices",
+        "panel_reviews",
+        "persisted_case_settings",
+        "refinement_history",
+        "report_created_at",
+        "report_id",
+        "revision_history",
+        "schema_version",
+        "selected_attribute_snapshot",
+        "selected_image_export",
+        "selected_version",
+        "statements"
+      ]
+    },
+    "GET /api/cases/c857905409634e64b0854a68d146d8c9/versions/74922f1e704a40b8b294f6cdf3b56e0a/export.json": {
+      "type": "object",
+      "keys": [
+        "attribute_summary",
+        "case",
+        "case_events",
+        "disclaimer",
+        "generation_jobs",
+        "heading",
+        "multi_view_requests",
+        "notices",
+        "panel_reviews",
+        "persisted_case_settings",
+        "refinement_history",
+        "report_created_at",
+        "report_id",
+        "revision_history",
+        "schema_version",
+        "selected_attribute_snapshot",
+        "selected_image_export",
+        "selected_version",
+        "statements"
+      ]
+    },
+    "GET /api/cases/c2336c3ad5b3468a898e730549d83d94/versions/6da419fd82074fb68a316e0c724d963b/sketch": {
+      "type": "object",
+      "keys": [
+        "detail"
+      ]
+    },
+    "GET /api/cases/c2336c3ad5b3468a898e730549d83d94/versions/6da419fd82074fb68a316e0c724d963b/enhance": {
+      "type": "object",
+      "keys": [
+        "detail"
+      ]
+    },
+    "GET /api/cases/c2336c3ad5b3468a898e730549d83d94/versions/6da419fd82074fb68a316e0c724d963b/pixels": {
+      "type": "object",
+      "keys": [
+        "detail"
+      ]
+    },
+    "GET /api/cases/c2336c3ad5b3468a898e730549d83d94/versions/6da419fd82074fb68a316e0c724d963b/export.png": {
+      "type": "object",
+      "keys": [
+        "detail"
+      ]
+    },
+    "GET /api/cases/c2336c3ad5b3468a898e730549d83d94/versions/6da419fd82074fb68a316e0c724d963b/export.json": {
+      "type": "object",
+      "keys": [
+        "detail"
+      ]
+    },
+    "GET /api/cases/c2336c3ad5b3468a898e730549d83d94/reports/8fa02351242f4a658042bb3e7d47208d/pdf": {
+      "type": "object",
+      "keys": [
+        "detail"
+      ]
+    },
+    "GET /images/not-a-record": {
+      "type": "object",
+      "keys": [
+        "detail"
+      ]
+    }
+  },
+  "port": 8022,
+  "server_starts": 2,
+  "static_assets_checked": 35,
+  "synthetic_cases": 2,
+  "synthetic_versions": 6,
+  "runtime_external": true,
+  "owned_server_stopped": true
+}

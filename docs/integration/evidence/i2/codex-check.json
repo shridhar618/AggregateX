@@ -1,0 +1,9 @@
+{
+  "binary_available": true,
+  "version": "codex-cli 0.165.0",
+  "login_status_exit_code": 0,
+  "authenticated_status_reported": true,
+  "auth_output_retained": false,
+  "live_generation_submitted": false,
+  "quota_or_tool_availability_proven": false
+}

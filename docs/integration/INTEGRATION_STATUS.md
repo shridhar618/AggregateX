@@ -37,12 +37,28 @@ Security gates: **OWNER-SEC-01 OPEN** — owners must classify/remediate already
 
 Checkpoint: local commit titled `docs: preserve Revelio visual baseline and record I1 risks` (resolve SHA from git log). No merge, cherry-pick or push. I2 requires a new explicit NEXT.
 
+## I2 — PASS: WitnessTrace backend preservation and safe import
+
+Imported 57 allowlisted files from committed b `49f63ee4e242efe0c5aa4aef0a524652e75cfd5a` into `witness-backend/`. No merge/cherry-pick, private runtime data or remote operation. 52 files are byte-identical; five reviewed relocation-only differences cover app output/work environment paths, isolated launcher, test runtime roots and two code-only fixture paths. Every app function/class/route/model AST is unchanged; all six store/schema modules and 35 static assets retain original bytes.
+
+Preserved all original eight-phase functionality and all 54 pytest tests. Original private historical ledgers/IDs/browser evidence were excluded; safe README/demo/phase summaries are provided. The 41 non-pytest historical browser drivers remain in original source/history because they target 8001/private evidence; no fresh browser regression pass is claimed.
+
+Fresh tests: original suite54 passed; full suite with two relocation/launcher checks **56 passed** (27.62s, one existing Starlette/httpx deprecation warning); pip check PASS. **33 isolated HTTP checks** pass through actual launcher/start/restart on8022 with disposable synthetic data and an explicitly fake CLI. All35 static assets match hashes over HTTP; two cases/six revisions, exact statements, selection/preferred and all report/image bytes persist after actual owned-process restart; SQLite integrity/FKs pass. No real AI image call was submitted. CodexCLI0.165.0 is installed and privately reports authenticated login; quota/tool availability remains unproven.
+
+Frontend build and lint pass. React/source/assets/API client/Vite/package/lock and existing Revelio backend remain untouched. I1 manifest68/69 files match; the only configuration exception is adding witness-backend to existing ESLint backend/dist exclusions. Root .gitignore now prevents new runtime/SQLite/Codex auth additions. No source redesign or API connection occurred.
+
+Created `I2_BACKEND_PRESERVATION.md`, `I2_BACKEND_API_INVENTORY.md` (all34 application routes plus framework/static behavior), source/test/docs tree and `evidence/i2/` verification/provenance/logs/OpenAPI. Exact selected hashes/diffs and changed paths are in evidence manifests. Original94-file source hashes still match in both original/migrated projects; original data was not opened for tests. Private recovery bundles/backups verified. Ports8000/8001 never contacted or signaled; original8001 PID143217 unchanged; owned8022 stopped.
+
+**OWNER-SEC-01 OPEN** before final shared merge; .gitignore does not remediate remote b history. **DEP-01 OPEN** from I1. Original WitnessTrace has no authentication; I3 must apply real auth without fake login. Shared-output attribution, process-local locking, text-only drift, 2D rather than3D and absent private data remain documented limitations.
+
+Checkpoint: local commit titled `feat: preserve WitnessTrace backend with isolated runtime and tests` (resolve SHA from git log). Main/b/backend unchanged; no push/merge. I3 requires explicit NEXT and has not started.
+
 ## Remaining phases
 
 | Phase | Status | Next required work |
 |---|---|---|
 | I1 frontend preservation | PASS | See I1 reports/evidence; source preserved unchanged |
-| I2 backend preservation | NOT STARTED | Selectively preserve verified b source/tests without runtime artifacts |
+| I2 backend preservation | PASS | Preserved source and tests; independent service verified; see I2 reports |
 | I3 API integration | NOT STARTED | Actual contracts/adapter/auth/proxy and integration tests; create API_MAPPING.md |
 | I4 complete features | NOT STARTED | Coherent full UI and engine lifecycle parity; create FEATURE_PARITY.md |
 | I5 visual fidelity | NOT STARTED | All viewport/theme screenshots and fixes; create VISUAL_QA.md |
@@ -50,4 +66,4 @@ Checkpoint: local commit titled `docs: preserve Revelio visual baseline and reco
 | I7 automated QA | NOT STARTED | Full browser workflow, restart/export checks and permitted real CLI generation |
 | I8 final Git | NOT STARTED | Final reviewed integration commit/merge preparation; create FINAL_INTEGRATION_REPORT.md |
 
-STOPPED: awaiting explicit NEXT. I1 is complete; I2 has not begun. Do not merge main before I8; do not push remote main without explicit approval of final commit/push.
+STOPPED: awaiting explicit NEXT. I2 is complete; I3 has not begun. Do not merge main before I8; do not push remote main without explicit approval of final commit/push.
