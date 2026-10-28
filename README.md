@@ -1,3 +1,8 @@
+# ssdnexus-t1-20
+Official HackFest 2026 repository for team SSDNexus (T1-20).
+
+---
+
 # ShareLock
 _Submission to the Gemini 3 Paris Hackathon organized by Cerebral Valley on 14.03.2026 which was awarded 2nd place._
 
