@@ -3694,3 +3694,26 @@ html:not([data-theme='light']) .lp-brand .logo-mark {
     opacity: 0.42;
   }
 }
+
+/* Log in: beside the theme toggle on narrower screens; at the end of the
+   stacked section links on wide screens, where the toggle has no room beside it. */
+.lp-nav__links-login {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .lp-nav__right .lp-nav__login {
+    display: none;
+  }
+
+  .lp-nav__links .lp-nav__links-login {
+    display: block;
+    margin-top: 0.45rem;
+    padding-top: 0.45rem;
+    border-top: 1px solid color-mix(in srgb, var(--text-3) 35%, transparent);
+  }
+
+  .lp-nav__links .lp-nav__links-login a {
+    color: var(--cyan);
+  }
+}
