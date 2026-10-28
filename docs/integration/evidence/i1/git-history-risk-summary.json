@@ -1,0 +1,18 @@
+{
+  "ref": "49f63ee4e242efe0c5aa4aef0a524652e75cfd5a",
+  "tracked_runtime_counts": {
+    "data/": 56,
+    "outputs/": 14,
+    "work/": 34,
+    "evidence/": 434,
+    "migration-private/": 12
+  },
+  "text_blobs_scanned": 291,
+  "limited_secret_shape_hits": {
+    "provider_key": [],
+    "private_key": [],
+    "token_field": []
+  },
+  "privacy_exposure": "runtime records/images/reports present; real-person classification cannot be ruled out; owner remediation gate required",
+  "scope_limit": "pattern scan is not a full secret or privacy clearance; no values copied to report"
+}
