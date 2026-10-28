@@ -1,5 +1,6 @@
 import { lazy, Suspense, useEffect, useState } from 'react'
 import { witnessMode } from './api/witnesstrace'
+import { WitnessLibrary, WitnessCompare, WitnessSettings, ProcessingTools } from './pages/WitnessTools'
 import WitnessStudio, { WitnessWorkspace } from './pages/WitnessStudio'
 import { api } from './api/client'
 import BootScreen from './components/shell/BootScreen'
@@ -117,9 +118,9 @@ function Shell() {
   else if (page === 'workspace') content = witnessMode ? <WitnessWorkspace /> : <Workspace />
   else if (page === 'new' && witnessMode) content = <WitnessStudio key={wt.record?.id || 'new'} />
   else if (page === 'new') content = <NewSketch key={`${route.params.sketch || 'new'}-${route.params.rev || ''}-${route.params.fresh || ''}`} params={route.params} />
-  else if (page === 'library') content = <Library />
-  else if (page === 'compare') content = <Compare params={route.params} />
-  else content = <Settings />
+  else if (page === 'library') content = witnessMode ? <WitnessLibrary key={wt.record?.id} /> : <Library />
+  else if (page === 'compare') content = witnessMode ? <WitnessCompare key={wt.record?.id} /> : <Compare params={route.params} />
+  else content = witnessMode ? <WitnessSettings /> : <Settings />
 
   return (
     <div className={`app ${witnessMode ? 'app--witness' : ''}`}>
@@ -128,9 +129,10 @@ function Shell() {
       <Sidebar current={page} open={navOpen} onNavigate={() => setNavOpen(false)} onClose={() => setNavOpen(false)} />
       <div className="app__main">
         <Topbar title={title} eyebrow={eyebrow} onMenu={() => setNavOpen(true)} />
-        <main id="main" className="content" key={page}>
-          {witnessMode && <p className="alert">Local integration · synthetic cases only · Codex generation uses the authenticated CLI. {['library', 'compare', 'settings'].includes(page) && 'This legacy Revelio screen is not connected to WitnessTrace; full integration is deferred to I4.'}</p>}
+        <main id="main" className="content" key={witnessMode ? 'witness' : page}>
+          {witnessMode && <p className="alert">Local integration · synthetic cases only · Codex generation uses the authenticated CLI.</p>}
           <Suspense fallback={<PageFallback />}>{content}</Suspense>
+          {witnessMode && wt.record && <div hidden={page !== 'new'}><ProcessingTools key={wt.record.id} /></div>}
         </main>
         <footer className="app__foot">
           <span className="mono">REVELIO · v1.0</span>

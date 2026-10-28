@@ -60,3 +60,6 @@ __pycache__/
 *.db-shm
 .codex/
 auth.json
+
+# Local virtual environments, including reusable development symlinks
+.venv

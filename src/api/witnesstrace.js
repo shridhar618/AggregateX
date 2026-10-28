@@ -7,14 +7,14 @@ export class WitnessError extends Error {
   constructor(status, message) { super(message); this.status = status }
 }
 export function createWitnessClient(fetcher = (...args) => fetch(...args), timeout = 15000) {
-  async function request(path, { body, signal, validate = () => true } = {}) {
+  async function request(path, { body, signal, method, validate = () => true } = {}) {
     const controller = new AbortController()
     const abort = () => controller.abort(signal.reason)
     if (signal?.aborted) abort()
     signal?.addEventListener('abort', abort, { once: true })
     const timer = setTimeout(() => controller.abort(), timeout)
     try {
-      const response = await fetcher(BASE + path, { method: body === undefined ? 'GET' : 'POST',
+      const response = await fetcher(BASE + path, { method: method || (body === undefined ? 'GET' : 'POST'),
         credentials: 'same-origin', signal: controller.signal,
         headers: body === undefined ? undefined : { 'Content-Type': 'application/json' },
         body: body === undefined ? undefined : JSON.stringify(body) })
@@ -37,6 +37,7 @@ export function createWitnessClient(fetcher = (...args) => fetch(...args), timeo
   const isCase = v => ID.test(v?.id) && Number.isInteger(v.revision) && Array.isArray(v.versions) && v.versions.every(r => ID.test(r.id) && r.image_url === `/images/${r.id}`) && Array.isArray(v.jobs) && v.jobs.every(j => ID.test(j.id)) && Array.isArray(v.statements) && v.statements.every(s => typeof s.text === 'string') && v.draft && typeof v.draft === 'object'
   const isJob = v => ID.test(v?.job_id) && ['working', 'complete', 'failed'].includes(v.status) && (v.status !== 'complete' || v.image_url === `/images/${v.job_id}`)
   return {
+    operation: (path, body, method) => request(path, { body, method }),
     health: signal => request('/api/health', { signal, validate: v => typeof v?.codex_installed === 'boolean' }),
     listCases: signal => request('/api/cases', { signal, validate: v => Array.isArray(v) && v.every(c => ID.test(c.id) && typeof c.title === 'string') }),
     createCase: data => request('/api/cases', { body: data, validate: isCase }),

@@ -31,7 +31,7 @@ export default function useWitnessCases() {
   const select = useCallback(async id => {
     const ticket = ++epoch.current
     poller.current?.abort()
-    setError(''); setJob(null); setRecord(null)
+    setError(''); setJob(null); setRecord(current => current?.id === id ? current : null)
     const saved = await witness.getCase(id)
     if (!mounted.current || epoch.current !== ticket) return
     safeStorage.set('revelio.witness.case', id)
@@ -64,9 +64,12 @@ export default function useWitnessCases() {
     finally { lock.current = false; if (mounted.current) setBusy(false) }
   }
   return { record, cases, connection, error, busy, job, reconnect,
-    select: id => act(() => select(id)),
-    create: title => act(async () => {
-      const saved = await witness.createCase({ title, synthetic: true })
+    refresh: () => act(() => select(record.id)),
+    update: operation => act(async () => { const result = await operation(); await select(record.id); return result }),
+    follow: handle => { setJob(handle); void follow(record.id, handle.job_id, epoch.current) },
+    select: id => { if (!window.dispatchEvent(new Event('witness-before-case', { cancelable: true }))) return; return act(() => select(id)) },
+    create: (title, synthetic = true) => act(async () => {
+      const saved = await witness.createCase({ title, synthetic })
       setCases(await witness.listCases()); return select(saved.id)
     }),
     freeze: text => act(async () => { setRecord(await witness.freeze(record.id, record.revision, text)) }),
