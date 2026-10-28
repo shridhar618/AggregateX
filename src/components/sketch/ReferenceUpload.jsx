@@ -57,7 +57,7 @@ const ReferenceUpload = ({ value, onChange, supported, providerLabel }) => {
             {error && <p className="field__error" role="alert">{error}</p>}
             <p className="field__hint">
               Sent to the hosted provider with this one request as visual context, after the server re-encodes it to strip
-              metadata. It is never stored, and VeriSketch performs no face recognition or identity matching.
+              metadata. It is never stored, and Revelio performs no face recognition or identity matching.
             </p>
           </>
         )}

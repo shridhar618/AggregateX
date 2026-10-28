@@ -1,5 +1,5 @@
 {
-  "name": "verisketch-ai",
+  "name": "revelio",
   "private": true,
   "version": "1.0.0",
   "type": "module",
@@ -28,5 +28,5 @@
     "globals": "^17.4.0",
     "vite": "^8.0.0"
   },
-  "description": "VeriSketch AI \u2014 From Witness Description to Forensic Sketch."
+  "description": "Revelio \u2014 From Witness Description to Forensic Sketch."
 }

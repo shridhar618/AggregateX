@@ -1,4 +1,4 @@
-// Thin client for the local VeriSketch API. No provider credentials ever pass
+// Thin client for the local Revelio API. No provider credentials ever pass
 // through the browser: hosted providers are configured on the backend only.
 const BASE = (import.meta.env.VITE_API_BASE || '/api').replace(/\/$/, '')
 
@@ -29,7 +29,7 @@ async function request(path, { method = 'GET', body, signal, raw = false } = {})
     })
   } catch (err) {
     if (err?.name === 'AbortError') throw err
-    throw new ApiError(0, 'The local VeriSketch engine is not reachable. Start it with “npm run dev:api”.')
+    throw new ApiError(0, 'The local Revelio engine is not reachable. Start it with “npm run dev:api”.')
   }
   if (!res.ok) {
     let data = {}

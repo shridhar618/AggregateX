@@ -37,7 +37,7 @@ def test_invalid_uploads_rejected(bad):
 
 
 def test_oversized_upload_rejected(monkeypatch):
-    monkeypatch.setenv("VERISKETCH_MAX_UPLOAD_MB", "0")
+    monkeypatch.setenv("REVELIO_MAX_UPLOAD_MB", "0")
     with pytest.raises(UploadError):
         validate_reference_image(_png_data_url())
 
@@ -59,7 +59,7 @@ def test_local_provider_unavailable_is_honest(client):
 
 
 def test_hosted_failure_is_reported_without_leaking_key(client, monkeypatch):
-    monkeypatch.setenv("VERISKETCH_HOSTED_PROVIDER", "gemini")
+    monkeypatch.setenv("REVELIO_HOSTED_PROVIDER", "gemini")
     monkeypatch.setenv("GEMINI_API_KEY", FAKE_KEY)
 
     def boom(req, timeout=0):
@@ -77,7 +77,7 @@ def test_hosted_failure_is_reported_without_leaking_key(client, monkeypatch):
 
 
 def test_hosted_success_is_labelled_ai(client, monkeypatch):
-    monkeypatch.setenv("VERISKETCH_HOSTED_PROVIDER", "gemini")
+    monkeypatch.setenv("REVELIO_HOSTED_PROVIDER", "gemini")
     monkeypatch.setenv("GEMINI_API_KEY", FAKE_KEY)
     buf = io.BytesIO()
     Image.new("RGB", (64, 80), "white").save(buf, "PNG")

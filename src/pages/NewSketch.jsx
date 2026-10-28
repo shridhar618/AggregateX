@@ -15,7 +15,7 @@ import { downloadBlob, emptyProfile, formatDateTime, profileSummary, safeStorage
 import { navigate } from '../lib/router'
 import { useApp } from '../state/AppContext'
 
-const DRAFT_KEY = 'verisketch.draft'
+const DRAFT_KEY = 'revelio.draft'
 
 // ---- profile history (undo / redo) ---------------------------------------
 function historyReducer(state, action) {
@@ -268,7 +268,7 @@ export default function NewSketch({ params }) {
     }
     setDownloadBusy(true)
     try {
-      downloadBlob(await api.renderPng(profile, caption), `${sketch?.id || 'verisketch-draft'}-preview.png`)
+      downloadBlob(await api.renderPng(profile, caption), `${sketch?.id || 'revelio-draft'}-preview.png`)
     } catch (err) {
       notify({ kind: 'error', title: 'Export failed', message: err.message })
     } finally {

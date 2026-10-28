@@ -1,10 +1,10 @@
 """Optional hosted AI provider (Google Gemini image generation).
 
-* Disabled unless VERISKETCH_HOSTED_PROVIDER=gemini AND GEMINI_API_KEY are set
+* Disabled unless REVELIO_HOSTED_PROVIDER=gemini AND GEMINI_API_KEY are set
   in the backend environment. The key never reaches the browser.
 * The key is sent in the ``x-goog-api-key`` header, never in the URL, so it
   cannot appear in URL logs.
-* Usage may be billed by Google. VeriSketch does not claim this is free; check
+* Usage may be billed by Google. Revelio does not claim this is free; check
   your own quota and pricing before enabling it.
 * Never silently replaced: if this provider fails, the API returns an error and
   the operator chooses whether to use the offline composite instead.
@@ -65,7 +65,7 @@ class HostedGeminiProvider(GenerationProvider):
         s = get_settings()
         if s.hosted_provider != "gemini":
             return {"available": False, "state": "disabled",
-                    "reason": "Disabled. Set VERISKETCH_HOSTED_PROVIDER=gemini and GEMINI_API_KEY in backend/.env to enable.",
+                    "reason": "Disabled. Set REVELIO_HOSTED_PROVIDER=gemini and GEMINI_API_KEY in backend/.env to enable.",
                     "data_leaves_device": True, "model": s.gemini_model}
         if not s.gemini_api_key:
             return {"available": False, "state": "missing_key",

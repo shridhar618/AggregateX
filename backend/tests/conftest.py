@@ -10,8 +10,9 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 @pytest.fixture(autouse=True)
 def isolated_env(tmp_path, monkeypatch):
     """Each test gets its own data directory and no hosted-provider credentials."""
-    monkeypatch.setenv("VERISKETCH_DATA_DIR", str(tmp_path / "data"))
-    for key in ("VERISKETCH_HOSTED_PROVIDER", "GEMINI_API_KEY", "VERISKETCH_LOCAL_MODEL_PATH"):
+    monkeypatch.setenv("REVELIO_DATA_DIR", str(tmp_path / "data"))
+    for key in ("REVELIO_HOSTED_PROVIDER", "GEMINI_API_KEY", "REVELIO_LOCAL_MODEL_PATH",
+                "VERISKETCH_DATA_DIR", "VERISKETCH_HOSTED_PROVIDER", "VERISKETCH_LOCAL_MODEL_PATH", "VERISKETCH_MAX_UPLOAD_MB"):
         monkeypatch.delenv(key, raising=False)
     yield
 

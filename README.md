@@ -1,12 +1,14 @@
-# VeriSketch AI
+<img src="src/assets/brand/logo-wordmark.png" alt="Revelio" height="64" />
+
+# Revelio
 
 **From Witness Description to Forensic Sketch.**
 
-VeriSketch AI is an offline-first workstation for AI-assisted facial composite generation. An operator converts a witness's verbal description into an editable, structured facial profile. The profile then renders as a monochrome forensic-style composite. The operator can refine it, compare revisions and export it with a printable report.
+Revelio is an offline-first workstation for AI-assisted facial composite generation. An operator converts a witness's verbal description into an editable, structured facial profile. The profile then renders as a monochrome forensic-style composite. The operator can refine it, compare revisions and export it with a printable report.
 
-> **Investigative assistance only.** A generated composite is not proof of identity, does not identify anyone automatically, and must never be presented as evidence that a particular person committed a crime. VeriSketch performs no face recognition and no identity matching.
+> **Investigative assistance only.** A generated composite is not proof of identity, does not identify anyone automatically, and must never be presented as evidence that a particular person committed a crime. Revelio performs no face recognition and no identity matching.
 
-![VeriSketch AI — New Sketch workspace](docs/screenshots/new-sketch.png)
+![Revelio — New Sketch workspace](docs/screenshots/new-sketch.png)
 
 ---
 
@@ -14,7 +16,7 @@ VeriSketch AI is an offline-first workstation for AI-assisted facial composite g
 
 Building a facial composite from a verbal description is slow. Witnesses remember features unevenly, contradict themselves, and hedge. Separate accounts from different witnesses rarely agree. Most tools either demand a complete description or fill in the gaps silently with invented detail.
 
-## What VeriSketch does
+## What Revelio does
 
 | | |
 |---|---|
@@ -30,13 +32,13 @@ Building a facial composite from a verbal description is slow. Witnesses remembe
 
 ### Screenshots
 
-| Workspace | Before / after |
+| Landing page (`/`) | Workspace (`/app`) |
 |---|---|
-| ![Workspace](docs/screenshots/workspace.png) | ![Before and after](docs/screenshots/before-after.png) |
-| **Compare revisions** | **Library** |
-| ![Compare](docs/screenshots/compare.png) | ![Library](docs/screenshots/library.png) |
-| **Settings & providers** | **Boot sequence** |
-| ![Settings](docs/screenshots/settings.png) | ![Boot](docs/screenshots/boot.png) |
+| ![Landing page](docs/screenshots/landing.png) | ![Workspace](docs/screenshots/workspace.png) |
+| **Before / after** | **Compare revisions** |
+| ![Before and after](docs/screenshots/before-after.png) | ![Compare](docs/screenshots/compare.png) |
+| **Library** | **Settings & providers** |
+| ![Library](docs/screenshots/library.png) | ![Settings](docs/screenshots/settings.png) |
 
 Procedural composites generated from eight different descriptions. The bottom-left one has no hair description, so its hair is drawn as “unspecified”:
 
@@ -83,11 +85,13 @@ backend/
     providers/           base · offline_provider · local_provider · hosted_provider · registry
   tests/                 56 pytest tests
 src/
+  main.jsx             Route switch: / → landing page, /app → workspace (separate lazy bundles)
+  landing/             Landing page (Lumora-inspired); reuses the API client, renderer and CompareSlider
   api/client.js          API client (no credentials ever pass through the browser)
   state/AppContext.jsx   Catalog, engine status, toasts, preferences, active case
   components/            brand · shell · ui · sketch (viewer, editor, refine, merge…)
   pages/                 Workspace · NewSketch · Library · Compare · Settings
-scripts/                 run-api.mjs · dev-all.mjs
+scripts/                 run-api.mjs · dev-all.mjs · render-landing-assets.py
 ```
 
 **Technology:** React 19, Vite 8, plain CSS design system (Inter + IBM Plex Mono), FastAPI, Pydantic 2, SQLite, Pillow and pytest. The frontend adds no new dependencies. Animations are CSS keyframes, with `requestAnimationFrame` only where needed, and they respect `prefers-reduced-motion`.
@@ -110,7 +114,14 @@ backend/.venv/bin/pip install -r backend/requirements.txt      # Windows: backen
 npm run dev         # starts the API and the interface together
 ```
 
-Open **http://127.0.0.1:5173**. The boot screen checks the local engine; if it is not running you'll see instructions instead of a broken UI.
+Open **http://127.0.0.1:5173** for the landing page, or **http://127.0.0.1:5173/app** for the workspace. The workspace boot screen checks the local engine. If the engine isn't running, you'll see instructions instead of a broken UI.
+
+| Route | What it is |
+|---|---|
+| `/` | Marketing landing page with a live demo running on the real procedural renderer |
+| `/app` | The Revelio workspace (`/app#/new`, `/app#/library`, `/app#/compare`, `/app#/settings`) |
+
+Old links such as `/#/library` redirect to `/app#/library`. For static hosting, serve `index.html` for `/app` as an SPA fallback. Vite's dev and preview servers already do this.
 
 Run the pieces separately if you prefer:
 
@@ -133,6 +144,17 @@ After installation, the whole core workflow runs with **no network access**: ext
 
 ---
 
+### Landing page
+
+The landing page at `/` presents the product with a short, skippable intro, and its demos are real:
+
+- **Live demo:** a visitor types a fictional description, and the page calls the local engine to extract traits and render a procedural composite. Visitors can change traits and sliders, regenerate, and download the PNG.
+- **Editor showcase:** a second live renderer instance with real sliders, in-page demo revisions and a before/after slider.
+- **Hero imagery:** pre-rendered by the same renderer from a fictional profile. Regenerate it with `backend/.venv/bin/python scripts/render-landing-assets.py`.
+- **Pricing:** Pro and Team are labelled as proposals. Their buttons open a notice that collects no data, and only implemented features get a checkmark.
+
+If the local engine isn't running, the demos say so and offer a retry. They never fall back to a static image.
+
 ## Generation modes
 
 | Mode | Default | Runs | Cost | Status in this build |
@@ -150,16 +172,16 @@ The key lives **only** on the backend. It is sent in the `x-goog-api-key` header
 ```bash
 cp backend/.env.example backend/.env
 # then edit backend/.env:
-VERISKETCH_HOSTED_PROVIDER=gemini
+REVELIO_HOSTED_PROVIDER=gemini
 GEMINI_API_KEY=your-key-here
 GEMINI_IMAGE_MODEL=gemini-3-pro-image-preview
 ```
 
-Restart the API. The provider then shows as *configured*. It is not verified until a generation succeeds. VeriSketch makes no claim that this service is free, so check your own quota and pricing. When used, the prompt is built only from **described** traits, with unknown traits explicitly marked unspecified. An optional reference image is sent with that one request. If the provider fails, you see the real error and a one-click option to save an offline composite instead. Nothing switches over silently.
+Restart the API. The provider then shows as *configured*. It is not verified until a generation succeeds. Revelio makes no claim that this service is free, so check your own quota and pricing. When used, the prompt is built only from **described** traits, with unknown traits explicitly marked unspecified. An optional reference image is sent with that one request. If the provider fails, you see the real error and a one-click option to save an offline composite instead. Nothing switches over silently.
 
 ### Optional local model
 
-A local diffusion model (for example Stable Diffusion 1.5) needs roughly **8 GB of free RAM or unified memory** and **5–10 GB of disk**. That is more than a typical student laptop can spare while running a browser and dev servers, and inference couldn't be tested reliably here. So this build ships **detection only**: Settings reports whether PyTorch, `diffusers` and a model path (`VERISKETCH_LOCAL_MODEL_PATH`) are present. The provider interface (`backend/app/providers/base.py`) is the place to add it.
+A local diffusion model (for example Stable Diffusion 1.5) needs roughly **8 GB of free RAM or unified memory** and **5–10 GB of disk**. That is more than a typical student laptop can spare while running a browser and dev servers, and inference couldn't be tested reliably here. So this build ships **detection only**: Settings reports whether PyTorch, `diffusers` and a model path (`REVELIO_LOCAL_MODEL_PATH`) are present. The provider interface (`backend/app/providers/base.py`) is the place to add it.
 
 ---
 
@@ -171,7 +193,7 @@ A local diffusion model (for example Stable Diffusion 1.5) needs roughly **8 GB 
 - **Safe uploads.** Reference images are checked for type allow-list, magic bytes, size (5 MB by default), dimensions and decompression bombs. They are then re-encoded, which strips EXIF and GPS metadata, used for one hosted request, and **never stored**.
 - **No biometric processing.** There is no face detection, recognition, identity matching or sensitive-attribute inference.
 - **Deletion.** Delete a single sketch with all its revisions and image files from the Library, or wipe all local data from Settings (type `DELETE` to confirm).
-- **Data location.** `backend/data/` holds `verisketch.db` and `images/` (override with `VERISKETCH_DATA_DIR`).
+- **Data location.** `backend/data/` holds `revelio.db` and `images/` (override with `REVELIO_DATA_DIR`).
 
 These are engineering safeguards for a local demo. They are not a claim of legal compliance or enterprise-grade security.
 

@@ -33,7 +33,7 @@ def _check_id(sketch_id: str) -> str:
 def _new_id(conn) -> str:
     day = datetime.now(timezone.utc).strftime("%Y%m%d")
     for _ in range(50):
-        sid = f"VS-{day}-{secrets.token_hex(2).upper()}"
+        sid = f"RV-{day}-{secrets.token_hex(2).upper()}"
         if not conn.execute("SELECT 1 FROM sketches WHERE id = ?", (sid,)).fetchone():
             return sid
     raise RuntimeError("Could not allocate a sketch id")
@@ -258,7 +258,7 @@ def export_json(sketch_id: str) -> dict:
     with connect() as conn:
         log_activity(conn, "exported", f"Exported {sketch_id} as JSON", sketch_id)
     return {
-        "application": "VeriSketch AI", "export_version": 1, "exported_at": now_iso(),
+        "application": "Revelio", "export_version": 1, "exported_at": now_iso(),
         "sketch_id": s["id"], "title": s["title"], "status": s["status"], "description": s["description"],
         "created_at": s["created_at"], "modified_at": s["updated_at"], "operator_notes": s["notes"],
         "current_revision": s["current"]["number"] if s["current"] else None,

@@ -14,7 +14,7 @@ def _with(profile: Profile, **traits) -> Profile:
 
 
 def test_renders_real_png(spec_profile):
-    r = render_profile(spec_profile, caption="VS-TEST")
+    r = render_profile(spec_profile, caption="RV-TEST")
     assert r.png.startswith(b"\x89PNG\r\n\x1a\n")
     img = Image.open(io.BytesIO(r.png))
     assert img.size == (900, 1125)

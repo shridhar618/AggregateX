@@ -1,4 +1,4 @@
-import { LogoMark } from '../brand/Logo'
+import { BrandLogo } from '../brand/Logo'
 import Icon from '../ui/Icon'
 
 const STEP_LABELS = {
@@ -23,9 +23,8 @@ const BootScreen = ({ steps, leaving }) => {
     <div className={`boot ${leaving ? 'is-leaving' : ''}`} role="status" aria-live="polite">
       <div className="boot__grid" aria-hidden="true" />
       <div className="boot__card">
-        <LogoMark size={56} animated />
         <div className="boot__brand">
-          <span className="boot__name">VeriSketch<span>AI</span></span>
+          <BrandLogo height={72} animated />
           <span className="boot__tag">From Witness Description to Forensic Sketch.</span>
         </div>
         <div className="boot__status label label--cyan">Initializing forensic workspace</div>

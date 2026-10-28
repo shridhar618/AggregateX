@@ -24,7 +24,7 @@ def render_preview(req: RenderRequest):
 def render_preview_png(req: RenderRequest):
     result = render_profile(req.profile, caption=req.caption)
     return Response(content=result.png, media_type="image/png",
-                    headers={"Content-Disposition": 'attachment; filename="verisketch-preview.png"', **NO_STORE})
+                    headers={"Content-Disposition": 'attachment; filename="revelio-preview.png"', **NO_STORE})
 
 
 @router.get("/sketches")

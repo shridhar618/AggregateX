@@ -1,4 +1,4 @@
-"""VeriSketch AI — local API server.
+"""Revelio — local API server.
 
 Run:  backend/.venv/bin/uvicorn app.main:app --app-dir backend --host 127.0.0.1 --port 8000
 Binds to localhost by default; it is not exposed to the network.
@@ -22,7 +22,7 @@ from .providers.base import ProviderError, ProviderUnavailable
 from .services.sketch_service import NotFound
 from .services.uploads import UploadError
 
-log = logging.getLogger("verisketch")
+log = logging.getLogger("revelio")
 
 
 @asynccontextmanager
@@ -32,7 +32,7 @@ async def _lifespan(_app: FastAPI):
 
 
 def create_app() -> FastAPI:
-    app = FastAPI(title="VeriSketch AI", version=__version__, lifespan=_lifespan,
+    app = FastAPI(title="Revelio", version=__version__, lifespan=_lifespan,
                   description="From Witness Description to Forensic Sketch — local API")
     settings = get_settings()
     app.add_middleware(

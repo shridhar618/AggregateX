@@ -1,5 +1,5 @@
 import { useApp } from '../../state/AppContext'
-import { LogoMark, Wordmark } from '../brand/Logo'
+import { BrandLogo } from '../brand/Logo'
 import Icon from '../ui/Icon'
 import { NAV } from '../../lib/nav'
 
@@ -13,8 +13,8 @@ const Sidebar = ({ current, open, onNavigate, onClose }) => {
       <div className={`sidebar-scrim ${open ? 'is-open' : ''}`} onClick={onClose} aria-hidden="true" />
       <aside className={`sidebar ${open ? 'is-open' : ''}`} aria-label="Primary">
         <div className="sidebar__brand">
-          <LogoMark size={34} />
-          <Wordmark />
+          <BrandLogo height={44} />
+          <span className="sidebar__tag">Forensic composite workspace</span>
         </div>
 
         <nav className="sidebar__nav">

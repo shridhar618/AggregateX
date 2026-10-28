@@ -39,20 +39,25 @@ class Settings:
     max_upload_pixels: int
 
 
+def _env(name: str, default: str = "") -> str:
+    """Read REVELIO_<name>, falling back to the pre-rename VERISKETCH_<name>."""
+    return os.environ.get(f"REVELIO_{name}", os.environ.get(f"VERISKETCH_{name}", default))
+
+
 def get_settings() -> Settings:
-    data_dir = Path(os.environ.get("VERISKETCH_DATA_DIR", BACKEND_DIR / "data")).resolve()
-    origins = os.environ.get(
-        "VERISKETCH_CORS_ORIGINS",
+    data_dir = Path(_env("DATA_DIR", BACKEND_DIR / "data")).resolve()
+    origins = _env(
+        "CORS_ORIGINS",
         "http://localhost:5173,http://127.0.0.1:5173,http://localhost:4173,http://127.0.0.1:4173",
     )
     return Settings(
         data_dir=data_dir,
         cors_origins=[o.strip() for o in origins.split(",") if o.strip()],
-        hosted_provider=os.environ.get("VERISKETCH_HOSTED_PROVIDER", "").strip().lower(),
+        hosted_provider=_env("HOSTED_PROVIDER", "").strip().lower(),
         gemini_api_key=os.environ.get("GEMINI_API_KEY", "").strip(),
         gemini_model=os.environ.get("GEMINI_IMAGE_MODEL", "gemini-3-pro-image-preview").strip(),
-        hosted_timeout_s=int(os.environ.get("VERISKETCH_HOSTED_TIMEOUT", "90")),
-        local_model_path=os.environ.get("VERISKETCH_LOCAL_MODEL_PATH", "").strip(),
-        max_upload_bytes=int(os.environ.get("VERISKETCH_MAX_UPLOAD_MB", "5")) * 1024 * 1024,
+        hosted_timeout_s=int(_env("HOSTED_TIMEOUT", "90")),
+        local_model_path=_env("LOCAL_MODEL_PATH", "").strip(),
+        max_upload_bytes=int(_env("MAX_UPLOAD_MB", "5")) * 1024 * 1024,
         max_upload_pixels=4096 * 4096,
     )

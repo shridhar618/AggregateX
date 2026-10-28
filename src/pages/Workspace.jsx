@@ -13,7 +13,7 @@ export default function Workspace() {
   const { catalog, providers } = useApp()
   const [data, setData] = useState(null)
   const [error, setError] = useState(null)
-  const [draft] = useState(() => safeStorage.get('verisketch.draft'))
+  const [draft] = useState(() => safeStorage.get('revelio.draft'))
 
   useEffect(() => {
     let cancelled = false
@@ -34,7 +34,7 @@ export default function Workspace() {
       <section className="hero panel panel--corners reveal">
         <div className="hero__grid" aria-hidden="true" />
         <div className="hero__text">
-          <span className="label label--cyan">VeriSketch AI · Forensic composite workspace</span>
+          <span className="label label--cyan">Revelio · Forensic composite workspace</span>
           <h2 className="hero__title">From witness description<br />to forensic sketch.</h2>
           <p className="hero__lead">
             Turn a verbal description into an editable facial profile and a monochrome composite. It runs entirely on this

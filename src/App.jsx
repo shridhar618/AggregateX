@@ -41,7 +41,7 @@ function EngineOffline({ onRetry, retrying }) {
       <Icon name="cpu" className="icon engine-offline__icon" />
       <h2>Local engine not reachable</h2>
       <p className="muted">
-        VeriSketch renders composites and stores sketches with a small local server on this machine.
+        Revelio renders composites and stores sketches with a small local server on this machine.
         It is not running, so nothing can be generated yet. No data is sent anywhere else.
       </p>
       <pre className="code mono">{`npm run dev        # starts the API and the interface together\n# or, if the interface is already running, in a second terminal:\nnpm run dev:api`}</pre>
@@ -127,7 +127,7 @@ function Shell() {
           <Suspense fallback={<PageFallback />}>{content}</Suspense>
         </main>
         <footer className="app__foot">
-          <span className="mono">VERISKETCH AI · v1.0</span>
+          <span className="mono">REVELIO · v1.0</span>
           <span>Investigative assistance only. A composite is not proof of identity.</span>
         </footer>
       </div>

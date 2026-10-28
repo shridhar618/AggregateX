@@ -4,7 +4,7 @@ import { safeStorage } from '../lib/format'
 
 const AppContext = createContext(null)
 
-const PREFS_KEY = 'verisketch.prefs'
+const PREFS_KEY = 'revelio.prefs'
 
 export function AppProvider({ children }) {
   const [catalog, setCatalog] = useState(null)

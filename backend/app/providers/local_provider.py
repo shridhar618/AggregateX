@@ -37,7 +37,7 @@ class LocalModelProvider(GenerationProvider):
         if not has_diffusers:
             missing.append("diffusers")
         if not path_ok:
-            missing.append("a downloaded model (VERISKETCH_LOCAL_MODEL_PATH)")
+            missing.append("a downloaded model (REVELIO_LOCAL_MODEL_PATH)")
         reason = ("Not installed: missing " + ", ".join(missing) + "." if missing else
                   "Components detected, but local inference is not enabled in this build.")
         return {
