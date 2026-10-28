@@ -13,6 +13,41 @@ npm run dev
 
 Open **http://127.0.0.1:5182/register** or `/login`. The launcher uses loopback ports **5182 / 8021 / 8022**, refuses occupied ports and stores runtime data outside Git. AI generation requires the existing authenticated Codex CLI; it never falls back to the procedural renderer or another provider.
 
+### Run with Docker
+
+One container runs the React build (nginx), the Revelio gateway and WitnessTrace. Only port 8080 is exposed, bound to localhost.
+
+```bash
+docker compose up -d --build     # first build takes a few minutes
+docker compose logs -f           # follow logs
+docker compose down              # stop (data is kept)
+```
+
+Open **http://127.0.0.1:8080/register**. Cases, accounts and images persist in the `revelio-data` volume. Compose mounts your signed-in `~/.codex` for AI generation (run `codex login` on the host first, or remove that volume line to run without it).
+
+| Build argument | Default | Effect |
+|---|---|---|
+| `INSTALL_CODEX` | `1` | `0` leaves out Node and the Codex CLI (smaller image; no AI generation) |
+| `CODEX_VERSION` | `latest` | Pin the Codex CLI version |
+| `WHISPER_MODEL` | `base.en` | Local speech-to-text model baked into the image (e.g. `small.en` for better accuracy, `base` for other languages) |
+
+Example: `docker compose build --build-arg WHISPER_MODEL=small.en`. The image is about 1.8 GB with Codex and the speech model. Codex generation inside the container has not been verified with a real generation; Codex's own sandbox may need adjusting there.
+
+### Voice dictation
+
+Every description field has a **Dictate** button: Revelio description, guided observations, multi-witness accounts, refinement, and WitnessTrace testimony, clarification and refinement instructions.
+
+- **Local transcription (default in Docker):** press *Dictate*, speak, press *Stop*. The recording is transcribed on this machine by [faster-whisper](https://github.com/SYSTRAN/faster-whisper) and appended to the field. Audio never leaves the machine, works offline, and works in any browser with a microphone. Recordings are capped at 3 minutes.
+- **Browser fallback:** when the server lacks the speech package (e.g. `npm run dev` without it), the button uses the browser's Web Speech API with live text. That sends audio to the browser vendor's cloud service and only works in Google Chrome, Edge and Safari.
+
+To enable local transcription outside Docker:
+
+```bash
+witness-backend/.venv/bin/python -m pip install -r backend/requirements-speech.txt
+```
+
+The model (about 140 MB for `base.en`) downloads on first use. Set `REVELIO_WHISPER_MODEL` to choose another one.
+
 See the [startup and rollback guide](docs/integration/STARTUP_GUIDE.md), [final integration report](docs/integration/FINAL_INTEGRATION_REPORT.md), [feature parity](docs/integration/FEATURE_PARITY.md), and [security review](docs/integration/SECURITY_REVIEW.md). Local integration is tested; remote publication remains gated by owner remediation of private artifacts already in b history. This is a local shared collection, not a public multi-tenant deployment.
 
 ## Legacy Revelio design reference
@@ -41,7 +76,7 @@ Building a facial composite from a verbal description is slow. Witnesses remembe
 | **Real offline composite renderer** | A procedural vector renderer draws the face from the profile: face shape, jaw, chin, hairline, hair, brows, eyes, nose, mouth, ears, facial hair, eyewear, age lines and marks. It uses no network, no GPU and no model download. It outputs SVG for live preview and PNG for export, both from the same geometry. |
 | **Honest renderer report** | Every result lists which traits were drawn with a neutral default, which are recorded but not drawable (eye colour and skin tone in a monochrome sketch), and which conflicts are pending. Undescribed hair is drawn as a dashed “unspecified” outline, not an invented hairstyle. |
 | **Three ways to describe** | A free-text **Description** tab, a **Guided** tab that asks about every trait in turn, and a **Witnesses** tab for separate accounts. Extract with the button or <kbd>⌘/Ctrl</kbd> + <kbd>Enter</kbd>. |
-| **Voice dictation** | A *Dictate* button on the description, observations, witness and refinement fields uses the browser's built-in speech recognition. It appends to the text you already have and never submits anything on its own. Works in Chrome, Edge and Safari. Browsers without speech recognition, such as Firefox, don't show the button. Brave and embedded browser views do show it, but there it explains why dictation can't run there, without trying and failing silently. |
+| **Voice dictation** | A *Dictate* button on the description, observations, witness and refinement fields. It transcribes locally with faster-whisper when installed (see [Voice dictation](#voice-dictation)), otherwise it uses the browser's built-in speech recognition. It appends to the text you already have and never submits anything on its own. |
 | **Interactive editor** | Trait editor with provenance badges (*Described / Extracted / Manual / Unknown / Conflict / Uncertain*). Sixteen proportion sliders, mark placement, live re-rendering, undo/redo (<kbd>⌘/Ctrl</kbd> + <kbd>Z</kbd>) and reset. A pipeline bar across the top shows the real state of each step: description, trait profile, operator review, composite and revision. |
 | **Natural-language refinement** | Commands like “Make the eyebrows thicker”, “Add a small scar on the left cheek” or “Make the jaw narrower” are parsed locally. You review and edit the proposed changes before anything is applied. Requests that are no-ops are reported as such, never faked. |
 | **Investigation workspace** | The overview shows saved sketches, drafts in progress, revisions recorded and the last-used generation mode, plus recent sketches, unfinished work, recent activity and provider status. The library supports search by title, sketch ID or description, and you can switch a sketch between draft and final. |
@@ -105,9 +140,9 @@ backend/
     catalog.py           Trait catalog — single source of truth for options & renderability
     schemas.py           Pydantic models and validation
     database.py          SQLite (stdlib) schema and helpers
-    api/                 auth.py · system.py · traits.py · sketches.py
+    api/                 auth.py · system.py · traits.py · sketches.py · speech.py
     services/            auth_service · trait_extractor · procedural_renderer · refinement_service
-                         merge_service · sketch_service · report · uploads
+                         merge_service · sketch_service · report · uploads · speech (local Whisper)
     providers/           base · offline_provider · local_provider · hosted_provider · registry
   tests/                 76 pytest tests
 src/
@@ -120,7 +155,7 @@ src/
                          refine, merge, pipeline…) · ui (dictation, theme toggle, modals…)
   lib/                   router · nav · format · theme
   pages/                 Workspace · NewSketch · Library · Compare · Settings
-public/landing/          Pre-rendered hero composites (from scripts/render-landing-assets.py)
+public/landing/          Hero sketches (demo-r1/r2) and the pencil reference set in sketches/
 scripts/                 run-api.mjs · dev-all.mjs · render-landing-assets.py
 ```
 
@@ -173,7 +208,7 @@ npm run test:api    # backend pytest suite (76 tests)
 
 After installation, the whole core workflow runs with **no network access**: extraction, refinement, merge, rendering, saving, comparison and export. A test (`test_offline_workflow_without_network`) blocks all sockets and runs the workflow. Without internet, the interface falls back from the Google-hosted fonts to system fonts.
 
-Voice dictation is the exception. It relies on the browser's speech service, and depending on the browser, that service may process audio on a remote server. Typing always works offline.
+Voice dictation also works offline when local transcription is installed (it is in the Docker image). The browser fallback relies on the browser's speech service, which may process audio on a remote server. Typing always works offline.
 
 ---
 
@@ -181,9 +216,9 @@ Voice dictation is the exception. It relies on the browser's speech service, and
 
 The landing page at `/` opens with a short intro (skip it with <kbd>Esc</kbd> or <kbd>Enter</kbd>; it plays once per browser session and never with reduced motion). It then runs through the hero, a live demo, the editor showcase, features, how it works, privacy and capabilities, pricing and an FAQ. The nav has the same light/dark toggle as the workspace. Its demos are real:
 
-- **Live demo:** a visitor types a fictional description, and the page calls the local engine to extract traits and render a procedural composite. Visitors can change traits and sliders, regenerate, and download the PNG.
-- **Editor showcase:** a second live renderer instance with real sliders, in-page demo revisions and a before/after slider.
-- **Hero imagery:** pre-rendered by the same renderer from a fictional profile. Regenerate it with `backend/.venv/bin/python scripts/render-landing-assets.py`.
+- **Live demo:** a visitor types a fictional description, and the page calls the local engine to extract traits, then shows the closest pencil sketch from a fictional, AI-generated reference set (`public/landing/sketches/`, matched in `src/landing/sketches.js` on facial hair, eyewear, hair and scars). Visitors can change those traits and download the sketch.
+- **Editor showcase:** trait buttons that swap the matched sketch, in-page demo revisions and a before/after slider.
+- **Hero imagery:** a before/after pair of pencil sketches (`public/landing/demo-r1.webp`, `demo-r2.webp`). `scripts/render-landing-assets.py` would overwrite them with procedural renders, so don't run it unless you want those back.
 - **Pricing:** Pro and Team are labelled as proposals. Their buttons open a notice that collects no data, and only implemented features get a checkmark.
 
 If the local engine isn't running, the demos say so and offer a retry. They never fall back to a static image.
@@ -240,7 +275,7 @@ A local diffusion model (for example Stable Diffusion 1.5) needs roughly **8 GB 
 - **Deletion.** Delete a single sketch with all its revisions and image files from the Library, or wipe all local data from Settings (type `DELETE` to confirm).
 - **Data location.** `backend/data/` holds `revelio.db` and `images/` (override with `REVELIO_DATA_DIR`).
 - **Browser storage.** The browser keeps only interface preferences, the theme choice and one unsaved draft (`revelio.*` keys in local storage).
-- **Dictation.** Speech recognition is provided by the browser, not by Revelio. Revelio never records or stores audio, but the browser's speech service may send audio off the device.
+- **Dictation.** With local transcription, audio is sent only to the local engine, transcribed in memory and never stored. With the browser fallback, the browser's speech service may send audio off the device.
 
 These are engineering safeguards for a local demo. They are not a claim of legal compliance or enterprise-grade security.
 
@@ -259,7 +294,7 @@ The project was previously called VeriSketch AI. Existing installs keep working:
 - Trait extraction is rule-based English. Unusual phrasing may be missed, but missed traits stay **unknown** rather than becoming wrong. The guided questions cover every trait.
 - Real hosted generation has not been verified with a working API key.
 - Local-only: accounts share one sketch library, and there are no roles, no password reset, no sync and no audit-grade chain of custody.
-- Voice dictation depends on browser support. It is unavailable in Firefox, Brave and embedded browser views.
+- Local dictation shows the text after you press *Stop*, not word by word. The browser fallback is unavailable in Firefox, Brave and embedded browser views.
 
 ## Future improvements
 
