@@ -1,3 +1,4 @@
+import BlockchainIntegrity from '../components/integrity/BlockchainIntegrity'
 import { useState } from 'react'
 import { downloadUrl, imageUrl } from '../api/witnesstrace'
 import { LogoMark } from '../components/brand/Logo'
@@ -52,6 +53,7 @@ export default function WitnessStudio() {
         <p className="faint">Original account: 1,800 characters maximum. Complete generation prompt: 2,500. Generation is prompt-based; identity consistency is not guaranteed.</p>
       </div></section>}
     </div><div className="studio__center"><SketchViewer src={version ? imageUrl(version) : null} kind="ai" label={record?.title || 'Composite preview'} sublabel={version?.id} loading={pending} error={wt.error} onDownload={() => { if (version) window.location.assign(downloadUrl(record.id, version.id)) }} meta={version ? [['Revision', version.id], ['SHA-256', version.sha256]] : []} empty={<p>{pending ? 'Codex is working. You can navigate away and return.' : 'Save a witness description and explicitly generate a composite.'}</p>} />
+      {version && <BlockchainIntegrity key={version.id} caseId={record.id} versionId={version.id} />}
       <section className="panel"><div className="panel__body" role="status" aria-live="polite">{job ? `${job.status === 'complete' && !version ? 'Verifying saved output' : job.status} · ${job.message}` : 'No generation submitted in this case.'}</div></section>
     </div><aside className="studio__side panel"><div className="panel__head"><h2 className="panel__title">Saved revisions</h2></div><div className="panel__body wt-fields"><RevisionList /></div></aside></div>
     {record && <div className="wt-tools-grid"><div><CharacterLab key={record.id} /><Refinement /><Deliverables /></div></div>}
