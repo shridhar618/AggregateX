@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: revelio
+    runtime: docker
+    plan: starter
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /api/health
+    autoDeploy: true
+    disk:
+      name: revelio-data
+      mountPath: /data
+      sizeGB: 1
+    envVars:
+      - key: REVELIO_HOSTED_PROVIDER
+        value: ""
