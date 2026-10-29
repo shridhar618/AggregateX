@@ -167,13 +167,17 @@ export default function Hero() {
     let raf = 0
     let mx = 0.5
     let my = 0.3
+    let sy = null // eased parallax offset; follows the scroll target instead of jumping to it
     const apply = () => {
       raf = 0
       el.style.setProperty('--mx', `${(mx * 100).toFixed(2)}%`)
       el.style.setProperty('--my', `${(my * 100).toFixed(2)}%`)
       const progress = Math.min(window.scrollY, 900) / 900
-      const easedProgress = progress * progress * (3 - 2 * progress)
-      el.style.setProperty('--sy', `${(easedProgress * 900).toFixed(1)}`)
+      const target = progress * progress * (3 - 2 * progress) * 900
+      sy = sy === null ? target : sy + (target - sy) * 0.14
+      if (Math.abs(target - sy) < 0.4) sy = target
+      else raf = requestAnimationFrame(apply)
+      el.style.setProperty('--sy', sy.toFixed(1))
     }
     const onMove = (e) => {
       const r = el.getBoundingClientRect()
