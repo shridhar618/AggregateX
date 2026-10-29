@@ -1,6 +1,7 @@
-// Small, draggable ball that the hero orb turns into once it has shrunk on scroll.
-// It drifts toward the emptiest part of the viewport and bounces off the edges and
-// off visible content, so it only ever plays in open space.
+// Small ball that the hero orb turns into once it has shrunk on scroll. With a mouse
+// it chases the cursor; otherwise (touch, or the cursor has left the page) it drifts
+// toward the emptiest part of the viewport and bounces off the edges and off visible
+// content, and can be dragged, thrown or tapped.
 
 const R = 5
 const MIN_SPEED = 1.1
@@ -38,6 +39,7 @@ export function createPlayOrb({ section, copy }) {
   let rects = []
   let top = 0 // bottom of the fixed site header, used as the ceiling
   let drag = null
+  let cursor = null // last mouse position while it is over the page
 
   const home = () => {
     const r = copy.getBoundingClientRect()
@@ -155,10 +157,27 @@ export function createPlayOrb({ section, copy }) {
       }
     }
 
+    walls(W, H)
+  }
+
+  const walls = (W, H) => {
     if (x < R) { x = R; bounce(1, 0) }
     if (x > W - R) { x = W - R; bounce(-1, 0) }
     if (y < top + R) { y = top + R; bounce(0, 1) }
     if (y > H - R) { y = H - R; bounce(0, -1) }
+  }
+
+  // Springy follow that trails just below-right of the pointer, so the ball never
+  // sits on top of whatever is about to be clicked.
+  const chase = (dt) => {
+    vx += (cursor[0] + 16 - x) * 0.018 * dt
+    vy += (cursor[1] + 16 - y) * 0.018 * dt
+    const damp = 0.85 ** dt
+    vx *= damp
+    vy *= damp
+    x += vx * dt
+    y += vy * dt
+    walls(window.innerWidth, window.innerHeight)
   }
 
   const render = () => {
@@ -187,6 +206,9 @@ export function createPlayOrb({ section, copy }) {
         last = 0
         return
       }
+    } else if (cursor) {
+      if (frame % 4 === 0) measure()
+      chase(dt)
     } else if (!drag) {
       if (frame % 60 === 0) collect()
       if (frame % 4 === 0) measure()
@@ -256,6 +278,21 @@ export function createPlayOrb({ section, copy }) {
   const onResize = () => { if (mode === 'free') { collect(); measure(); findSpace() } }
   window.addEventListener('resize', onResize)
 
+  const onPointer = (e) => {
+    if (e.pointerType !== 'mouse' && e.pointerType !== 'pen') return
+    cursor = [e.clientX, e.clientY]
+    el.classList.add('is-chasing')
+  }
+  const onPointerOut = (e) => {
+    if (e.relatedTarget) return
+    cursor = null
+    el.classList.remove('is-chasing')
+    if (mode === 'free') findSpace()
+  }
+  window.addEventListener('pointermove', onPointer, { passive: true })
+  document.addEventListener('pointerout', onPointerOut)
+  window.addEventListener('blur', onPointerOut)
+
   return {
     update(shrink, offset) {
       sy = offset
@@ -270,6 +307,9 @@ export function createPlayOrb({ section, copy }) {
     destroy() {
       cancelAnimationFrame(raf)
       window.removeEventListener('resize', onResize)
+      window.removeEventListener('pointermove', onPointer)
+      document.removeEventListener('pointerout', onPointerOut)
+      window.removeEventListener('blur', onPointerOut)
       section.classList.remove('is-orb-free')
       el.remove()
     },

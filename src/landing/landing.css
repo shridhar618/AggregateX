@@ -3978,6 +3978,8 @@ html .lp-hero.is-orb-free .lp-hero__copy::before { opacity: 0; }
 .lp-playorb.is-on { opacity: 0.8; pointer-events: auto; }
 .lp-playorb.is-on:hover { opacity: 1; }
 .lp-playorb.is-grabbed { cursor: grabbing; }
+/* While chasing the mouse it must never intercept clicks. */
+.lp-playorb.is-chasing { pointer-events: none; }
 
 html[data-theme='light'] .lp-playorb {
   background: radial-gradient(circle at 34% 30%, #d4ebb8 0%, #a3c97c 45%, #6f9d4c 100%);
