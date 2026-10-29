@@ -44,7 +44,16 @@ const SketchViewer = ({ src, kind, label, sublabel, loading, error, before, onDo
         </div>
       </div>
 
-      <div className={`viewer__stage ${zoom > 1 ? 'is-zoomed' : ''}`}>
+      <div className={`viewer__stage ${zoom > 1 ? 'is-zoomed' : ''} ${loading ? 'is-processing' : ''}`}>
+        {loading && !showCompare && (
+          <div className="viewer__processing" aria-hidden="true">
+            <svg className="viewer__reticle" viewBox="0 0 120 120">
+              <circle cx="60" cy="60" r="44" /><circle cx="60" cy="60" r="26" />
+              <path d="M60 4v20M60 96v20M4 60h20M96 60h20" />
+            </svg>
+            {prefs.scanEffect && !src && <span className="viewer__sweep" />}
+          </div>
+        )}
         {showCompare ? (
           <div className="viewer__compare"><CompareSlider before={before.src} after={src} beforeLabel={before.label} afterLabel="Current" /></div>
         ) : src ? (
@@ -55,8 +64,8 @@ const SketchViewer = ({ src, kind, label, sublabel, loading, error, before, onDo
         ) : (
           <div className="viewer__empty">{empty}</div>
         )}
-        {loading && src && !showCompare && (
-          <div className="viewer__busy mono" role="status"><span className="spinner" /> Rendering…</div>
+        {loading && !showCompare && (
+          <div className="viewer__busy mono" role="status"><span className="spinner" /> {kind === 'ai' ? 'Processing' : 'Rendering…'}</div>
         )}
         {(error || (src && failedImage === src)) && (
           <div className="viewer__error alert alert--error" role="alert"><Icon name="error" /><span>{error || 'Saved image could not be loaded. Reconnect to verify the revision.'}</span></div>

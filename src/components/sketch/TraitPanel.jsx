@@ -21,11 +21,17 @@ export const SourceTag = ({ tv }) => {
   )
 }
 
+// One visual state per row, in priority order, mirroring the tags shown in SourceTag.
+const rowState = (tv) => (tv?.alternatives?.length ? 'conflict'
+  : !tv?.value ? 'unknown'
+    : tv.certainty === 'uncertain' ? 'uncertain'
+      : tv.source)
+
 const TraitRow = ({ trait, tv, onSet }) => {
   const conflict = tv?.alternatives?.length > 0
   const hint = RENDER_HINT[trait.rendered]
   return (
-    <li className={`trait ${conflict ? 'is-conflict' : ''} ${tv?.value ? 'is-known' : ''}`}>
+    <li className={`trait ${conflict ? 'is-conflict' : ''} ${tv?.value ? 'is-known' : ''} state-${rowState(tv)}`}>
       <div className="trait__top">
         <span className="trait__label">
           {trait.label}
@@ -57,7 +63,7 @@ const TraitRow = ({ trait, tv, onSet }) => {
   )
 }
 
-const TraitPanel = ({ profile, onChange }) => {
+const TraitPanel = ({ profile, onChange, revealKey = 0 }) => {
   const { catalog } = useApp()
   const [showUnknown, setShowUnknown] = useState(true)
   const groups = useMemo(() => {
@@ -111,13 +117,13 @@ const TraitPanel = ({ profile, onChange }) => {
         </label>
       </div>
 
-      {Object.entries(groups).map(([group, traits]) => {
+      {Object.entries(groups).map(([group, traits], groupIndex) => {
         const visible = traits.filter((t) => showUnknown || profile.traits[t.key]?.value || profile.traits[t.key]?.alternatives?.length)
         if (!visible.length) return null
         return (
-          <section key={group} className="traits__group">
+          <section key={group} className="traits__group" style={{ '--g': groupIndex }}>
             <h3 className="label">{group}</h3>
-            <ul className="stagger">
+            <ul className="traits__list" key={revealKey}>
               {visible.map((t) => <TraitRow key={t.key} trait={t} tv={profile.traits[t.key]} onSet={setTrait} />)}
             </ul>
           </section>

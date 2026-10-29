@@ -46,6 +46,7 @@ export default function Library() {
   const { notify } = useApp()
   const [query, setQuery] = useState('')
   const [items, setItems] = useState(null)
+  const [removing, setRemoving] = useState(null)
   const [error, setError] = useState(null)
   const [editing, setEditing] = useState(null)
   const [confirm, setConfirm] = useState(null)
@@ -93,7 +94,11 @@ export default function Library() {
     try {
       await api.deleteSketch(confirm.id)
       notify({ kind: 'ok', title: `${confirm.id} deleted`, message: 'The sketch, its revisions and its image files were removed.' })
+      setRemoving(confirm.id)
       setConfirm(null)
+      // Let the card fade out before the list reloads without it.
+      await new Promise((resolve) => setTimeout(resolve, document.documentElement.classList.contains('reduce-motion') ? 0 : 220))
+      setRemoving(null)
       load(query.trim())
     } catch (err) {
       notify({ kind: 'error', title: 'Delete failed', message: err.message })
@@ -125,8 +130,8 @@ export default function Library() {
         </EmptyState>
       ) : (
         <div className="library__grid stagger">
-          {items.map((s) => (
-            <article key={s.id} className="lib-card panel">
+          {items.map((s, i) => (
+            <article key={s.id} className={`lib-card panel lib-card--enter ${removing === s.id ? 'is-removing' : ''}`} style={{ '--i': Math.min(i, 10) }}>
               <a className="lib-card__img" href={`#/new?sketch=${encodeURIComponent(s.id)}`} aria-label={`Open ${s.title}`}>
                 {s.thumbnail_url && <img src={assetUrl(s.thumbnail_url)} alt="" loading="lazy" />}
                 <span className={`tag ${s.is_ai ? 'tag--ai' : 'tag--procedural'}`}>{s.is_ai ? 'AI-generated' : 'Procedural'}</span>
