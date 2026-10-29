@@ -174,7 +174,7 @@ export default function Hero() {
       el.style.setProperty('--my', `${(my * 100).toFixed(2)}%`)
       const progress = Math.min(window.scrollY, 900) / 900
       const target = progress * progress * (3 - 2 * progress) * 900
-      sy = sy === null ? target : sy + (target - sy) * 0.14
+      sy = sy === null ? target : sy + (target - sy) * 0.06
       if (Math.abs(target - sy) < 0.4) sy = target
       else raf = requestAnimationFrame(apply)
       el.style.setProperty('--sy', sy.toFixed(1))
