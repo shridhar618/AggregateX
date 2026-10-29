@@ -3281,7 +3281,7 @@ html:not([data-theme='light']) .lp-hero__copy::before {
   aspect-ratio: 1;
   left: 48%;
   top: 48%;
-  transform: translate(calc(-50% + var(--sy) * 1.1px), calc(-50% - var(--sy) * 0.35px));
+  transform: translate(calc(-50% + var(--sy) * 0.3px), calc(-50% + var(--sy) * 0.4px));
   border-radius: 50%;
   /* Deeper ember with a feathered rim keeps the light headline readable on top. */
   background: radial-gradient(circle closest-side, #d6502f 0%, #c4402a 80%, rgba(180, 58, 37, 0.9) 95%, rgba(180, 58, 37, 0) 100%);
@@ -3472,7 +3472,7 @@ html[data-theme='light'] .lp-hero__copy::before {
   aspect-ratio: 1;
   left: 48%;
   top: 48%;
-  transform: translate(calc(-50% + var(--sy) * 1.1px), calc(-50% - var(--sy) * 0.35px));
+  transform: translate(calc(-50% + var(--sy) * 0.3px), calc(-50% + var(--sy) * 0.4px));
   border-radius: 50%;
   background: radial-gradient(circle closest-side, #b7d894 0%, #a3c97c 80%, rgba(148, 189, 108, 0.9) 95%, rgba(148, 189, 108, 0) 100%);
   filter: drop-shadow(0 0 40px rgba(130, 176, 92, 0.25));
