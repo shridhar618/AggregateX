@@ -33,6 +33,17 @@ Open **http://127.0.0.1:8080/register**. Cases, accounts and images persist in t
 
 Example: `docker compose build --build-arg WHISPER_MODEL=small.en`. The image is about 1.8 GB with Codex and the speech model. Codex generation inside the container has not been verified with a real generation; Codex's own sandbox may need adjusting there.
 
+### Deploy to Render
+
+The repository includes a Render Blueprint at [`render.yaml`](./render.yaml). It deploys the existing Docker image as one web service, exposes the built-in `/api/health` check, and mounts a persistent disk at `/data` for accounts, cases, images and reports.
+
+1. Push this repository to GitHub.
+2. In Render, choose **New → Blueprint** and select the repository.
+3. Review the `revelio` web service and its persistent disk, then apply the Blueprint.
+4. Open the generated `https://<service-name>.onrender.com/register` URL.
+
+The Blueprint uses the current application as-is. Render does not provide the signed-in host Codex home mounted by local Docker Compose, so the existing Codex-based AI generation path is not authenticated automatically there. The offline/local case workflow remains available; enable a hosted provider only after configuring its backend secret in Render and reviewing its cost and privacy implications. A persistent disk is required because the application stores local accounts, cases and generated files under `/data`.
+
 ### Voice dictation
 
 Every description field has a **Dictate** button: Revelio description, guided observations, multi-witness accounts, refinement, and WitnessTrace testimony, clarification and refinement instructions.
