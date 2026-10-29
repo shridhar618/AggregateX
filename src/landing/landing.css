@@ -3207,7 +3207,8 @@ html:not([data-theme='light']) .lp h3 {
 
 html:not([data-theme='light']) .lp-hero__title {
   max-width: 18ch;
-  color: #d0c2ad;
+  color: #f1e6d4;
+  text-shadow: 0 2px 28px rgba(0, 0, 0, 0.35);
   font-family: var(--display);
   font-size: clamp(3.2rem, 7.2vw, 8.5rem);
   font-weight: 850;
@@ -3282,7 +3283,10 @@ html:not([data-theme='light']) .lp-hero__copy::before {
   top: 48%;
   transform: translate(calc(-50% + var(--sy) * 1.1px), calc(-50% - var(--sy) * 0.35px));
   border-radius: 50%;
-  background: #ef5539;
+  /* Deeper ember with a feathered rim keeps the light headline readable on top. */
+  background: radial-gradient(circle closest-side, #d6502f 0%, #c4402a 80%, rgba(180, 58, 37, 0.9) 95%, rgba(180, 58, 37, 0) 100%);
+  filter: drop-shadow(0 0 48px rgba(214, 74, 46, 0.28));
+  animation: heroOrbBreathe 9s ease-in-out infinite;
   will-change: transform;
 }
 
@@ -3470,8 +3474,30 @@ html[data-theme='light'] .lp-hero__copy::before {
   top: 48%;
   transform: translate(calc(-50% + var(--sy) * 1.1px), calc(-50% - var(--sy) * 0.35px));
   border-radius: 50%;
-  background: #a0c878;
+  background: radial-gradient(circle closest-side, #b7d894 0%, #a3c97c 80%, rgba(148, 189, 108, 0.9) 95%, rgba(148, 189, 108, 0) 100%);
+  filter: drop-shadow(0 0 40px rgba(130, 176, 92, 0.25));
+  animation: heroOrbBreathe 9s ease-in-out infinite;
   will-change: transform;
+}
+
+/* Independent `scale` so the slow breathing never fights the scroll transform. */
+@keyframes heroOrbBreathe {
+  0%, 100% { scale: 1; }
+  50% { scale: 1.035; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lp-hero__copy::before { animation: none !important; }
+}
+
+html:not([data-theme='light']) .lp-hero__title .lp-lines__mask:last-child .lp-lines__line {
+  background: none;
+  color: #fff3e3;
+}
+
+html[data-theme='light'] .lp-hero__title .lp-lines__mask:last-child .lp-lines__line {
+  background: none;
+  color: #2e5524;
 }
 
 html[data-theme='light'] .lp-hero__copy > * {
@@ -3908,4 +3934,12 @@ html[data-theme='light'] .lp-editor__panel {
 
 html[data-theme='light'] .lp-editor__traits li {
   border-color: #e1e8cc;
+}
+
+/* The longest headline word ("DESCRIPTIONS") is about 12.3em wide. Cap the size by the
+   column width so no line is clipped by its reveal mask, at any viewport. */
+.lp-hero__copy { container-type: inline-size; }
+
+html .lp-hero .lp-hero__copy .lp-hero__title {
+  font-size: min(clamp(3.2rem, 7.2vw, 8.5rem), 100cqi / 12.6);
 }
