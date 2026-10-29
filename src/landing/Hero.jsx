@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { LogoMark } from '../components/brand/Logo'
 import Icon from '../components/ui/Icon'
 import { canHover, prefersReducedMotion, Reveal, scrollToId, SplitLines, useIntroReady } from './motion'
+import { createPlayOrb } from './playOrb'
 
 const R1 = '/landing/demo-r1.webp'
 const R2 = '/landing/demo-r2.webp'
@@ -168,6 +169,7 @@ export default function Hero() {
     let mx = 0.5
     let my = 0.3
     let sy = null // eased parallax offset; follows the scroll target instead of jumping to it
+    const orb = createPlayOrb({ section: el, copy: el.querySelector('.lp-hero__copy') })
     const apply = () => {
       raf = 0
       el.style.setProperty('--mx', `${(mx * 100).toFixed(2)}%`)
@@ -178,6 +180,9 @@ export default function Hero() {
       if (Math.abs(target - sy) < 0.4) sy = target
       else raf = requestAnimationFrame(apply)
       el.style.setProperty('--sy', sy.toFixed(1))
+      const shrink = Math.min(sy / 560, 1)
+      el.style.setProperty('--shrink', shrink.toFixed(3))
+      orb.update(shrink, sy)
     }
     const onMove = (e) => {
       const r = el.getBoundingClientRect()
@@ -191,6 +196,7 @@ export default function Hero() {
     apply()
     return () => {
       cancelAnimationFrame(raf)
+      orb.destroy()
       el.removeEventListener('pointermove', onMove)
       window.removeEventListener('scroll', onScroll)
     }
