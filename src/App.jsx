@@ -14,6 +14,7 @@ import { useRoute } from './lib/router'
 import Workspace from './pages/Workspace'
 import { AppProvider, useApp } from './state/AppContext'
 import './styles/app.css'
+import './styles/motion.css'
 
 const NewSketch = lazy(() => import('./pages/NewSketch'))
 const Library = lazy(() => import('./pages/Library'))

@@ -63,6 +63,7 @@ export default function NewSketch({ params }) {
   const [restored] = useState(() => (!params.sketch && !params.fresh ? safeStorage.get(DRAFT_KEY) : null))
   const [title, setTitle] = useState(restored?.title || '')
   const [description, setDescription] = useState(restored?.description || '')
+  const [reveal, setReveal] = useState(0) // bumps after each extraction so traits re-reveal
   const [mode, setMode] = useState(restored?.mode && restored.mode !== 'local' ? restored.mode : 'offline')
   const [hist, dispatch] = useReducer(historyReducer, null, () => ({ past: [], present: restored?.profile || emptyProfile(), future: [], key: null, at: 0 }))
   const profile = hist.present
@@ -178,6 +179,7 @@ export default function NewSketch({ params }) {
   const onExtracted = (result) => {
     const next = { ...result.profile, adjustments: profile.adjustments || {}, observations: profile.observations || '' }
     setProfile(next, 'extract')
+    setReveal((n) => n + 1)
     if (!sketch) setBaseline(next)
     setMeta(result)
     setTab('profile')
@@ -191,6 +193,7 @@ export default function NewSketch({ params }) {
     marks.forEach((m, i) => next.marks.push({ id: `g${Date.now().toString(36)}${i}`, ...m, dx: 0, dy: 0, side_specified: true, source: 'described', evidence: 'Guided question' }))
     if (observations.trim()) next.observations = [next.observations, observations.trim()].filter(Boolean).join('\n').slice(0, 1000)
     setProfile(next, 'guided')
+    setReveal((n) => n + 1)
     if (!sketch && !hasContent(baseline)) setBaseline(next)
     setTab('profile')
     notify({ kind: 'ok', title: 'Guided answers applied', message: 'Marked as “Described” in the profile.' })
@@ -199,6 +202,7 @@ export default function NewSketch({ params }) {
   const onMerged = ({ profile: merged, description: text }) => {
     const next = { ...merged, adjustments: profile.adjustments || {}, observations: profile.observations || '' }
     setProfile(next, 'merge')
+    setReveal((n) => n + 1)
     setDescription(text.slice(0, 2000))
     if (!sketch) setBaseline(next)
     setTab('profile')
@@ -482,7 +486,7 @@ export default function NewSketch({ params }) {
             ))}
           </div>
           <div className="studio__sidebody">
-            {tab === 'profile' && <TraitPanel profile={profile} onChange={setProfile} />}
+            {tab === 'profile' && <TraitPanel profile={profile} onChange={setProfile} revealKey={reveal} />}
             {tab === 'adjust' && <AdjustPanel profile={profile} onChange={setProfile} aiNotice={aiNotice} />}
             {tab === 'refine' && <RefinePanel profile={profile} onApply={onRefined} />}
           </div>

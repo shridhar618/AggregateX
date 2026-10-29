@@ -172,7 +172,7 @@ const DescriptionPanel = ({ description, onDescriptionChange, onExtracted, onGui
 
       <div className="panel__body">
         {tab === 'free' && (
-          <div className="describe">
+          <div className={`describe ${busy ? 'is-extracting' : ''}`}>
             <label className="field">
               <span className="label">Witness description</span>
               <textarea
@@ -185,7 +185,9 @@ const DescriptionPanel = ({ description, onDescriptionChange, onExtracted, onGui
                 aria-describedby="describe-meta"
                 onKeyDown={(e) => { if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') extract() }}
               />
+              <span className="describe__progress" aria-hidden="true" />
             </label>
+            <span className="sr-only" role="status">{busy ? 'Extracting traits from the description' : ''}</span>
             <div id="describe-meta" className="describe__meta">
               <span className={`mono ${tooLong ? 'text-red' : len && len < min ? 'text-amber' : 'faint'}`}>{description.length} / {max}</span>
               <span className="describe__actions">

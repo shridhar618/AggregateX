@@ -13,9 +13,19 @@ export function getStoredTheme() {
   }
 }
 
+let themeTimer = 0
+
 export function applyTheme(theme) {
   const nextTheme = THEMES.includes(theme) ? theme : 'dark'
-  document.documentElement.dataset.theme = nextTheme
+  const root = document.documentElement
+  // Cross-fade colours only for a user-initiated change, never on first paint.
+  if (root.dataset.theme && root.dataset.theme !== nextTheme && !root.classList.contains('reduce-motion')
+    && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    root.classList.add('theme-anim')
+    clearTimeout(themeTimer)
+    themeTimer = setTimeout(() => root.classList.remove('theme-anim'), 400)
+  }
+  root.dataset.theme = nextTheme
   try {
     window.localStorage.setItem(THEME_KEY, nextTheme)
   } catch {
