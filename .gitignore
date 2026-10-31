@@ -28,27 +28,20 @@ dist-ssr
 .env.*
 !.env.example
 
-# Revelio backend
+# Python (future AggregateX backend)
 backend/.venv/
 backend/data/
-backend/.env
 __pycache__/
 *.pyc
 .pytest_cache/
 
-# WitnessTrace source-only import: local runtime is never a repository fixture.
-/witness-backend/.venv/
-/witness-backend/data/
-/witness-backend/outputs/
-/witness-backend/work/
-/witness-backend/evidence/
-/witness-backend/backups/
+# Untracked runtime data archived from the removed Revelio/WitnessTrace backend (see docs/MIGRATION_REPORT.md)
+/.legacy-runtime-backup/
+
+# Never commit runtime data or credentials
 /data/
 /outputs/
 /work/
-/evidence/
-/migration-private/
-/backups/
 *.sqlite
 *.sqlite3
 *.sqlite-wal

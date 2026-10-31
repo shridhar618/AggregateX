@@ -1,4 +1,0 @@
-# Optional: local speech-to-text for dictation. Without it, dictation uses the browser.
-faster-whisper==1.2.1
-# faster-whisper 1.2.1 passes av.open(metadata_errors=...), which PyAV 19 removed.
-av==18.1.0
