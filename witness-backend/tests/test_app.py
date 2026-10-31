@@ -19,6 +19,9 @@ from pathlib import Path
 from PIL import Image
 _ = sys.stdin.read()
 time.sleep(0.30)
+if "--add-dir" not in sys.argv or sys.argv[sys.argv.index("--add-dir") + 1] != os.environ["CODEX_HOME"]:
+    print("Codex home is not writable", file=sys.stderr)
+    sys.exit(1)
 if {mode!r} == "success":
     p = Path(os.environ["CODEX_HOME"]) / "generated_images" / "fake-thread" / "generated.png"
     p.parent.mkdir(parents=True, exist_ok=True)
