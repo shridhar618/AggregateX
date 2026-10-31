@@ -132,7 +132,8 @@ def run_job(job_id: str) -> None:
         job_workdir.mkdir(parents=True, exist_ok=False)
 
         cmd = [CODEX_BIN, "exec", "-C", str(job_workdir),
-               "--sandbox", "workspace-write", "--skip-git-repo-check",
+               "--sandbox", "workspace-write", "--add-dir", str(CODEX_HOME),
+               "--skip-git-repo-check",
                "-o", str(job_workdir / "codex-response.txt"), "-"]
         env = os.environ.copy()
         # Never accidentally pay for a different OpenAI API route via inherited env vars.
